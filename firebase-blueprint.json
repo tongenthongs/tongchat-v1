@@ -1,0 +1,105 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile document",
+      "type": "object",
+      "properties": {
+        "username": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "role": { "type": "string" },
+        "avatar": { "type": "string" },
+        "created": { "type": "string" },
+        "muted_until": { "type": "number" }
+      },
+      "required": ["username", "name", "role"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer order document",
+      "type": "object",
+      "properties": {
+        "customer_id": { "type": "string" },
+        "customer_name": { "type": "string" },
+        "customer_phone": { "type": "string" },
+        "game_name": { "type": "string" },
+        "package_name": { "type": "string" },
+        "price": { "type": "number" },
+        "status": { "type": "string" },
+        "created": { "type": "string" }
+      },
+      "required": ["customer_id", "status"]
+    },
+    "ChatRoom": {
+      "title": "ChatRoom",
+      "description": "Realtime chat room parent document",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customer_id": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customer_name": { "type": "string" },
+        "status": { "type": "string", "enum": ["ACTIVE", "BOOKING", "SELESAI", "NEW", "PROSES"] },
+        "lastMessage": { "type": "string" },
+        "last_message": { "type": "string" },
+        "lastMessageTime": { "type": "string" },
+        "lastSender": { "type": "string", "enum": ["customer", "admin"] },
+        "last_sender": { "type": "string", "enum": ["customer", "admin"] },
+        "last_sender_id": { "type": "string" },
+        "last_sender_role": { "type": "string" },
+        "unreadAdminCount": { "type": "number" },
+        "unreadCustomerCount": { "type": "number" },
+        "unreadCount": { "type": "number" },
+        "is_read_admin": { "type": "boolean" },
+        "is_read_customer": { "type": "boolean" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Realtime chat message in room subcollection",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "sender_id": { "type": "string" },
+        "senderRole": { "type": "string", "enum": ["admin", "customer", "system"] },
+        "sender_role": { "type": "string", "enum": ["admin", "customer", "system", "OWNER", "ADMIN", "CUSTOMER"] },
+        "senderName": { "type": "string" },
+        "sender_name": { "type": "string" },
+        "text": { "type": "string" },
+        "message": { "type": "string" },
+        "mediaUrl": { "type": "string" },
+        "media_url": { "type": "string" },
+        "media_type": { "type": "string" },
+        "type": { "type": "string" },
+        "is_read": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "createdAtMillis": { "type": "number" },
+        "localTimestamp": { "type": "number" }
+      },
+      "required": ["senderId", "senderRole", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Customer orders"
+    },
+    "/chats/{chatId}": {
+      "schema": "ChatRoom",
+      "description": "Unified 2-way chat rooms"
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Unified 2-way chat messages subcollection"
+    }
+  }
+}

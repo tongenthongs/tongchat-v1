@@ -1,0 +1,91 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default open access for Entong Store operations
+    match /{document=**} {
+      allow read, write: if true;
+    }
+
+    // Unified 2-Way Chat Rooms & Messages
+    match /chats/{chatId} {
+      allow read, write: if true;
+
+      match /messages/{messageId} {
+        allow read, write: if true;
+      }
+    }
+
+    // Backward-compatibility Rooms collection
+    match /rooms/{roomId} {
+      allow read, write: if true;
+
+      match /messages/{messageId} {
+        allow read, write: if true;
+      }
+    }
+
+    // User profiles and subcollections
+    match /users/{userId} {
+      allow read, write: if true;
+
+      match /{subcollection=**} {
+        allow read, write: if true;
+      }
+    }
+
+    // Orders & Transactions
+    match /orders/{orderId} {
+      allow read, write: if true;
+    }
+
+    match /coin_transactions/{txId} {
+      allow read, write: if true;
+    }
+
+    match /tc_admin_logs/{logId} {
+      allow read, write: if true;
+    }
+
+    // Catalogs & Items
+    match /catalogs/{catId} {
+      allow read, write: if true;
+    }
+
+    match /items/{itemId} {
+      allow read, write: if true;
+    }
+
+    // Reviews & Customer Feedback
+    match /reviews/{reviewId} {
+      allow read, write: if true;
+    }
+
+    // Store & Admin Management
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['ADMIN', 'OWNER'];
+    }
+
+    match /quickReplies/{replyId} {
+      allow read, write: if true;
+    }
+
+    match /attendance/{attId} {
+      allow read, write: if true;
+    }
+
+    match /finance/{finId} {
+      allow read, write: if true;
+    }
+
+    match /staff_chats/{msgId} {
+      allow read, write: if true;
+    }
+
+    match /clouds/{cloudId} {
+      allow read, write: if true;
+    }
+  }
+}

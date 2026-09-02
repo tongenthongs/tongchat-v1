@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="peci" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dc2626" />
+      <stop offset="100%" stop-color="#991b1b" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="128" fill="url(#bg)" />
+  
+  <!-- Shoulders / Jacket -->
+  <path d="M 110 460 C 110 370 180 340 256 340 C 332 340 402 370 402 460 Z" fill="#2563eb" />
+  <path d="M 180 460 L 256 390 L 332 460 Z" fill="#1d4ed8" />
+  
+  <!-- Neck -->
+  <rect x="226" y="290" width="60" height="70" fill="#fbcfe8" rx="8" />
+
+  <!-- Head / Face -->
+  <circle cx="256" cy="200" r="95" fill="#fce7f3" />
+  
+  <!-- Hair -->
+  <path d="M 165 170 C 165 120 200 100 256 100 C 312 100 347 120 347 170 C 347 150 320 120 256 120 C 192 120 165 150 165 170 Z" fill="#0f172a" />
+
+  <!-- Eyes -->
+  <circle cx="216" cy="195" r="11" fill="#0f172a" />
+  <circle cx="296" cy="195" r="11" fill="#0f172a" />
+  <circle cx="219" cy="192" r="3.5" fill="#ffffff" />
+  <circle cx="299" cy="192" r="3.5" fill="#ffffff" />
+
+  <!-- Smile -->
+  <path d="M 236 230 Q 256 250 276 230" fill="none" stroke="#0f172a" stroke-width="7" stroke-linecap="round" />
+
+  <!-- Red Peci Cap (Karakter Entong) -->
+  <path d="M 176 135 Q 256 75 336 135 L 326 100 Q 256 50 186 100 Z" fill="url(#peci)" />
+  <ellipse cx="256" cy="95" rx="72" ry="18" fill="#b91c1c" />
+
+  <!-- Verified Badge -->
+  <circle cx="380" cy="380" r="42" fill="#00E676" stroke="#0f172a" stroke-width="6" />
+  <path d="M 365 380 L 375 390 L 400 362" fill="none" stroke="#0f172a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

@@ -1,0 +1,6 @@
+{
+  "name": "Entong Store",
+  "description": "Platform Top Up & Jasa Joko Game Terpercaya & Super Cepat dengan Tema Dark Blue Modern",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

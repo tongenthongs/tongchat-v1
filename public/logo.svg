@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B0F19" />
+      <stop offset="100%" stop-color="#151B2B" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bgGrad)" stroke="#2563eb" stroke-width="4"/>
+  <path d="M64 24 L94 38 L94 72 C94 92 78 106 64 112 C50 106 34 92 34 72 L34 38 Z" fill="url(#blueGrad)" opacity="0.2" stroke="#38bdf8" stroke-width="3" stroke-linejoin="round"/>
+  <text x="64" y="76" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="44" fill="#ffffff" text-anchor="middle" letter-spacing="-1">E</text>
+  <circle cx="90" cy="38" r="7" fill="#38bdf8"/>
+</svg>

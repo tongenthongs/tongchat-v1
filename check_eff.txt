@@ -1,0 +1,71 @@
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+
+  const [profilePendingCount, setProfilePendingCount] = useState<number>(0);
+
+
+  useEffect(() => {
+    const cleanUser = guestRoblox.trim().replace(/^@/, '');
+    if (!cleanUser || cleanUser.length < 3) {
+      setRobloxAvatarUrl(null);
+      setIsRobloxValid(null);
+      setIsCheckingRoblox(false);
+      return;
+    }
+
+    setIsCheckingRoblox(true);
+    const timer = setTimeout(async () => {
+      try {
+        const profile = await fetchRobloxProfile(cleanUser);
+        if (profile && profile.avatarUrl) {
+          setRobloxAvatarUrl(profile.avatarUrl);
+          setIsRobloxValid(true);
+        } else {
+          // Direct fallback fetch avatar from Roblox thumbnails API if internal proxy failed
+          try {
+            const searchRes = await fetch(`https://users.roblox.com/v1/usernames/users`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ usernames: [cleanUser], excludeBannedUsers: false })
+            });
+            const searchData = await searchRes.json();
+            if (searchData?.data && searchData.data.length > 0) {
+              const uId = searchData.data[0].id;
+              const thumbRes = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${uId}&size=150x150&format=Png&isCircular=true`);
+              const thumbData = await thumbRes.json();
+              const avatar = thumbData?.data?.[0]?.imageUrl;
+              if (avatar) {
+                setRobloxAvatarUrl(avatar);
+                setIsRobloxValid(true);
+              } else {
+                setRobloxAvatarUrl(null);
+                setIsRobloxValid(true);
+              }
+            } else {
+              setRobloxAvatarUrl(null);
+              setIsRobloxValid(false);
+            }
+          } catch {
+            setRobloxAvatarUrl(null);
+            setIsRobloxValid(false);
+          }
+        }
+      } catch (err) {
+        console.error('Roblox check error:', err);
+        setRobloxAvatarUrl(null);
+        setIsRobloxValid(false);
+      } finally {
+        setIsCheckingRoblox(false);
+      }
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [guestRoblox]);
+
+
+  useEffect(() => {
+    const activeUser = currentUser || safeGetJSON<any>('entong_active_user', {});
+    const currentUid = activeUser?.id || activeUser?.uid;
+
+    if (!currentUid) {
+      setProfilePendingCount(0);
+      return;

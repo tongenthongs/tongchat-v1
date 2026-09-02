@@ -1,0 +1,321 @@
+          <button
+            onClick={() => setIncomingToastMsg(null)}
+            className="text-white/80 hover:text-white font-bold text-sm px-2 py-0.5 rounded-lg bg-black/20"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+      
+      {/* ELEMEN 1: HEADER CHAT (ENTONG STORE EXCLUSIVE DARK BLUE REDESIGN) */}
+      <div className="shrink-0 bg-[#0F172A] px-4 py-3.5 border-b border-slate-800 flex justify-between items-center z-10">
+        {/* CS Identity */}
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="relative shrink-0">
+            <img 
+              src={storeAvatarUrl || "/logo-entong.png"} 
+              alt="CS Entong Store" 
+              className="w-10 h-10 rounded-full object-cover object-top border border-blue-500/40 shadow-sm" 
+              referrerPolicy="no-referrer"
+            />
+            <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full ${storeOperatingStatus.isOpen ? 'bg-emerald-500' : 'bg-rose-500'} border-2 border-[#0F172A]`} />
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm font-black text-white truncate">CS Entong Store</span>
+              <span className="text-[9px] px-2 py-0.5 bg-blue-500/20 text-blue-400 font-extrabold rounded-full border border-blue-500/30 uppercase tracking-wider">
+                LIVE SUPPORT
+              </span>
+            </div>
+            <p className={`text-[11px] ${storeOperatingStatus.isOpen ? 'text-emerald-400' : 'text-rose-400'} font-medium flex items-center gap-1.5 mt-0.5`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${storeOperatingStatus.isOpen ? 'bg-emerald-400 animate-pulse' : 'bg-rose-500'}`} />
+              <span>• {storeOperatingStatus.isOpen ? 'Online' : 'Offline'}</span>
+            </p>
+          </div>
+        </div>
+        
+        {/* Right Action Buttons: Login (if guest), Toggle Fullscreen, Close ("X") */}
+        <div className="flex items-center gap-2 shrink-0">
+          {(!currentUser || currentUser.id?.startsWith('guest_') || currentUser.id?.startsWith('local-')) && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowAuthModal(true);
+              }}
+              className="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-[11px] font-bold transition-all shadow cursor-pointer mr-1"
+            >
+              Login
+            </button>
+          )}
+
+          {/* Fullscreen / Minimize Toggle Button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsFullscreen(!isFullscreen);
+            }}
+            className="p-2 text-slate-400 hover:text-white hover:bg-slate-800/80 rounded-xl transition-all border border-slate-700/50 hover:border-slate-600 cursor-pointer shadow-sm flex items-center justify-center"
+            title={isFullscreen ? "Kecilkan / Minimize" : "Layar Penuh / Fullscreen"}
+          >
+            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+          </button>
+
+          {/* Close Button */}
+          <button 
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsFullscreen(false);
+              if (onClose) {
+                onClose();
+              }
+            }}
+            className="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/20 rounded-xl transition-all border border-slate-700/50 hover:border-rose-500/40 cursor-pointer shadow-sm flex items-center justify-center"
+            title="Tutup Chat"
+          >
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* 📢 BANNER JAM OPERASIONAL TOKO TERPUSAT & PENGUMUMAN REALTIME */}
+      <StoreOperationalBanner />
+
+      {/* ELEMEN 2: AREA PESAN (Tengah / Isi Chat ATAU Inline Guest Form) */}
+      {!currentUser ? null : (
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3 bg-[#0B0F19] space-y-2.5">
+        {showNotifBanner && (
+          <div className="mb-2 bg-blue-950/90 border border-blue-500/50 rounded-xl p-3 flex items-center justify-between shadow-lg">
+            <div className="flex-1 mr-3">
+              <h4 className="text-blue-400 font-bold text-xs">Aktifkan Notifikasi</h4>
+              <p className="text-[10px] text-blue-200/80">Agar tidak ketinggalan balasan chat dari admin saat aplikasi ditutup.</p>
+            </div>
+            <button onClick={requestNotifPermission} className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs shrink-0 shadow-lg cursor-pointer">
+              Izinkan
+            </button>
+          </div>
+        )}
+
+        <div className="text-center my-2">
+          <span className="px-3 py-1 bg-[#151B2B] text-slate-400 text-[10px] rounded-xl border border-slate-800 shadow-sm inline-block font-medium">
+            🔒 Pesan terenkripsi langsung ke Customer Service Entong Store
+          </span>
+        </div>
+
+        {currentOrderChats.map((chat, idx) => {
+          if (!chat) return null;
+          const messageText = chat.message || (chat as any).text || '';
+          const isSystemMsg = !!(messageText && (messageText.includes('STATUS UPDATE') || messageText.includes('UPDATE STATUS') || messageText.includes('STATUS ORDER') || messageText.includes('[STATUS') || messageText.includes('[PESANAN BARU]')));
+          const timeStr = formatChatTime(chat.created || new Date());
+          const chatKey = (chat as any).docUniqueId || chat.id ? `${chat.id || (chat as any).docUniqueId}-${idx}` : `chat-item-${idx}`;
+
+          if (isSystemMsg) {
+            const cleanMsg = messageText.replace(/^📋\s*STATUS\s*(UPDATE|ORDER)\s*#[^\n]*\n?/gi, '').trim() || messageText;
+            return (
+              <div key={chatKey} className="flex justify-center my-1.5 px-2 w-full">
+                <div className="bg-[#151B2B] border border-blue-500/30 rounded-2xl px-4 py-2 max-w-xs sm:max-w-sm text-center shadow-md">
+                  <div className="flex items-center justify-center gap-1.5 text-blue-400 font-bold text-[10px] uppercase tracking-wider mb-0.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                    <span>INFO PESANAN</span>
+                  </div>
+                  <div className="text-slate-200 text-[11px] font-medium leading-snug whitespace-pre-wrap">
+                    {renderMessageText(cleanMsg)}
+                  </div>
+                  <div className="text-[9px] text-blue-400/60 mt-1">
+                    {timeStr}
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          if (chat.type === 'review_prompt') {
+            return <ReviewPromptCard key={chatKey} currentUser={currentUser} roomId={activeRoomId} />;
+          }
+
+          if (chat.type === 'JOKI_CREDENTIAL_FORM' || (chat as any).type === 'joki_credential_form') {
+            return (
+              <JokiCredentialFormMessage
+                key={chatKey}
+                message={chat as any}
+                chatId={activeRoomId}
+                isCustomer={true}
+                currentUser={currentUser}
+              />
+            );
+          }
+
+          if ((chat as any).is2FAPrompt || (chat as any).type === '2FA_PROMPT' || (chat as any).type === 'TWO_FACTOR_ACTION') {
+            return (
+              <div key={chatKey} className="flex justify-start my-2">
+                <TwoFactorActionBubble
+                  chatId={activeRoomId}
+                  orderId={(chat as any).orderId || targetOrderId}
+                  isResolved={(chat as any).isResolved || false}
+                />
+              </div>
+            );
+          }
+
+          const isAdmin = chat.sender_role === 'ADMIN' || chat.sender_role === 'OWNER' || chat.sender_role === 'WORKER' || chat.sender_name === 'Ceo Entong' || (chat as any).senderName === 'Bot Entong Store' || chat.isOfficialBot;
+          const isMe = !isAdmin && (chat.sender_id === currentUser?.id || chat.sender_role === 'CUSTOMER' || chat.sender === 'customer');
+          const bubbleClass = chat.is_quick_reply
+            ? 'bg-gradient-to-r from-blue-950 to-slate-900 border border-blue-500/50 text-blue-100 shadow-md'
+            : (isMe ? 'bg-blue-600 text-white rounded-2xl rounded-br-none shadow-md shadow-blue-600/10' : 'bg-slate-800 text-slate-100 rounded-2xl rounded-bl-none border border-slate-700/60 shadow-md');
+
+          // Inline Interactive Bot Flow Detection
+          const interactiveType = !isMe ? detectInteractiveType(chat) : 'NONE';
+          const isAnswered = interactiveType !== 'NONE' && currentOrderChats.slice(idx + 1).some((nextMsg: any) => {
+            const t = nextMsg.text || nextMsg.message || '';
+            const nextIsCust = nextMsg.sender === 'customer' || nextMsg.sender_role === 'CUSTOMER' || nextMsg.sender_id === currentUser?.id;
+            if (!nextIsCust) return false;
+            
+            if (interactiveType === 'WELCOME') {
+              return t.includes('jajan di Entong Store');
+            }
+            if (interactiveType === 'NOT_YET_SERVICES') {
+              return t.includes('Gift Ingame') || t.includes('Joki Game');
+            }
+            if (interactiveType === 'CHOOSE_CATEGORY') {
+              return t.includes('Gift In Game') || t.includes('Joki');
+            }
+            if (interactiveType === 'FILL_GIFT_FORM' || interactiveType === 'FILL_JOKI_FORM') {
+              return t.includes('[FORM GIFT') || t.includes('[FORM JOKI]');
+            }
+            if (interactiveType === 'WAITING_FEEDBACK') {
+              return t.includes('sabar nunggu') || t.includes('lama banget min');
+            }
+            return false;
+          });
+
+          return (
+            <div key={chatKey} className="space-y-2">
+              <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[90%] sm:max-w-[80%] rounded-2xl px-3.5 py-2.5 shadow-md text-xs relative ${bubbleClass}`}>
+                  {!isMe && (() => {
+                    const isOfficialBot = chat.isOfficialBot || (chat as any).senderName === 'Bot Entong Store' || (chat as any).senderName === 'Entong Bot' || (chat as any).is_official_bot;
+                    if (isOfficialBot) {
+                      return (
+                        <div className="text-[10px] font-bold mb-1 flex items-center gap-1.5 text-emerald-400">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span>🤖 Entong Bot</span>
+                          <span className="text-[8px] px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono">RESMI</span>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
+                  <ChatMessageRenderer text={(chat as any).text || chat.message || ''} />
+
+                  {chat.is_quick_reply && (
+                    <div className="text-[9px] font-bold text-blue-400 mt-1 uppercase tracking-wider flex items-center gap-1 border-t border-blue-500/30 pt-1">
+                      <span>⚡ Sistem • Pesan Otomatis</span>
+                    </div>
+                  )}
+                  
+                  {chat.media_url && (
+                    <div className="my-1.5 max-w-xs cursor-pointer" onClick={() => setExpandedMediaUrl(chat.media_url!)}>
+                      {chat.media_type === 'IMAGE' ? (
+                        <SafeImage
+                          src={chat.media_url}
+                          alt="Foto Chat"
+                          className="w-full max-h-56 rounded-xl border border-slate-700/80 shadow hover:opacity-90 transition-opacity"
+                        />
+                      ) : (
+                        <video
+                          src={chat.media_url}
+                          controls
+                          className="w-full max-h-56 rounded-xl border border-slate-700/80 bg-black shadow"
+                        />
+                      )}
+                    </div>
+                  )}
+
+                  <div className="text-[9px] text-slate-500 mt-1 font-mono text-right">
+                    {timeStr.endsWith('WIB') ? timeStr : `${timeStr} WIB`}
+                  </div>
+                </div>
+              </div>
+
+              {/* RENDER UI DIRECT KATALOG (CARD INTERAKTIF DI BAWAH BUBBLE PESAN) */}
+              {(chat as any).actionCard && (chat as any).actionCard.type === 'OPEN_CATALOG_MODAL' && (
+                <div className="w-full max-w-xs pl-2">
+                  <div className="bg-slate-900/95 border border-cyan-500/40 rounded-2xl p-3.5 space-y-2.5 shadow-xl shadow-cyan-950/20">
+                    <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold">
+                      <span>{(chat as any).actionCard.targetCategory === 'GIFT' ? '🎁' : '⚡'}</span>
+                      <span>{(chat as any).actionCard.title}</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-normal">
+                      {(chat as any).actionCard.description}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (setActiveTab) {
+                          setActiveTab('catalog');
+                        } else {
+                          window.location.href = (chat as any).actionCard.routePath || '/';
+                        }
+                      }}
+                      className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <span>{(chat as any).actionCard.buttonLabel}</span>
+                      <span>➔</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* OUTSIDE-BUBBLE INTERACTIVE BOT PILLS & FORMS (MAYOBLOX STYLE) */}
+              {interactiveType !== 'NONE' && activeRoomId && (
+                <div className="flex justify-start">
+                  <InteractiveBotBubble
+                    type={interactiveType}
+                    roomId={activeRoomId}
+                    currentUser={currentUser}
+                    messageId={chat.id}
+                    isAnswered={isAnswered}
+                    onOpenCatalog={(category) => {
+                      if (setActiveTab) {
+                        setActiveTab('catalog');
+                      }
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {/* OPSI BOT TERKONTROL (HANYA MUNCUL DI AWAL / SETELAH ORDER SELESAI/HANGUS) */}
+        {activeRoomId && (
+          <BotWelcomeOptions
+            chatId={activeRoomId}
+            customerName={currentUser?.name || currentUser?.username || "Kak"}
+            customerUid={currentUser?.id || currentUser?.phone}
+            currentUser={currentUser}
+            orderStatus={activeOrder?.status || (orders && orders[0]?.status) || "NONE"}
+            hasActiveOrder={Boolean(activeOrder ? !["SELESAI", "HANGUS"].includes(activeOrder.status) : (orders && orders.some(o => !["SELESAI", "HANGUS"].includes(o.status))))}
+            messages={messages}
+          />
+        )}
+
+        <div ref={chatEndRef} />
+      </div>
+      )}
+
+      {/* ELEMEN 3: AREA INPUT TEXT (Paling Bawah - Hanya tampil jika user aktif) */}
+      {currentUser && (
+        <div className="shrink-0 bg-[#151B2B] p-3 border-t border-slate-800">
+          {showSpamWarning && !isMutedCurrently && (
+            <div className="bg-amber-950/90 border border-amber-500/30 px-3 py-2 rounded-xl flex items-center justify-between text-xs text-amber-200 mb-2 shadow-lg">
+              <div className="flex items-center gap-2 min-w-0">
+                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 animate-bounce" />
+                <p className="text-[11px] leading-tight">
+                  <strong className="text-amber-300">Peringatan Spam:</strong> Mohon tidak spam! Jika lanjut mengirim pesan terlalu cepat, akun Anda akan di-mute selama 15 menit.
+                </p>
+              </div>
+              <button type="button" onClick={() => setShowSpamWarning(false)} className="text-amber-400 font-bold px-2 py-0.5 hover:bg-amber-900/50 rounded transition-colors shrink-0 cursor-pointer">✕</button>
+            </div>
