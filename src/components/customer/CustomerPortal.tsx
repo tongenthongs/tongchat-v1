@@ -5,6 +5,7 @@ import { GameOrder, OrderStatus, GameItem, ChatMessage, resolveChatRoomId, CartE
 import { doc, collection, query, orderBy, onSnapshot, limit, where, getDocs, getCountFromServer, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db, auth, getSafeTimestamp, getPureCreationTime, applySmartSearch } from '../../lib/firebase';
 import { WebPushNotificationBanner } from '../common/WebPushNotificationBanner';
+import { InstallPWAButton } from '../common/InstallPWAButton';
 import { StoreOperationalBanner } from '../banner/StoreOperationalBanner';
 import { SafeImage } from '../common/SafeImage';
 import { 
@@ -470,12 +471,12 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     window.location.href = '/gpdragdrivesim';
   };
 
-  // 🚀 ISOLATED & FAST: Realtime Catalogs & Products query with SWR (Stale-While-Revalidate) & 2.5s Timeout Guard
+  // 🚀 ISOLATED & FAST: Realtime Catalogs & Products query with SWR (Stale-While-Revalidate) & 1.5s Timeout Guard
   useEffect(() => {
-    // 2.5s Safety Timeout fallback to prevent infinite skeleton hang
+    // 1.5s Safety Timeout fallback to prevent infinite skeleton hang
     const safetyTimer = setTimeout(() => {
       setIsProductsLoading(false);
-    }, 2500);
+    }, 1500);
 
     const unsubscribe = onSnapshot(query(collection(db, 'catalogs'), limit(60)), (snapshot) => {
       clearTimeout(safetyTimer);
@@ -497,7 +498,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
       setIsProductsLoading(false);
     });
 
-  
+
     return () => {
       clearTimeout(safetyTimer);
       unsubscribe();
@@ -554,7 +555,13 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
   useEffect(() => {
     let unsubs: (() => void)[] = [];
     let isMounted = true;
-    
+
+    // 1.2s safety to avoid blocking first paint on cold cache
+    const slowTimer = setTimeout(() => {
+      if (!isMounted) return;
+      setRecentTransactions((prev) => prev);
+    }, 1200);
+
     const ordersRef = collection(db, 'orders');
     const qRecent = query(ordersRef, orderBy('createdAt', 'desc'), limit(20));
     
@@ -630,9 +637,10 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     
     unsubs.push(unsubRecent);
 
-  
+
     return () => {
       isMounted = false;
+      clearTimeout(slowTimer);
       unsubs.forEach(u => u());
     };
   }, []);
@@ -2173,6 +2181,9 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
 
         {/* Right Actions */}
         <div className="flex items-center gap-2">
+          {/* PWA Install Button (navbar variant) */}
+          <InstallPWAButton variant="navbar" />
+
           {/* Notification Bell Button (Desktop Popover & Mobile Drawer Trigger) */}
           <div className="relative">
             <button
@@ -3823,6 +3834,9 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         }}
         orders={myOrders}
       />
+
+      {/* 🚀 Floating Install PWA prompt (mobile bottom bar) */}
+      <InstallPWAButton variant="floating" />
 
     </div>
   );

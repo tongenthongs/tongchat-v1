@@ -242,7 +242,7 @@ export const getCachedCatalogs = (): GameCatalog[] => {
   if (Array.isArray(cached) && cached.length > 0) {
     return cached;
   }
-  return DEFAULT_FALLBACK_CATALOGS;
+  return [];
 };
 
 export const setCachedCatalogs = (catalogs: GameCatalog[]): void => {
@@ -251,9 +251,13 @@ export const setCachedCatalogs = (catalogs: GameCatalog[]): void => {
   }
 };
 
-export const extractPopularProductsFromCatalogs = (catalogs: GameCatalog[], completedOrdersCount: number = 0): any[] => {
+export const getFallbackPopularProducts = (): any[] => {
+  return extractPopularProductsFromCatalogs(DEFAULT_FALLBACK_CATALOGS);
+};
+
+export const extractPopularProductsFromCatalogs = (catalogs: GameCatalog[], completedOrdersCount: number = 0, useFallback = false): any[] => {
   const list: any[] = [];
-  const source = (Array.isArray(catalogs) && catalogs.length > 0) ? catalogs : DEFAULT_FALLBACK_CATALOGS;
+  const source = (Array.isArray(catalogs) && catalogs.length > 0) ? catalogs : (useFallback ? DEFAULT_FALLBACK_CATALOGS : []);
 
   source.forEach((game: any) => {
     const isJokoOrJoki = (game.category || '').toLowerCase().includes('joko') || 

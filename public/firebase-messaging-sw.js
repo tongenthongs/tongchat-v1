@@ -13,42 +13,59 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  const title = payload.notification?.title || payload.data?.title || "Entong Store";
+  const title = (payload.notification && payload.notification.title) || payload.data?.title || "Entong Store";
+  const body = (payload.notification && payload.notification.body) || payload.data?.body || "Ada pesan baru dari admin.";
+  const targetUrl = payload.data?.url || "/chat";
   const options = {
-    body: payload.notification?.body || payload.data?.body || "Ada pesan baru dari admin.",
-    icon: "/icons/icon-192x192.png",
-    badge: "/icons/badge-72x72.png",
-    vibrate: [200, 100, 200],
+    body,
+    icon: payload.data?.icon || "/logo192.png",
+    badge: payload.data?.badge || "/logo192.png",
+    image: payload.data?.image || undefined,
+    vibrate: [200, 100, 200, 100, 400],
     tag: payload.data?.tag || "chat-update",
     renotify: true,
+    requireInteraction: true,
+    timestamp: Date.now(),
+    silent: false,
     data: {
-      url: payload.data?.url || "/chat"
-    }
+      url: targetUrl,
+      tag: payload.data?.tag || "chat-update",
+      chatId: payload.data?.chatId || null
+    },
+    actions: [
+      { action: 'open', title: 'Buka Chat' },
+      { action: 'dismiss', title: 'Tutup' }
+    ]
   };
   self.registration.showNotification(title, options);
 });
 
-// Cache & lifecycle update management
+// Click handler with smooth URL deep-link
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  if (event.action === 'dismiss') return;
+  const targetUrl = event.notification.data?.url || '/chat';
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        const clientUrl = client.url || '';
+        if ((clientUrl.includes(targetUrl) || (targetUrl.includes('/chat') && clientUrl.includes('/chat'))) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(targetUrl);
+      }
+      return null;
+    })
+  );
+});
+
+// Service worker lifecycle for fast activation
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
-});
-
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      for (const client of clientList) {
-        if (client.url.includes('/chat') && 'focus' in client) {
-          return client.focus();
-        }
-      }
-      if (clients.openWindow) {
-        return clients.openWindow(event.notification.data?.url || '/chat');
-      }
-    })
-  );
+  event.waitUntil(self.clients.claim());
 });

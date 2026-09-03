@@ -1,0 +1,1 @@
+{"nodes": [{"id": "$graphify-root$_kilo_command_caveman_md", "label": "caveman.md", "file_type": "document", "node_kind": "page", "source_file": ".kilo/command/caveman.md", "source_location": "L1", "frontmatter": {"description": "Terse coding mode. Minimal tokens, YAGNI, stdlib-first."}}], "edges": [], "input_tokens": 0, "output_tokens": 0}

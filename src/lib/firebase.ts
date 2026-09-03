@@ -51,10 +51,17 @@ let cacheOption: any;
 if (typeof window !== 'undefined') {
   try {
     cacheOption = persistentLocalCache({
-      tabManager: persistentMultipleTabManager()
+      tabManager: persistentMultipleTabManager(),
+      cacheSizeBytes: 50 * 1024 * 1024
     });
   } catch (e) {
-    cacheOption = memoryLocalCache();
+    try {
+      cacheOption = persistentLocalCache({
+        tabManager: persistentMultipleTabManager()
+      });
+    } catch (e2) {
+      cacheOption = memoryLocalCache();
+    }
   }
 }
 

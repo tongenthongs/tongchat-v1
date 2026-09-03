@@ -24,17 +24,26 @@ self.addEventListener('push', (event) => {
     }
   }
 
+  const targetUrl = (event.notification.data && event.notification.data.url) || "/";
+
   const options = {
     body: data.body,
-    icon: "/icons/icon-192x192.png",
-    badge: "/icons/badge-72x72.png",
+    icon: data.icon || "/logo192.png",
+    badge: data.badge || "/logo192.png",
+    image: data.image || undefined,
     tag: data.tag || "entong-store-notif",
-    renotify: true,
-    requireInteraction: true, // Notif tetap nangkring di layar HP sampai diklik
-    vibrate: [200, 100, 200, 100, 400], // Getar ganda di HP
+    renotify: Boolean(data.renotify),
+    requireInteraction: data.requireInteraction !== false,
+    vibrate: Array.isArray(data.vibrate) ? data.vibrate : [200, 100, 200, 100, 400],
+    timestamp: Date.now(),
+    silent: false,
     data: {
-      url: data.url || "/"
-    }
+      url: targetUrl,
+      tag: data.tag || "entong-store-notif"
+    },
+    actions: Array.isArray(data.actions) ? data.actions : [
+      { action: 'open', title: 'Buka Chat' }
+    ]
   };
 
   event.waitUntil(

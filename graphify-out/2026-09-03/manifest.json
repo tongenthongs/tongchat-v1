@@ -348,9 +348,9 @@
     "semantic_hash": ""
   },
   "public/firebase-messaging-sw.js": {
-    "mtime": 1788377233.073216,
-    "seen": 1788377748.968188,
-    "ast_hash": "028ca6263a335cc34ae5d6622b453dd6",
+    "mtime": 1788330902.0,
+    "seen": 1788366800.7868564,
+    "ast_hash": "186c449ca03bbb8f4cfbdd6dd48e9514",
     "semantic_hash": ""
   },
   "public/manifest.json": {
@@ -360,9 +360,9 @@
     "semantic_hash": ""
   },
   "public/sw.js": {
-    "mtime": 1788377184.7444105,
-    "seen": 1788377748.9681928,
-    "ast_hash": "903dbd86f1dec584bbc134c235c6eab3",
+    "mtime": 1788330902.0,
+    "seen": 1788366800.7868595,
+    "ast_hash": "c872396c723bce174fdae94ca8fb7315",
     "semantic_hash": ""
   },
   "public/version.json": {
@@ -702,9 +702,9 @@
     "semantic_hash": ""
   },
   "src/components/checkout/CheckoutModal.tsx": {
-    "mtime": 1788374353.3505929,
-    "seen": 1788377748.9682896,
-    "ast_hash": "a72e23e5891ecbf95e25da2c54708ab6",
+    "mtime": 1788330902.0,
+    "seen": 1788366800.7869394,
+    "ast_hash": "1b01b1337a8303ced43a6be4ced73c66",
     "semantic_hash": ""
   },
   "src/components/common/AutoUpdateHandler.tsx": {
@@ -786,9 +786,9 @@
     "semantic_hash": ""
   },
   "src/components/customer/CustomerPortal.tsx": {
-    "mtime": 1788377627.3338544,
-    "seen": 1788377748.9683173,
-    "ast_hash": "d8f85ce93cfab40c5e51de468976b1a0",
+    "mtime": 1788330902.0,
+    "seen": 1788366800.786959,
+    "ast_hash": "0727db0eba10f86be0c73d6b45fb8bef",
     "semantic_hash": ""
   },
   "src/components/customer/CustomerSettings.tsx": {
@@ -852,9 +852,9 @@
     "semantic_hash": ""
   },
   "src/components/orders/GiftDeliveryModal.tsx": {
-    "mtime": 1788374612.2318218,
-    "seen": 1788377748.968335,
-    "ast_hash": "5bec2c616b80b58d2c694933e850214b",
+    "mtime": 1788330902.0,
+    "seen": 1788366800.786974,
+    "ast_hash": "cc727b85d5e6c975bb5f77c9c2b65c37",
     "semantic_hash": ""
   },
   "src/components/orders/GiftJoinServerBanner.tsx": {
@@ -882,9 +882,9 @@
     "semantic_hash": ""
   },
   "src/context/AppContext.tsx": {
-    "mtime": 1788367511.8175678,
-    "seen": 1788377748.9683428,
-    "ast_hash": "5366a0f36ef009fec5a7f78e026b4669",
+    "mtime": 1788367202.353171,
+    "seen": 1788367264.772011,
+    "ast_hash": "f12f56fa6fab3bc254b07594c8c3dbe5",
     "semantic_hash": ""
   },
   "src/data/masterReviewsData.ts": {
@@ -912,9 +912,9 @@
     "semantic_hash": ""
   },
   "src/lib/firebase.ts": {
-    "mtime": 1788377599.6579318,
-    "seen": 1788377748.9683506,
-    "ast_hash": "7ed9eed16f960733e63f4973751abe89",
+    "mtime": 1788330902.0,
+    "seen": 1788366800.7869878,
+    "ast_hash": "8e557da58f4d90edb5a9fdbf05349981",
     "semantic_hash": ""
   },
   "src/lib/giftExpirationService.ts": {
@@ -1140,9 +1140,9 @@
     "semantic_hash": ""
   },
   "src/utils/productCache.ts": {
-    "mtime": 1788377518.0450382,
-    "seen": 1788377748.968413,
-    "ast_hash": "b1d20428d606f70e8ea40cdcaafc4401",
+    "mtime": 1788330902.0,
+    "seen": 1788366800.7870433,
+    "ast_hash": "b5bc7ba6c2fba4a6a6cf6851227dca6f",
     "semantic_hash": ""
   },
   "src/utils/productImageHelper.ts": {
@@ -1521,30 +1521,6 @@
     "mtime": 1788330902.0,
     "seen": 1788366800.787149,
     "ast_hash": "6ef683ba4ed99a35b33d7d7fed9655dc",
-    "semantic_hash": ""
-  },
-  "src/components/checkout/GiftOrderFormModal.tsx": {
-    "mtime": 1788374221.7373753,
-    "seen": 1788377748.968292,
-    "ast_hash": "99c89fd7a96770af1c11acc6a7f3cac4",
-    "semantic_hash": ""
-  },
-  "src/components/common/InstallPWAButton.tsx": {
-    "mtime": 1788377281.9206474,
-    "seen": 1788377748.968303,
-    "ast_hash": "a0dcb2529f1a68bfab7f9f30f0dd0c1b",
-    "semantic_hash": ""
-  },
-  ".kilo/command/caveman.md": {
-    "mtime": 1788374035.4985273,
-    "seen": 1788377748.9684844,
-    "ast_hash": "3afac83ad462ef8a91a5f1faf8a8899f",
-    "semantic_hash": ""
-  },
-  ".kiro/steering/caveman.md": {
-    "mtime": 1788374287.174098,
-    "seen": 1788377748.9684856,
-    "ast_hash": "bf9f6c435b444e3da4e67ebeff2d00e5",
     "semantic_hash": ""
   }
 }
