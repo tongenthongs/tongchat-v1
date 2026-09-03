@@ -471,12 +471,12 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     window.location.href = '/gpdragdrivesim';
   };
 
-  // 🚀 ISOLATED & FAST: Realtime Catalogs & Products query with SWR (Stale-While-Revalidate) & 1.5s Timeout Guard
+  // 🚀 ISOLATED & FAST: Realtime Catalogs & Products query with SWR (Stale-While-Revalidate) & 300ms Timeout Guard
   useEffect(() => {
-    // 1.5s Safety Timeout fallback to prevent infinite skeleton hang
+    // 300ms Safety Timeout fallback to prevent infinite skeleton hang (cache sudah dirender seketika)
     const safetyTimer = setTimeout(() => {
       setIsProductsLoading(false);
-    }, 1500);
+    }, 300);
 
     const unsubscribe = onSnapshot(query(collection(db, 'catalogs'), limit(60)), (snapshot) => {
       clearTimeout(safetyTimer);

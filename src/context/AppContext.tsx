@@ -240,8 +240,13 @@ const extractGameItemsFromCatalogs = (catalogs: any[]): GameItem[] => {
 };
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
-  const [authLoading, setAuthLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => {
+    const savedUser = safeGetJSON<UserProfile | null>('entong_user_session', null) ||
+                      safeGetJSON<UserProfile | null>('entong_active_user', null) ||
+                      safeGetJSON<UserProfile | null>('entong_local_user', null);
+    return savedUser && typeof savedUser === 'object' ? savedUser : null;
+  });
+  const [authLoading, setAuthLoading] = useState(false);
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [rawOrders, setRawOrders] = useState<any[]>([]);
 
@@ -995,6 +1000,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   // PILAR 1: REALTIME LISTENER ROOMS (CHATS) & UNREAD SEPARATE QUERY
   useEffect(() => {
+    // Hanya staff yang butuh daftar semua chat rooms (admin inbox); customer hanya butuh room sendiri.
+    if (authLoading) return;
+    const roleUpper = (currentUser?.role || '').toString().toUpperCase();
+    const isStaffUser = Boolean(
+      currentUser?.isStaff === true ||
+      ['STAFF', 'ADMIN', 'OWNER', 'WORKER', 'OPERATOR'].includes(roleUpper)
+    );
+    if (!isStaffUser) return;
+
     // 1. Optimized Realtime Query for latest 150 chat rooms
     const qChats = query(collection(db, 'chats'), orderBy('updatedAt', 'desc'), limit(150));
 
@@ -1078,7 +1092,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       unsubUnread();
       if (unsubFallbackUnread) unsubFallbackUnread();
     };
-  }, []);
+  }, [authLoading, currentUser?.role, currentUser?.isStaff]);
 
   // PILAR 1: REALTIME LISTENER MESSAGES (ACTIVE ROOM WITH DYNAMIC PATH RESOLVER)
   const chatsRef = useRef(chats);
@@ -1528,21 +1542,32 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {}
   }, []);
 
-  // Inisialisasi Data Sekunder On Mount (Mencegah Banjir WebChannel Listeners)
+  // Inisialisasi Data Sekunder Setelah Auth Diketahui (Cegah Fetch Berat Untuk Customer)
   useEffect(() => {
+    if (authLoading) return;
     setIsOnlinePB(true);
 
-    // Initial on-demand fetches
-    fetchUsers();
-    fetchOrders();
-    fetchItems();
+    const roleUpper = (currentUser?.role || '').toString().toUpperCase();
+    const isStaffUser = Boolean(
+      currentUser?.isStaff === true ||
+      ['STAFF', 'ADMIN', 'OWNER', 'WORKER', 'OPERATOR'].includes(roleUpper)
+    );
 
-    const timer = setTimeout(() => {
-      fetchQuickReplies();
-      fetchFinance();
-      fetchAttendance();
-      fetchClouds();
-    }, 200);
+    // Data yang dibutuhkan semua pengguna (katalog untuk browsing, order milik sendiri)
+    fetchItems();
+    fetchOrders();
+
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    if (isStaffUser) {
+      // Data berat (500 users, finance, attendance, clouds) khusus staff
+      fetchUsers();
+      timer = setTimeout(() => {
+        fetchQuickReplies();
+        fetchFinance();
+        fetchAttendance();
+        fetchClouds();
+      }, 200);
+    }
 
     // Dokumen Pengaturan Ringan (Real-time single doc)
     
@@ -1615,12 +1640,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     });
 
     return () => { 
-      clearTimeout(timer);
+      if (timer) clearTimeout(timer);
       unsubWhatsapp();
       unsubPayment();
       unsubDedicatedStore();
     };
-  }, [fetchUsers, fetchOrders, fetchItems, fetchQuickReplies, fetchFinance, fetchAttendance, fetchClouds]);
+  }, [authLoading, currentUser?.role, currentUser?.isStaff, fetchUsers, fetchOrders, fetchItems, fetchQuickReplies, fetchFinance, fetchAttendance, fetchClouds]);
 
   const totalUnreadCount = useMemo(() => {
     if (!currentUser) return 0;

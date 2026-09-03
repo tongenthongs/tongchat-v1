@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "public/version.json": {
-    "mtime": 1788428752.7697942,
-    "seen": 1788428785.850684,
-    "ast_hash": "75a7da64721519ca00ef98a0857c2bca",
+    "mtime": 1788432624.201126,
+    "seen": 1788433326.169142,
+    "ast_hash": "761c188d85db3eb9c9862db7b313deb2",
     "semantic_hash": ""
   },
   "remove_new_option.cjs": {
@@ -762,9 +762,9 @@
     "semantic_hash": ""
   },
   "src/components/customer/Catalog.tsx": {
-    "mtime": 1788358264.784871,
-    "seen": 1788366800.7869532,
-    "ast_hash": "0130559997c259b93a6ee93650f13971",
+    "mtime": 1788434043.9259422,
+    "seen": 1788434085.1211026,
+    "ast_hash": "a91ab4d8f425fb5ad0810c2bb8447a2b",
     "semantic_hash": ""
   },
   "src/components/customer/CustomerChat.tsx": {
@@ -786,9 +786,9 @@
     "semantic_hash": ""
   },
   "src/components/customer/CustomerPortal.tsx": {
-    "mtime": 1788428752.7754736,
-    "seen": 1788428785.850881,
-    "ast_hash": "2e73fea485d0abd5e39f2f27e81c5d2a",
+    "mtime": 1788434037.4067855,
+    "seen": 1788434085.1211088,
+    "ast_hash": "6e116bf8e8f5c2c0ed27cf1e1097b2c7",
     "semantic_hash": ""
   },
   "src/components/customer/CustomerSettings.tsx": {
@@ -882,9 +882,9 @@
     "semantic_hash": ""
   },
   "src/context/AppContext.tsx": {
-    "mtime": 1788428752.777631,
-    "seen": 1788428785.8509207,
-    "ast_hash": "4e7a777171f099f2893c294d07b3eaf1",
+    "mtime": 1788433873.2659035,
+    "seen": 1788433912.4202485,
+    "ast_hash": "6ac37c843616e934dde6e6f4ca93c773",
     "semantic_hash": ""
   },
   "src/data/masterReviewsData.ts": {
@@ -912,9 +912,9 @@
     "semantic_hash": ""
   },
   "src/lib/firebase.ts": {
-    "mtime": 1788377599.6579318,
-    "seen": 1788377748.9683506,
-    "ast_hash": "7ed9eed16f960733e63f4973751abe89",
+    "mtime": 1788434030.6206193,
+    "seen": 1788434085.1211393,
+    "ast_hash": "f8eab0cd9728d7609bfc200cea9cf901",
     "semantic_hash": ""
   },
   "src/lib/giftExpirationService.ts": {
@@ -948,9 +948,9 @@
     "semantic_hash": ""
   },
   "src/lib/roblox.ts": {
-    "mtime": 1788330902.0,
-    "seen": 1788366800.7869961,
-    "ast_hash": "a2668ddbe522fc7a8ae24e7661e6153f",
+    "mtime": 1788433155.2226126,
+    "seen": 1788433326.169287,
+    "ast_hash": "e00f151f707f048614bf7e051cb14b42",
     "semantic_hash": ""
   },
   "src/main.tsx": {

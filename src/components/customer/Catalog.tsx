@@ -163,12 +163,12 @@ export const Catalog: React.FC<CatalogProps> = ({
     return (game.totalSold || 0) + completedOrders.length;
   };
 
-  // Realtime subscription to Firestore 'catalogs' collection with Stale-While-Revalidate & 2.5s Timeout Guard
+  // Realtime subscription to Firestore 'catalogs' collection with Stale-While-Revalidate & 300ms Timeout Guard
   useEffect(() => {
-    // 2.5s Safety Timeout fallback to prevent infinite skeleton hang
+    // 300ms Safety Timeout fallback (cache sudah dirender seketika via getCachedCatalogs)
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2500);
+    }, 300);
 
     const unsubscribe = onSnapshot(
       collection(db, "catalogs"),

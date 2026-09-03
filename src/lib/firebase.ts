@@ -9,8 +9,6 @@ import {
   getDoc, 
   setDoc, 
   updateDoc,
-  persistentLocalCache,
-  persistentMultipleTabManager,
   memoryLocalCache
 } from 'firebase/firestore';
 import rawFirebaseConfig from '../../firebase-applet-config.json';
@@ -46,28 +44,21 @@ const app = appInstance;
 const dbId = rawConfig.firestoreDatabaseId || 'ai-studio-entongchat-013b89eb-39ec-4b7f-b986-33f58088ff28';
 let dbInstance: any;
 
-// Resolve safe local cache strategy for sandboxed/iframe environments
+// Resolve safe local cache strategy for sandboxed/iframe environments.
+// Realtime correctness (admin -> customer sync) is the top priority here, so we
+// prefer the in-memory cache which never serves stale cross-tab snapshots over a
+// persistent cache that can delay/lose admin updates in the customer browser.
 let cacheOption: any;
 if (typeof window !== 'undefined') {
   try {
-    cacheOption = persistentLocalCache({
-      tabManager: persistentMultipleTabManager(),
-      cacheSizeBytes: 50 * 1024 * 1024
-    });
+    cacheOption = memoryLocalCache();
   } catch (e) {
-    try {
-      cacheOption = persistentLocalCache({
-        tabManager: persistentMultipleTabManager()
-      });
-    } catch (e2) {
-      cacheOption = memoryLocalCache();
-    }
+    cacheOption = undefined;
   }
 }
 
 try {
   dbInstance = initializeFirestore(app, {
-    experimentalForceLongPolling: true,
     localCache: cacheOption
   }, dbId);
 } catch (e) {
@@ -76,7 +67,6 @@ try {
   } catch (err) {
     try {
       dbInstance = initializeFirestore(app, {
-        experimentalForceLongPolling: true,
         localCache: memoryLocalCache()
       });
     } catch (err2) {

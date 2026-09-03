@@ -3,20 +3,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import ExistingCatalogView from "./components/products/ExistingCatalogView";
 import { AppProvider, useApp } from './context/AppContext';
-import { CustomerPortal } from './components/customer/CustomerPortal';
-import { AdminPortal } from './components/admin/AdminPortal';
-import { VerifyEmailPage } from './components/auth/VerifyEmailPage';
-import { ResetPasswordPage } from './components/auth/ResetPasswordPage';
-import LoginPage from './pages/auth/LoginPage';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { AutoReloadManager } from './components/AutoReloadManager';
 import { useAutoUpdateWatcher } from './hooks/useAutoUpdateWatcher';
 import WebNotificationPromptModal from './components/modals/WebNotificationPromptModal';
 import { useCustomerRealtimeNotificationListener } from './components/chat/CustomerChatBox';
+
+const ExistingCatalogView = lazy(() => import("./components/products/ExistingCatalogView"));
+const CustomerPortal = lazy(() => import('./components/customer/CustomerPortal').then(m => ({ default: m.CustomerPortal })));
+const AdminPortal = lazy(() => import('./components/admin/AdminPortal').then(m => ({ default: m.AdminPortal })));
+const VerifyEmailPage = lazy(() => import('./components/auth/VerifyEmailPage').then(m => ({ default: m.VerifyEmailPage })));
+const ResetPasswordPage = lazy(() => import('./components/auth/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage })));
+const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
 
 function MainAppRouter() {
   const { currentUser, authLoading } = useApp();

@@ -1,50 +1,49 @@
 # Graph Report - entong-chat  (2026-09-03)
 
 ## Corpus Check
-- 248 files · ~224,765 words
+- 248 files · ~224,963 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1053 nodes · 1837 edges · 149 communities (73 shown, 41 thin omitted)
+- 1055 nodes · 1841 edges · 149 communities (68 shown, 45 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `27244240`
+- Built from commit: `4d61525a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - ReviewsSection.tsx
 - App.tsx
-- AppProvider
-- CustomerPortal
+- AdminTongCoinsPanel.tsx
+- CustomerInteractiveBotStream.tsx
 - What You Must Do When Invoked
-- useApp
+- auth
 - firebase.ts
 - devDependencies
 - AppContext.tsx
 - CustomerChat.tsx
 - dependencies
-- InstallPWAButton.tsx
+- InteractiveChatBot.tsx
 - otpService.ts
 - compilerOptions
 - db
 - DiscordBotListener
+- LazyMessageStream.tsx
 - EnhancedChatMessage.tsx
-- OrderDetail.tsx
+- chatService.ts
 - manifest.json
 - phoneUtils.ts
 - FakeCollection
 - components/admin/AdminChat.tsx
-- OperationType
+- chatAutoCleanupService.ts
 - command
 - CustomerPortal.tsx
 - package.json
 - storeScheduleService.ts
 - graphify reference: extra exports and benchmark
-- TongCoinsPage.tsx
-- overhaul_status_sync.cjs
 - parse_ast3.cjs
 - parse_ast4.cjs
 - parse_ast5.cjs
@@ -157,55 +156,47 @@
 ## Import Cycles
 - None detected.
 
-## Communities (149 total, 41 thin omitted)
+## Communities (149 total, 45 thin omitted)
 
 ### Community 0 - "ReviewsSection.tsx"
 Cohesion: 0.07
 Nodes (44): AdminReviewGenerator(), QUICK_KEYWORD_PILLS, AdminReviewsManager(), LeaderboardEntry, LeaderboardSection(), getProductOrCategoryImage(), LiveTransactionsCarousel(), LiveTransactionsCarouselProps (+36 more)
 
 ### Community 1 - "App.tsx"
-Cohesion: 0.08
-Nodes (20): App(), CustomerNotificationBridge(), MainAppRouter(), ResetPasswordPage(), ResetPasswordPageProps, VerifyEmailPage(), VerifyEmailPageProps, AutoReloadManager() (+12 more)
+Cohesion: 0.07
+Nodes (22): App(), CustomerNotificationBridge(), MainAppRouter(), AuthModal(), Props, ResetPasswordPage(), ResetPasswordPageProps, AutoReloadManager() (+14 more)
 
-### Community 2 - "AppProvider"
-Cohesion: 0.16
-Nodes (16): extractOrderTime(), FloatingPaymentNotifications(), FloatingPaymentNotificationsProps, AppProvider(), cleanFirestorePayload(), extractGameItemsFromCatalogs(), handleFirestoreError(), DEFAULT_FALLBACK_CATALOGS (+8 more)
+### Community 2 - "AdminTongCoinsPanel.tsx"
+Cohesion: 0.30
+Nodes (9): AdminKelolaTongCoins(), AdminKelolaTongCoinsProps, AdminTongCoinsPanel(), AdminTongCoinsPanelProps, AddTongCoinParams, mutateTongCoins(), ResolvedUser, resolveUserDocRef() (+1 more)
 
-### Community 3 - "CustomerPortal"
-Cohesion: 0.24
-Nodes (12): Catalog(), CatalogProps, isProductAvailable(), CustomerPortal(), formatDate(), checkIsGamepassOpen(), GIFT_OPERATIONAL_HOURS, isGiftClosedTime() (+4 more)
+### Community 3 - "CustomerInteractiveBotStream.tsx"
+Cohesion: 0.27
+Nodes (7): CustomerInteractiveBotStream(), Props, Props, StrictOrderValidatedForm(), dispatchCatalogActionBubble(), submitFormAndRelinkOrder(), SubmitFormPayload
 
 ### Community 4 - "What You Must Do When Invoked"
 Cohesion: 0.07
 Nodes (26): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+18 more)
 
-### Community 5 - "useApp"
-Cohesion: 0.16
-Nodes (12): AuthModal(), Props, NOTE: In production, you'd want to configure a proper VAPID key via env vars., WebPushNotificationBanner(), CustomerSettings(), CustomerSettingsProps, GiftDeliveryModal(), GiftDeliveryModalProps (+4 more)
-
 ### Community 6 - "firebase.ts"
-Cohesion: 0.06
-Nodes (61): AdminCatalogManager(), Toast, AdminPaymentPending(), AdminPaymentPendingProps, AdminPortal(), ChatInputArea, ChatListItem, getCustomerDisplayName() (+53 more)
+Cohesion: 0.07
+Nodes (57): AdminPaymentPending(), AdminPaymentPendingProps, AdminPortal(), ChatInputArea, ChatListItem, getCustomerDisplayName(), getSafeInitial(), getStatusBadgeConfig() (+49 more)
 
 ### Community 7 - "devDependencies"
 Cohesion: 0.09
 Nodes (23): autoprefixer, esbuild, devDependencies, autoprefixer, esbuild, tailwindcss, tsx, @types/express (+15 more)
 
 ### Community 8 - "AppContext.tsx"
-Cohesion: 0.17
-Nodes (18): CloudMonitor(), getCloudExpirationMs(), toDateTimeLocalString(), AppContext, AppContextType, FirestoreErrorInfo, ActionCard, ChatMessage (+10 more)
+Cohesion: 0.05
+Nodes (53): CloudMonitor(), getCloudExpirationMs(), toDateTimeLocalString(), extractOrderTime(), FloatingPaymentNotifications(), FloatingPaymentNotificationsProps, VerifyEmailPage(), VerifyEmailPageProps (+45 more)
 
 ### Community 9 - "CustomerChat.tsx"
-Cohesion: 0.07
-Nodes (36): AttendanceDayDoc, AttendancePanel(), AttendancePanelProps, AttendanceRecord, DEFAULT_STAFF_FALLBACK, BotWelcomeOptions(), BotWelcomeOptionsProps, InteractiveBotBubble() (+28 more)
+Cohesion: 0.08
+Nodes (33): AttendanceDayDoc, AttendancePanel(), AttendancePanelProps, AttendanceRecord, DEFAULT_STAFF_FALLBACK, BotWelcomeOptions(), BotWelcomeOptionsProps, InteractiveBotBubble() (+25 more)
 
 ### Community 10 - "dependencies"
 Cohesion: 0.10
 Nodes (21): browser-image-compression, dotenv, firebase-admin, @google/genai, lucide-react, @marsidev/react-turnstile, motion, dependencies (+13 more)
-
-### Community 11 - "InstallPWAButton.tsx"
-Cohesion: 0.60
-Nodes (4): BeforeInstallPromptEvent, InstallPWAButton(), isInStandalone(), isIOS()
 
 ### Community 12 - "otpService.ts"
 Cohesion: 0.22
@@ -216,8 +207,8 @@ Cohesion: 0.11
 Nodes (18): DOM, DOM.Iterable, ES2022, compilerOptions, allowImportingTsExtensions, allowJs, experimentalDecorators, isolatedModules (+10 more)
 
 ### Community 14 - "db"
-Cohesion: 0.05
-Nodes (32): AdminChatHeaderProps, AdminChatInlineHeader(), AdminKelolaTongCoins(), AdminKelolaTongCoinsProps, AdminTongCoinsPanel(), AdminTongCoinsPanelProps, CustomerInteractiveBotStream(), Props (+24 more)
+Cohesion: 0.27
+Nodes (6): AdminChatHeaderProps, AdminChatInlineHeader(), db, syncOrderStatusEverywhere(), executeSetOrderHangus(), SetOrderHangusParams
 
 ### Community 15 - "DiscordBotListener"
 Cohesion: 0.22
@@ -227,17 +218,17 @@ Nodes (6): DDSMonitoringParsedData, DiscordBotListener, DiscordBotLog, parseCurr
 Cohesion: 0.29
 Nodes (7): ChatMessageRenderer, ChatMessageRendererProps, FormattedChatMessage(), FormattedChatMessageProps, EnhancedChatMessage, EnhancedChatMessageProps, MessageContentProps
 
-### Community 18 - "OrderDetail.tsx"
-Cohesion: 0.21
-Nodes (11): checkIsConfirmedLocally(), OrderDetail(), OrderDetailProps, GiftJoinServerBanner(), GiftJoinServerBannerProps, OrderProgressStepper(), Props, WorkerGiftCard() (+3 more)
+### Community 18 - "chatService.ts"
+Cohesion: 1.00
+Nodes (3): formatSafeChatTime(), normalizeChatTimestamp(), subscribeToAllChats()
 
 ### Community 19 - "manifest.json"
 Cohesion: 0.13
 Nodes (14): background_color, categories, description, display, icons, name, orientation, scope (+6 more)
 
 ### Community 21 - "phoneUtils.ts"
-Cohesion: 0.18
-Nodes (18): CatalogOption, ManualWAOrderModal(), ManualWAOrderModalProps, sanitizePayload(), GuestChatForm(), GuestChatFormProps, GiftOrderFormModal(), GiftOrderFormModalProps (+10 more)
+Cohesion: 0.16
+Nodes (20): CatalogOption, ManualWAOrderModal(), ManualWAOrderModalProps, sanitizePayload(), GuestChatForm(), GuestChatFormProps, GiftOrderFormModal(), GiftOrderFormModalProps (+12 more)
 
 ### Community 22 - "FakeCollection"
 Cohesion: 0.18
@@ -247,17 +238,13 @@ Nodes (4): FakeCollection, FakePocketBase, pb, POCKETBASE_URL
 Cohesion: 0.21
 Nodes (9): AdminChat(), formatSimpleTime(), MemoizedChatItem, AdminChatRoom(), formatTime(), globalMemCache, MemoizedMessageBubble, formatSimpleTime() (+1 more)
 
-### Community 24 - "OperationType"
-Cohesion: 0.29
-Nodes (7): OperationType, CREATE, DELETE, GET, LIST, UPDATE, WRITE
-
 ### Community 25 - "command"
 Cohesion: 0.17
 Nodes (11): command, type, mcp, firebase, plugin, $schema, experimental:mcp, file:///C:/Users/sandi/Documents/WEB/entong-chat/.kilo/plugins/graphify.js (+3 more)
 
 ### Community 27 - "CustomerPortal.tsx"
-Cohesion: 0.15
-Nodes (15): CheckoutModal(), CheckoutModalProps, compressImageFile(), RulesAgreementModal(), RulesAgreementModalProps, SafeImage(), CustomerOrders(), CustomerOrdersProps (+7 more)
+Cohesion: 0.05
+Nodes (58): content, eIdx, fs, hEnd, hStart, sIdx, AdminCatalogManager(), Toast (+50 more)
 
 ### Community 28 - "package.json"
 Cohesion: 0.18
@@ -270,14 +257,6 @@ Nodes (7): StoreScheduleSettingModal(), StoreOperationalBanner(), DEFAULT_SCHEDU
 ### Community 31 - "graphify reference: extra exports and benchmark"
 Cohesion: 0.22
 Nodes (8): graphify reference: extra exports and benchmark, Step 6b - Wiki (only if --wiki flag), Step 7 - Neo4j export (only if --neo4j or --neo4j-push flag), Step 7a - FalkorDB export (only if --falkordb or --falkordb-push flag), Step 7b - SVG export (only if --svg flag), Step 7c - GraphML export (only if --graphml flag), Step 7d - MCP server (only if --mcp flag), Step 8 - Token reduction benchmark (only if total_words > 5000)
-
-### Community 32 - "TongCoinsPage.tsx"
-Cohesion: 0.40
-Nodes (5): formatTransactionDate(), PRESET_AMOUNTS, TongCoinsPage(), TongCoinsPageProps, TONGCOINS_TOS
-
-### Community 34 - "overhaul_status_sync.cjs"
-Cohesion: 0.25
-Nodes (6): content, eIdx, fs, hEnd, hStart, sIdx
 
 ### Community 35 - "parse_ast3.cjs"
 Cohesion: 0.25
@@ -454,22 +433,22 @@ Nodes (3): vite, vite, vite
 ## Knowledge Gaps
 - **404 isolated node(s):** `$schema`, `type`, `npx`, `-y`, `firebase-tools@14.15.2` (+399 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 521 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **41 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **45 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `db` connect `db` to `ReviewsSection.tsx`, `App.tsx`, `AppProvider`, `CustomerPortal`, `TongCoinsPage.tsx`, `useApp`, `firebase.ts`, `AppContext.tsx`, `CustomerChat.tsx`, `OrderDetail.tsx`, `phoneUtils.ts`, `FakeCollection`, `components/admin/AdminChat.tsx`, `CustomerPortal.tsx`, `storeScheduleService.ts`?**
-  _High betweenness centrality (0.048) - this node is a cross-community bridge._
+- **Why does `db` connect `db` to `ReviewsSection.tsx`, `App.tsx`, `AdminTongCoinsPanel.tsx`, `CustomerInteractiveBotStream.tsx`, `auth`, `firebase.ts`, `AppContext.tsx`, `CustomerChat.tsx`, `InteractiveChatBot.tsx`, `LazyMessageStream.tsx`, `chatService.ts`, `chatUnreadService.ts`, `phoneUtils.ts`, `FakeCollection`, `components/admin/AdminChat.tsx`, `chatAutoCleanupService.ts`, `CustomerPortal.tsx`, `storeScheduleService.ts`?**
+  _High betweenness centrality (0.047) - this node is a cross-community bridge._
 - **What connects `$schema`, `type`, `npx` to the rest of the system?**
   _404 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ReviewsSection.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.07422559906487435 - nodes in this community are weakly interconnected._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.07965860597439545 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07439024390243902 - nodes in this community are weakly interconnected._
 - **Should `What You Must Do When Invoked` be split into smaller, more focused modules?**
   _Cohesion score 0.07407407407407407 - nodes in this community are weakly interconnected._
 - **Should `firebase.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.060828680575962385 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06593406593406594 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.08695652173913043 - nodes in this community are weakly interconnected._

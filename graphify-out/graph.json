@@ -69,6 +69,19 @@
       "source_location": "L295"
     },
     {
+      "id": "src_components_auth_authmodal_props",
+      "label": "Props",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "props",
+      "source_file": "src/components/auth/AuthModal.tsx",
+      "source_location": "L8"
+    },
+    {
       "id": "src_components_auth_resetpasswordpage_resetpasswordpageprops",
       "label": "ResetPasswordPageProps",
       "_callable": true,
@@ -80,19 +93,6 @@
       "norm_label": "resetpasswordpageprops",
       "source_file": "src/components/auth/ResetPasswordPage.tsx",
       "source_location": "L19"
-    },
-    {
-      "id": "src_components_auth_verifyemailpage_verifyemailpageprops",
-      "label": "VerifyEmailPageProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "App.tsx",
-      "file_type": "code",
-      "norm_label": "verifyemailpageprops",
-      "source_file": "src/components/auth/VerifyEmailPage.tsx",
-      "source_location": "L8"
     },
     {
       "id": "src_components_common_errorboundary_errorboundary",
@@ -160,17 +160,30 @@
       "source_location": "L4"
     },
     {
-      "id": "src_components_common_installpwabutton_beforeinstallpromptevent",
-      "label": "BeforeInstallPromptEvent",
+      "id": "src_components_chat_interactivechatbot_botstep",
+      "label": "BotStep",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "InstallPWAButton.tsx",
+      "community_name": "InteractiveChatBot.tsx",
       "file_type": "code",
-      "norm_label": "beforeinstallpromptevent",
-      "source_file": "src/components/common/InstallPWAButton.tsx",
-      "source_location": "L4"
+      "norm_label": "botstep",
+      "source_file": "src/components/chat/InteractiveChatBot.tsx",
+      "source_location": "L12"
+    },
+    {
+      "id": "src_components_chat_interactivechatbot_interactivechatbotprops",
+      "label": "InteractiveChatBotProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "InteractiveChatBot.tsx",
+      "file_type": "code",
+      "norm_label": "interactivechatbotprops",
+      "source_file": "src/components/chat/InteractiveChatBot.tsx",
+      "source_location": "L5"
     },
     {
       "id": "server_otpservice_storedotpdata",
@@ -199,110 +212,6 @@
       "source_location": "L7"
     },
     {
-      "id": "src_components_admin_adminkelolatongcoins_adminkelolatongcoinsprops",
-      "label": "AdminKelolaTongCoinsProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "adminkelolatongcoinsprops",
-      "source_file": "src/components/admin/AdminKelolaTongCoins.tsx",
-      "source_location": "L5"
-    },
-    {
-      "id": "src_components_admin_admintongcoinspanel_admintongcoinspanelprops",
-      "label": "AdminTongCoinsPanelProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "admintongcoinspanelprops",
-      "source_file": "src/components/admin/AdminTongCoinsPanel.tsx",
-      "source_location": "L54"
-    },
-    {
-      "id": "src_components_chat_customerinteractivebotstream_props",
-      "label": "Props",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "props",
-      "source_file": "src/components/chat/CustomerInteractiveBotStream.tsx",
-      "source_location": "L7"
-    },
-    {
-      "id": "src_components_chat_interactivechatbot_botstep",
-      "label": "BotStep",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "botstep",
-      "source_file": "src/components/chat/InteractiveChatBot.tsx",
-      "source_location": "L12"
-    },
-    {
-      "id": "src_components_chat_interactivechatbot_interactivechatbotprops",
-      "label": "InteractiveChatBotProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "interactivechatbotprops",
-      "source_file": "src/components/chat/InteractiveChatBot.tsx",
-      "source_location": "L5"
-    },
-    {
-      "id": "src_components_chat_lazymessagestream_props",
-      "label": "Props",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "props",
-      "source_file": "src/components/chat/LazyMessageStream.tsx",
-      "source_location": "L13"
-    },
-    {
-      "id": "src_components_chat_strictordervalidatedform_props",
-      "label": "Props",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "props",
-      "source_file": "src/components/chat/StrictOrderValidatedForm.tsx",
-      "source_location": "L6"
-    },
-    {
-      "id": "src_services_formsubmissionrelinkservice_submitformpayload",
-      "label": "SubmitFormPayload",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "submitformpayload",
-      "source_file": "src/services/formSubmissionRelinkService.ts",
-      "source_location": "L16"
-    },
-    {
       "id": "src_services_orderhangusservice_setorderhangusparams",
       "label": "SetOrderHangusParams",
       "_callable": true,
@@ -314,32 +223,6 @@
       "norm_label": "setorderhangusparams",
       "source_file": "src/services/orderHangusService.ts",
       "source_location": "L4"
-    },
-    {
-      "id": "src_services_tongcoinservice_addtongcoinparams",
-      "label": "AddTongCoinParams",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "addtongcoinparams",
-      "source_file": "src/services/tongCoinService.ts",
-      "source_location": "L18"
-    },
-    {
-      "id": "src_services_tongcoinservice_resolveduser",
-      "label": "ResolvedUser",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "resolveduser",
-      "source_file": "src/services/tongCoinService.ts",
-      "source_location": "L27"
     },
     {
       "id": "server_discordlistener_ddsmonitoringparseddata",
@@ -379,6 +262,19 @@
       "norm_label": "discordbotlog",
       "source_file": "server/discordListener.ts",
       "source_location": "L15"
+    },
+    {
+      "id": "src_components_chat_lazymessagestream_props",
+      "label": "Props",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "LazyMessageStream.tsx",
+      "file_type": "code",
+      "norm_label": "props",
+      "source_file": "src/components/chat/LazyMessageStream.tsx",
+      "source_location": "L13"
     },
     {
       "id": "src_components_common_chatmessagerenderer_chatmessagerendererprops",
@@ -433,56 +329,56 @@
       "source_location": "L4"
     },
     {
-      "id": "src_components_customer_orderdetail_orderdetailprops",
-      "label": "OrderDetailProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
-      "file_type": "code",
-      "norm_label": "orderdetailprops",
-      "source_file": "src/components/customer/OrderDetail.tsx",
-      "source_location": "L13"
-    },
-    {
-      "id": "src_components_orders_giftjoinserverbanner_giftjoinserverbannerprops",
-      "label": "GiftJoinServerBannerProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
-      "file_type": "code",
-      "norm_label": "giftjoinserverbannerprops",
-      "source_file": "src/components/orders/GiftJoinServerBanner.tsx",
-      "source_location": "L8"
-    },
-    {
-      "id": "src_components_orders_orderprogressstepper_props",
-      "label": "Props",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
-      "file_type": "code",
-      "norm_label": "props",
-      "source_file": "src/components/orders/OrderProgressStepper.tsx",
-      "source_location": "L4"
-    },
-    {
-      "id": "src_components_admin_floatingpaymentnotifications_floatingpaymentnotificationsprops",
-      "label": "FloatingPaymentNotificationsProps",
+      "id": "src_components_admin_adminkelolatongcoins_adminkelolatongcoinsprops",
+      "label": "AdminKelolaTongCoinsProps",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "AppProvider",
+      "community_name": "AdminTongCoinsPanel.tsx",
       "file_type": "code",
-      "norm_label": "floatingpaymentnotificationsprops",
-      "source_file": "src/components/admin/FloatingPaymentNotifications.tsx",
-      "source_location": "L8"
+      "norm_label": "adminkelolatongcoinsprops",
+      "source_file": "src/components/admin/AdminKelolaTongCoins.tsx",
+      "source_location": "L5"
+    },
+    {
+      "id": "src_components_admin_admintongcoinspanel_admintongcoinspanelprops",
+      "label": "AdminTongCoinsPanelProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "AdminTongCoinsPanel.tsx",
+      "file_type": "code",
+      "norm_label": "admintongcoinspanelprops",
+      "source_file": "src/components/admin/AdminTongCoinsPanel.tsx",
+      "source_location": "L54"
+    },
+    {
+      "id": "src_services_tongcoinservice_addtongcoinparams",
+      "label": "AddTongCoinParams",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "AdminTongCoinsPanel.tsx",
+      "file_type": "code",
+      "norm_label": "addtongcoinparams",
+      "source_file": "src/services/tongCoinService.ts",
+      "source_location": "L18"
+    },
+    {
+      "id": "src_services_tongcoinservice_resolveduser",
+      "label": "ResolvedUser",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "AdminTongCoinsPanel.tsx",
+      "file_type": "code",
+      "norm_label": "resolveduser",
+      "source_file": "src/services/tongCoinService.ts",
+      "source_location": "L27"
     },
     {
       "id": "src_components_admin_manualwaordermodal_catalogoption",
@@ -576,17 +472,17 @@
       "source_location": "L112"
     },
     {
-      "id": "src_context_appcontext_operationtype",
-      "label": "OperationType",
+      "id": "src_components_admin_admincatalogmanager_toast",
+      "label": "Toast",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 24,
-      "community_name": "OperationType",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
       "file_type": "code",
-      "norm_label": "operationtype",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L14"
+      "norm_label": "toast",
+      "source_file": "src/components/admin/AdminCatalogManager.tsx",
+      "source_location": "L13"
     },
     {
       "id": "src_components_checkout_checkoutmodal_checkoutmodalprops",
@@ -602,6 +498,19 @@
       "source_location": "L12"
     },
     {
+      "id": "src_components_common_installpwabutton_beforeinstallpromptevent",
+      "label": "BeforeInstallPromptEvent",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "beforeinstallpromptevent",
+      "source_file": "src/components/common/InstallPWAButton.tsx",
+      "source_location": "L4"
+    },
+    {
       "id": "src_components_common_rulesagreementmodal_rulesagreementmodalprops",
       "label": "RulesAgreementModalProps",
       "_callable": true,
@@ -613,6 +522,32 @@
       "norm_label": "rulesagreementmodalprops",
       "source_file": "src/components/common/RulesAgreementModal.tsx",
       "source_location": "L5"
+    },
+    {
+      "id": "src_components_customer_catalog_catalogprops",
+      "label": "CatalogProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "catalogprops",
+      "source_file": "src/components/customer/Catalog.tsx",
+      "source_location": "L36"
+    },
+    {
+      "id": "src_components_customer_customernotifications_customernotificationsprops",
+      "label": "CustomerNotificationsProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "customernotificationsprops",
+      "source_file": "src/components/customer/CustomerNotifications.tsx",
+      "source_location": "L10"
     },
     {
       "id": "src_components_customer_customerorders_customerordersprops",
@@ -628,6 +563,45 @@
       "source_location": "L9"
     },
     {
+      "id": "src_components_customer_orderdetail_orderdetailprops",
+      "label": "OrderDetailProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "orderdetailprops",
+      "source_file": "src/components/customer/OrderDetail.tsx",
+      "source_location": "L13"
+    },
+    {
+      "id": "src_components_orders_giftjoinserverbanner_giftjoinserverbannerprops",
+      "label": "GiftJoinServerBannerProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "giftjoinserverbannerprops",
+      "source_file": "src/components/orders/GiftJoinServerBanner.tsx",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_components_orders_orderprogressstepper_props",
+      "label": "Props",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "props",
+      "source_file": "src/components/orders/OrderProgressStepper.tsx",
+      "source_location": "L4"
+    },
+    {
       "id": "src_services_orderservice_checkordereligibilityparams",
       "label": "CheckOrderEligibilityParams",
       "_callable": true,
@@ -639,6 +613,19 @@
       "norm_label": "checkordereligibilityparams",
       "source_file": "src/services/orderService.ts",
       "source_location": "L4"
+    },
+    {
+      "id": "src_types_appnotification",
+      "label": "AppNotification",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "appnotification",
+      "source_file": "src/types.ts",
+      "source_location": "L311"
     },
     {
       "id": "src_types_cartentry",
@@ -654,30 +641,69 @@
       "source_location": "L212"
     },
     {
-      "id": "src_components_customer_catalog_catalogprops",
-      "label": "CatalogProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "CustomerPortal",
-      "file_type": "code",
-      "norm_label": "catalogprops",
-      "source_file": "src/components/customer/Catalog.tsx",
-      "source_location": "L36"
-    },
-    {
       "id": "src_types_gamecatalog",
       "label": "GameCatalog",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "CustomerPortal",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
       "file_type": "code",
       "norm_label": "gamecatalog",
       "source_file": "src/types.ts",
       "source_location": "L193"
+    },
+    {
+      "id": "src_types_pricelistitem",
+      "label": "PricelistItem",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "pricelistitem",
+      "source_file": "src/types.ts",
+      "source_location": "L145"
+    },
+    {
+      "id": "src_components_chat_customerinteractivebotstream_props",
+      "label": "Props",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "CustomerInteractiveBotStream.tsx",
+      "file_type": "code",
+      "norm_label": "props",
+      "source_file": "src/components/chat/CustomerInteractiveBotStream.tsx",
+      "source_location": "L7"
+    },
+    {
+      "id": "src_components_chat_strictordervalidatedform_props",
+      "label": "Props",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "CustomerInteractiveBotStream.tsx",
+      "file_type": "code",
+      "norm_label": "props",
+      "source_file": "src/components/chat/StrictOrderValidatedForm.tsx",
+      "source_location": "L6"
+    },
+    {
+      "id": "src_services_formsubmissionrelinkservice_submitformpayload",
+      "label": "SubmitFormPayload",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "CustomerInteractiveBotStream.tsx",
+      "file_type": "code",
+      "norm_label": "submitformpayload",
+      "source_file": "src/services/formSubmissionRelinkService.ts",
+      "source_location": "L16"
     },
     {
       "id": "src_services_storescheduleservice_storescheduleconfig",
@@ -691,19 +717,6 @@
       "norm_label": "storescheduleconfig",
       "source_file": "src/services/storeScheduleService.ts",
       "source_location": "L4"
-    },
-    {
-      "id": "src_components_customer_tongcoinspage_tongcoinspageprops",
-      "label": "TongCoinsPageProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "TongCoinsPage.tsx",
-      "file_type": "code",
-      "norm_label": "tongcoinspageprops",
-      "source_file": "src/components/customer/TongCoinsPage.tsx",
-      "source_location": "L44"
     },
     {
       "id": "src_components_admin_chat_chatinputform_chatinputformprops",
@@ -730,58 +743,6 @@
       "norm_label": "chatsidebaritemprops",
       "source_file": "src/components/admin/chat/ChatSidebarItem.tsx",
       "source_location": "L3"
-    },
-    {
-      "id": "src_components_auth_authmodal_props",
-      "label": "Props",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "code",
-      "norm_label": "props",
-      "source_file": "src/components/auth/AuthModal.tsx",
-      "source_location": "L8"
-    },
-    {
-      "id": "src_components_customer_customersettings_customersettingsprops",
-      "label": "CustomerSettingsProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "code",
-      "norm_label": "customersettingsprops",
-      "source_file": "src/components/customer/CustomerSettings.tsx",
-      "source_location": "L11"
-    },
-    {
-      "id": "src_components_orders_giftdeliverymodal_giftdeliverymodalprops",
-      "label": "GiftDeliveryModalProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "code",
-      "norm_label": "giftdeliverymodalprops",
-      "source_file": "src/components/orders/GiftDeliveryModal.tsx",
-      "source_location": "L5"
-    },
-    {
-      "id": "src_components_admin_admincatalogmanager_toast",
-      "label": "Toast",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "firebase.ts",
-      "file_type": "code",
-      "norm_label": "toast",
-      "source_file": "src/components/admin/AdminCatalogManager.tsx",
-      "source_location": "L13"
     },
     {
       "id": "src_components_admin_adminpaymentpending_adminpaymentpendingprops",
@@ -888,17 +849,69 @@
       "source_location": "L90"
     },
     {
-      "id": "src_types_pricelistitem",
-      "label": "PricelistItem",
+      "id": "src_components_admin_floatingpaymentnotifications_floatingpaymentnotificationsprops",
+      "label": "FloatingPaymentNotificationsProps",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 6,
-      "community_name": "firebase.ts",
+      "community": 8,
+      "community_name": "AppContext.tsx",
       "file_type": "code",
-      "norm_label": "pricelistitem",
-      "source_file": "src/types.ts",
-      "source_location": "L145"
+      "norm_label": "floatingpaymentnotificationsprops",
+      "source_file": "src/components/admin/FloatingPaymentNotifications.tsx",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_components_auth_verifyemailpage_verifyemailpageprops",
+      "label": "VerifyEmailPageProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "verifyemailpageprops",
+      "source_file": "src/components/auth/VerifyEmailPage.tsx",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_components_customer_customersettings_customersettingsprops",
+      "label": "CustomerSettingsProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "customersettingsprops",
+      "source_file": "src/components/customer/CustomerSettings.tsx",
+      "source_location": "L11"
+    },
+    {
+      "id": "src_components_customer_tongcoinspage_tongcoinspageprops",
+      "label": "TongCoinsPageProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "tongcoinspageprops",
+      "source_file": "src/components/customer/TongCoinsPage.tsx",
+      "source_location": "L44"
+    },
+    {
+      "id": "src_components_orders_giftdeliverymodal_giftdeliverymodalprops",
+      "label": "GiftDeliveryModalProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "giftdeliverymodalprops",
+      "source_file": "src/components/orders/GiftDeliveryModal.tsx",
+      "source_location": "L5"
     },
     {
       "id": "src_context_appcontext_appcontexttype",
@@ -925,6 +938,19 @@
       "norm_label": "firestoreerrorinfo",
       "source_file": "src/context/AppContext.tsx",
       "source_location": "L23"
+    },
+    {
+      "id": "src_context_appcontext_operationtype",
+      "label": "OperationType",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "operationtype",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L14"
     },
     {
       "id": "src_types_actioncard",
@@ -1187,19 +1213,6 @@
       "source_location": "L33"
     },
     {
-      "id": "src_components_customer_customernotifications_customernotificationsprops",
-      "label": "CustomerNotificationsProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "CustomerChat.tsx",
-      "file_type": "code",
-      "norm_label": "customernotificationsprops",
-      "source_file": "src/components/customer/CustomerNotifications.tsx",
-      "source_location": "L10"
-    },
-    {
       "id": "src_services_botchatservice_interactivebottype",
       "label": "InteractiveBotType",
       "_callable": true,
@@ -1211,19 +1224,6 @@
       "norm_label": "interactivebottype",
       "source_file": "src/services/botChatService.ts",
       "source_location": "L5"
-    },
-    {
-      "id": "src_types_appnotification",
-      "label": "AppNotification",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "CustomerChat.tsx",
-      "file_type": "code",
-      "norm_label": "appnotification",
-      "source_file": "src/types.ts",
-      "source_location": "L311"
     },
     {
       "id": "src_types_userprofile",
@@ -1575,6 +1575,18 @@
       "source_location": "L21"
     },
     {
+      "id": "src_components_auth_authmodal_authmodal",
+      "label": "AuthModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "authmodal()",
+      "source_file": "src/components/auth/AuthModal.tsx",
+      "source_location": "L14"
+    },
+    {
       "id": "src_components_auth_resetpasswordpage_resetpasswordpage",
       "label": "ResetPasswordPage()",
       "_callable": true,
@@ -1585,18 +1597,6 @@
       "norm_label": "resetpasswordpage()",
       "source_file": "src/components/auth/ResetPasswordPage.tsx",
       "source_location": "L23"
-    },
-    {
-      "id": "src_components_auth_verifyemailpage_verifyemailpage",
-      "label": "VerifyEmailPage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "App.tsx",
-      "file_type": "code",
-      "norm_label": "verifyemailpage()",
-      "source_file": "src/components/auth/VerifyEmailPage.tsx",
-      "source_location": "L12"
     },
     {
       "id": "src_components_autoreloadmanager_autoreloadmanager",
@@ -1767,6 +1767,30 @@
       "source_location": "L21"
     },
     {
+      "id": "src_lib_firebase_syncusertofirestore",
+      "label": "syncUserToFirestore()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "syncusertofirestore()",
+      "source_file": "src/lib/firebase.ts",
+      "source_location": "L194"
+    },
+    {
+      "id": "src_pages_auth_loginpage_loginpage",
+      "label": "LoginPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "loginpage()",
+      "source_file": "src/pages/auth/LoginPage.tsx",
+      "source_location": "L4"
+    },
+    {
       "id": "src_services_ordernotificationdispatcher_playnotificationsound",
       "label": "playNotificationSound()",
       "_callable": true,
@@ -1827,40 +1851,16 @@
       "source_location": "L9"
     },
     {
-      "id": "src_components_common_installpwabutton_installpwabutton",
-      "label": "InstallPWAButton()",
+      "id": "src_components_chat_interactivechatbot_interactivechatbot",
+      "label": "InteractiveChatBot()",
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "InstallPWAButton.tsx",
+      "community_name": "InteractiveChatBot.tsx",
       "file_type": "code",
-      "norm_label": "installpwabutton()",
-      "source_file": "src/components/common/InstallPWAButton.tsx",
-      "source_location": "L27"
-    },
-    {
-      "id": "src_components_common_installpwabutton_isinstandalone",
-      "label": "isInStandalone()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "InstallPWAButton.tsx",
-      "file_type": "code",
-      "norm_label": "isinstandalone()",
-      "source_file": "src/components/common/InstallPWAButton.tsx",
-      "source_location": "L20"
-    },
-    {
-      "id": "src_components_common_installpwabutton_isios",
-      "label": "isIOS()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "InstallPWAButton.tsx",
-      "file_type": "code",
-      "norm_label": "isios()",
-      "source_file": "src/components/common/InstallPWAButton.tsx",
-      "source_location": "L12"
+      "norm_label": "interactivechatbot()",
+      "source_file": "src/components/chat/InteractiveChatBot.tsx",
+      "source_location": "L21"
     },
     {
       "id": "check_jsx_check",
@@ -2127,30 +2127,6 @@
       "source_location": "L16"
     },
     {
-      "id": "src_components_admin_adminkelolatongcoins_adminkelolatongcoins",
-      "label": "AdminKelolaTongCoins()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "adminkelolatongcoins()",
-      "source_file": "src/components/admin/AdminKelolaTongCoins.tsx",
-      "source_location": "L10"
-    },
-    {
-      "id": "src_components_admin_admintongcoinspanel_admintongcoinspanel",
-      "label": "AdminTongCoinsPanel()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "admintongcoinspanel()",
-      "source_file": "src/components/admin/AdminTongCoinsPanel.tsx",
-      "source_location": "L59"
-    },
-    {
       "id": "src_components_admin_jokiordercard_jokiordercard",
       "label": "JokiOrderCard()",
       "_callable": true,
@@ -2161,78 +2137,6 @@
       "norm_label": "jokiordercard()",
       "source_file": "src/components/admin/JokiOrderCard.tsx",
       "source_location": "L5"
-    },
-    {
-      "id": "src_components_chat_customerinteractivebotstream_customerinteractivebotstream",
-      "label": "CustomerInteractiveBotStream()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "customerinteractivebotstream()",
-      "source_file": "src/components/chat/CustomerInteractiveBotStream.tsx",
-      "source_location": "L14"
-    },
-    {
-      "id": "src_components_chat_interactivechatbot_interactivechatbot",
-      "label": "InteractiveChatBot()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "interactivechatbot()",
-      "source_file": "src/components/chat/InteractiveChatBot.tsx",
-      "source_location": "L21"
-    },
-    {
-      "id": "src_components_chat_lazymessagestream_lazymessagestream",
-      "label": "LazyMessageStream()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "lazymessagestream()",
-      "source_file": "src/components/chat/LazyMessageStream.tsx",
-      "source_location": "L42"
-    },
-    {
-      "id": "src_components_chat_strictordervalidatedform_strictordervalidatedform",
-      "label": "StrictOrderValidatedForm()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "strictordervalidatedform()",
-      "source_file": "src/components/chat/StrictOrderValidatedForm.tsx",
-      "source_location": "L13"
-    },
-    {
-      "id": "src_components_notification_mandatorynotificationgate_mandatorynotificationgate",
-      "label": "MandatoryNotificationGate()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "mandatorynotificationgate()",
-      "source_file": "src/components/notification/MandatoryNotificationGate.tsx",
-      "source_location": "L7"
-    },
-    {
-      "id": "src_hooks_usecustomerwallet_usecustomerwallet",
-      "label": "useCustomerWallet()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "usecustomerwallet()",
-      "source_file": "src/hooks/useCustomerWallet.ts",
-      "source_location": "L6"
     },
     {
       "id": "src_services_adminstatussyncservice_syncorderstatuseverywhere",
@@ -2247,126 +2151,6 @@
       "source_location": "L13"
     },
     {
-      "id": "src_services_botwelcomeservice_dispatchcatalogactionbubble",
-      "label": "dispatchCatalogActionBubble()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "dispatchcatalogactionbubble()",
-      "source_file": "src/services/botWelcomeService.ts",
-      "source_location": "L4"
-    },
-    {
-      "id": "src_services_chatautocleanupservice_deletechatsubcollections",
-      "label": "deleteChatSubcollections()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "deletechatsubcollections()",
-      "source_file": "src/services/chatAutoCleanupService.ts",
-      "source_location": "L14"
-    },
-    {
-      "id": "src_services_chatautocleanupservice_executeautopurgeinactivechats",
-      "label": "executeAutoPurgeInactiveChats()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "executeautopurgeinactivechats()",
-      "source_file": "src/services/chatAutoCleanupService.ts",
-      "source_location": "L36"
-    },
-    {
-      "id": "src_services_chatservice_formatsafechattime",
-      "label": "formatSafeChatTime()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "formatsafechattime()",
-      "source_file": "src/services/chatService.ts",
-      "source_location": "L31"
-    },
-    {
-      "id": "src_services_chatservice_normalizechattimestamp",
-      "label": "normalizeChatTimestamp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "normalizechattimestamp()",
-      "source_file": "src/services/chatService.ts",
-      "source_location": "L8"
-    },
-    {
-      "id": "src_services_chatservice_subscribetoallchats",
-      "label": "subscribeToAllChats()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "subscribetoallchats()",
-      "source_file": "src/services/chatService.ts",
-      "source_location": "L47"
-    },
-    {
-      "id": "src_services_chatunreadservice_clearchatunread",
-      "label": "clearChatUnread()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "clearchatunread()",
-      "source_file": "src/services/chatUnreadService.ts",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_services_chatunreadservice_markallchatsasread",
-      "label": "markAllChatsAsRead()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "markallchatsasread()",
-      "source_file": "src/services/chatUnreadService.ts",
-      "source_location": "L52"
-    },
-    {
-      "id": "src_services_chatunreadservice_subscribeunreadbadgecount",
-      "label": "subscribeUnreadBadgeCount()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "subscribeunreadbadgecount()",
-      "source_file": "src/services/chatUnreadService.ts",
-      "source_location": "L37"
-    },
-    {
-      "id": "src_services_formsubmissionrelinkservice_submitformandrelinkorder",
-      "label": "submitFormAndRelinkOrder()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "submitformandrelinkorder()",
-      "source_file": "src/services/formSubmissionRelinkService.ts",
-      "source_location": "L26"
-    },
-    {
       "id": "src_services_orderhangusservice_executesetorderhangus",
       "label": "executeSetOrderHangus()",
       "_callable": true,
@@ -2377,42 +2161,6 @@
       "norm_label": "executesetorderhangus()",
       "source_file": "src/services/orderHangusService.ts",
       "source_location": "L11"
-    },
-    {
-      "id": "src_services_tongcoinservice_mutatetongcoins",
-      "label": "mutateTongCoins()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "mutatetongcoins()",
-      "source_file": "src/services/tongCoinService.ts",
-      "source_location": "L148"
-    },
-    {
-      "id": "src_services_tongcoinservice_resolveuserdocref",
-      "label": "resolveUserDocRef()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "resolveuserdocref()",
-      "source_file": "src/services/tongCoinService.ts",
-      "source_location": "L37"
-    },
-    {
-      "id": "src_services_tongcoinservice_resolveuserwithdata",
-      "label": "resolveUserWithData()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "resolveuserwithdata()",
-      "source_file": "src/services/tongCoinService.ts",
-      "source_location": "L42"
     },
     {
       "id": "vite_config_versiongeneratorplugin",
@@ -2595,6 +2343,18 @@
       "source_location": "L189"
     },
     {
+      "id": "src_components_chat_lazymessagestream_lazymessagestream",
+      "label": "LazyMessageStream()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "LazyMessageStream.tsx",
+      "file_type": "code",
+      "norm_label": "lazymessagestream()",
+      "source_file": "src/components/chat/LazyMessageStream.tsx",
+      "source_location": "L42"
+    },
+    {
       "id": "src_components_common_chatmessagerenderer_formattedchatmessage",
       "label": "FormattedChatMessage()",
       "_callable": true,
@@ -2619,292 +2379,136 @@
       "source_location": "L8"
     },
     {
-      "id": "src_components_customer_orderdetail_checkisconfirmedlocally",
-      "label": "checkIsConfirmedLocally()",
+      "id": "src_services_chatservice_formatsafechattime",
+      "label": "formatSafeChatTime()",
       "_callable": true,
       "_origin": "ast",
       "community": 18,
-      "community_name": "OrderDetail.tsx",
+      "community_name": "chatService.ts",
       "file_type": "code",
-      "norm_label": "checkisconfirmedlocally()",
-      "source_file": "src/components/customer/OrderDetail.tsx",
-      "source_location": "L21"
+      "norm_label": "formatsafechattime()",
+      "source_file": "src/services/chatService.ts",
+      "source_location": "L31"
     },
     {
-      "id": "src_components_customer_orderdetail_orderdetail",
-      "label": "OrderDetail()",
+      "id": "src_services_chatservice_normalizechattimestamp",
+      "label": "normalizeChatTimestamp()",
       "_callable": true,
       "_origin": "ast",
       "community": 18,
-      "community_name": "OrderDetail.tsx",
+      "community_name": "chatService.ts",
       "file_type": "code",
-      "norm_label": "orderdetail()",
-      "source_file": "src/components/customer/OrderDetail.tsx",
-      "source_location": "L41"
+      "norm_label": "normalizechattimestamp()",
+      "source_file": "src/services/chatService.ts",
+      "source_location": "L8"
     },
     {
-      "id": "src_components_orders_giftjoinserverbanner_giftjoinserverbanner",
-      "label": "GiftJoinServerBanner()",
+      "id": "src_services_chatservice_subscribetoallchats",
+      "label": "subscribeToAllChats()",
       "_callable": true,
       "_origin": "ast",
       "community": 18,
-      "community_name": "OrderDetail.tsx",
+      "community_name": "chatService.ts",
       "file_type": "code",
-      "norm_label": "giftjoinserverbanner()",
-      "source_file": "src/components/orders/GiftJoinServerBanner.tsx",
-      "source_location": "L13"
+      "norm_label": "subscribetoallchats()",
+      "source_file": "src/services/chatService.ts",
+      "source_location": "L47"
     },
     {
-      "id": "src_components_orders_orderprogressstepper_orderprogressstepper",
-      "label": "OrderProgressStepper()",
+      "id": "src_components_admin_adminkelolatongcoins_adminkelolatongcoins",
+      "label": "AdminKelolaTongCoins()",
       "_callable": true,
       "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
+      "community": 2,
+      "community_name": "AdminTongCoinsPanel.tsx",
       "file_type": "code",
-      "norm_label": "orderprogressstepper()",
-      "source_file": "src/components/orders/OrderProgressStepper.tsx",
+      "norm_label": "adminkelolatongcoins()",
+      "source_file": "src/components/admin/AdminKelolaTongCoins.tsx",
+      "source_location": "L10"
+    },
+    {
+      "id": "src_components_admin_admintongcoinspanel_admintongcoinspanel",
+      "label": "AdminTongCoinsPanel()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "AdminTongCoinsPanel.tsx",
+      "file_type": "code",
+      "norm_label": "admintongcoinspanel()",
+      "source_file": "src/components/admin/AdminTongCoinsPanel.tsx",
+      "source_location": "L59"
+    },
+    {
+      "id": "src_services_tongcoinservice_mutatetongcoins",
+      "label": "mutateTongCoins()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "AdminTongCoinsPanel.tsx",
+      "file_type": "code",
+      "norm_label": "mutatetongcoins()",
+      "source_file": "src/services/tongCoinService.ts",
+      "source_location": "L148"
+    },
+    {
+      "id": "src_services_tongcoinservice_resolveuserdocref",
+      "label": "resolveUserDocRef()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "AdminTongCoinsPanel.tsx",
+      "file_type": "code",
+      "norm_label": "resolveuserdocref()",
+      "source_file": "src/services/tongCoinService.ts",
+      "source_location": "L37"
+    },
+    {
+      "id": "src_services_tongcoinservice_resolveuserwithdata",
+      "label": "resolveUserWithData()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "AdminTongCoinsPanel.tsx",
+      "file_type": "code",
+      "norm_label": "resolveuserwithdata()",
+      "source_file": "src/services/tongCoinService.ts",
+      "source_location": "L42"
+    },
+    {
+      "id": "src_services_chatunreadservice_clearchatunread",
+      "label": "clearChatUnread()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "chatUnreadService.ts",
+      "file_type": "code",
+      "norm_label": "clearchatunread()",
+      "source_file": "src/services/chatUnreadService.ts",
       "source_location": "L15"
     },
     {
-      "id": "src_components_orders_workergiftcard_workergiftcard",
-      "label": "WorkerGiftCard()",
+      "id": "src_services_chatunreadservice_markallchatsasread",
+      "label": "markAllChatsAsRead()",
       "_callable": true,
       "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
+      "community": 20,
+      "community_name": "chatUnreadService.ts",
       "file_type": "code",
-      "norm_label": "workergiftcard()",
-      "source_file": "src/components/orders/WorkerGiftCard.tsx",
-      "source_location": "L5"
+      "norm_label": "markallchatsasread()",
+      "source_file": "src/services/chatUnreadService.ts",
+      "source_location": "L52"
     },
     {
-      "id": "src_utils_ordercategoryvalidator_filterstrictgiftbookingonly",
-      "label": "filterStrictGiftBookingOnly()",
+      "id": "src_services_chatunreadservice_subscribeunreadbadgecount",
+      "label": "subscribeUnreadBadgeCount()",
       "_callable": true,
       "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
+      "community": 20,
+      "community_name": "chatUnreadService.ts",
       "file_type": "code",
-      "norm_label": "filterstrictgiftbookingonly()",
-      "source_file": "src/utils/orderCategoryValidator.ts",
-      "source_location": "L71"
-    },
-    {
-      "id": "src_utils_ordercategoryvalidator_isstrictgiftbookingorder",
-      "label": "isStrictGiftBookingOrder()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
-      "file_type": "code",
-      "norm_label": "isstrictgiftbookingorder()",
-      "source_file": "src/utils/orderCategoryValidator.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_admin_floatingpaymentnotifications_extractordertime",
-      "label": "extractOrderTime()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "extractordertime()",
-      "source_file": "src/components/admin/FloatingPaymentNotifications.tsx",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_components_admin_floatingpaymentnotifications_floatingpaymentnotifications",
-      "label": "FloatingPaymentNotifications()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "floatingpaymentnotifications()",
-      "source_file": "src/components/admin/FloatingPaymentNotifications.tsx",
-      "source_location": "L33"
-    },
-    {
-      "id": "src_context_appcontext_appprovider",
-      "label": "AppProvider()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "appprovider()",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L242"
-    },
-    {
-      "id": "src_context_appcontext_appprovider_testconnection",
-      "label": "testConnection()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "testconnection()",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L538"
-    },
-    {
-      "id": "src_context_appcontext_cleanfirestorepayload",
-      "label": "cleanFirestorePayload()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "cleanfirestorepayload()",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L144"
-    },
-    {
-      "id": "src_context_appcontext_extractgameitemsfromcatalogs",
-      "label": "extractGameItemsFromCatalogs()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "extractgameitemsfromcatalogs()",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L221"
-    },
-    {
-      "id": "src_context_appcontext_handlefirestoreerror",
-      "label": "handleFirestoreError()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "handlefirestoreerror()",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L40"
-    },
-    {
-      "id": "src_utils_productcache_extractpopularproductsfromcatalogs",
-      "label": "extractPopularProductsFromCatalogs()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "extractpopularproductsfromcatalogs()",
-      "source_file": "src/utils/productCache.ts",
-      "source_location": "L258"
-    },
-    {
-      "id": "src_utils_productcache_getcachedcatalogs",
-      "label": "getCachedCatalogs()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "getcachedcatalogs()",
-      "source_file": "src/utils/productCache.ts",
-      "source_location": "L240"
-    },
-    {
-      "id": "src_utils_productcache_getcachedpopularproducts",
-      "label": "getCachedPopularProducts()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "getcachedpopularproducts()",
-      "source_file": "src/utils/productCache.ts",
-      "source_location": "L312"
-    },
-    {
-      "id": "src_utils_productcache_getfallbackpopularproducts",
-      "label": "getFallbackPopularProducts()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "getfallbackpopularproducts()",
-      "source_file": "src/utils/productCache.ts",
-      "source_location": "L254"
-    },
-    {
-      "id": "src_utils_productcache_setcachedcatalogs",
-      "label": "setCachedCatalogs()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "setcachedcatalogs()",
-      "source_file": "src/utils/productCache.ts",
-      "source_location": "L248"
-    },
-    {
-      "id": "src_utils_safestorage_safegetitem",
-      "label": "safeGetItem()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "safegetitem()",
-      "source_file": "src/utils/safeStorage.ts",
-      "source_location": "L26"
-    },
-    {
-      "id": "src_utils_safestorage_safegetjson",
-      "label": "safeGetJSON()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "safegetjson()",
-      "source_file": "src/utils/safeStorage.ts",
-      "source_location": "L3"
-    },
-    {
-      "id": "src_utils_safestorage_saferemoveitem",
-      "label": "safeRemoveItem()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "saferemoveitem()",
-      "source_file": "src/utils/safeStorage.ts",
-      "source_location": "L46"
-    },
-    {
-      "id": "src_utils_safestorage_safesetitem",
-      "label": "safeSetItem()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "safesetitem()",
-      "source_file": "src/utils/safeStorage.ts",
-      "source_location": "L36"
-    },
-    {
-      "id": "src_utils_safestorage_safesetjson",
-      "label": "safeSetJSON()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
-      "file_type": "code",
-      "norm_label": "safesetjson()",
-      "source_file": "src/utils/safeStorage.ts",
-      "source_location": "L15"
+      "norm_label": "subscribeunreadbadgecount()",
+      "source_file": "src/services/chatUnreadService.ts",
+      "source_location": "L37"
     },
     {
       "id": "src_components_admin_manualwaordermodal_manualwaordermodal",
@@ -2955,6 +2559,30 @@
       "source_location": "L17"
     },
     {
+      "id": "src_lib_roblox_fallbackavatar",
+      "label": "fallbackAvatar()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "phoneUtils.ts",
+      "file_type": "code",
+      "norm_label": "fallbackavatar()",
+      "source_file": "src/lib/roblox.ts",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_lib_roblox_fetchrobloxdirect",
+      "label": "fetchRobloxDirect()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 21,
+      "community_name": "phoneUtils.ts",
+      "file_type": "code",
+      "norm_label": "fetchrobloxdirect()",
+      "source_file": "src/lib/roblox.ts",
+      "source_location": "L11"
+    },
+    {
       "id": "src_lib_roblox_fetchrobloxprofile",
       "label": "fetchRobloxProfile()",
       "_callable": true,
@@ -2964,7 +2592,7 @@
       "file_type": "code",
       "norm_label": "fetchrobloxprofile()",
       "source_file": "src/lib/roblox.ts",
-      "source_location": "L8"
+      "source_location": "L40"
     },
     {
       "id": "src_services_accountlinkingservice_getcanonicalphone",
@@ -3255,6 +2883,42 @@
       "source_location": "L6"
     },
     {
+      "id": "src_services_chatautocleanupservice_deletechatsubcollections",
+      "label": "deleteChatSubcollections()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "chatAutoCleanupService.ts",
+      "file_type": "code",
+      "norm_label": "deletechatsubcollections()",
+      "source_file": "src/services/chatAutoCleanupService.ts",
+      "source_location": "L14"
+    },
+    {
+      "id": "src_services_chatautocleanupservice_executeautopurgeinactivechats",
+      "label": "executeAutoPurgeInactiveChats()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "chatAutoCleanupService.ts",
+      "file_type": "code",
+      "norm_label": "executeautopurgeinactivechats()",
+      "source_file": "src/services/chatAutoCleanupService.ts",
+      "source_location": "L36"
+    },
+    {
+      "id": "src_components_admin_admincatalogmanager_admincatalogmanager",
+      "label": "AdminCatalogManager()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "admincatalogmanager()",
+      "source_file": "src/components/admin/AdminCatalogManager.tsx",
+      "source_location": "L18"
+    },
+    {
       "id": "src_components_checkout_checkoutmodal_checkoutmodal",
       "label": "CheckoutModal()",
       "_callable": true,
@@ -3277,6 +2941,42 @@
       "norm_label": "compressimagefile()",
       "source_file": "src/components/checkout/CheckoutModal.tsx",
       "source_location": "L44"
+    },
+    {
+      "id": "src_components_common_installpwabutton_installpwabutton",
+      "label": "InstallPWAButton()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "installpwabutton()",
+      "source_file": "src/components/common/InstallPWAButton.tsx",
+      "source_location": "L27"
+    },
+    {
+      "id": "src_components_common_installpwabutton_isinstandalone",
+      "label": "isInStandalone()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "isinstandalone()",
+      "source_file": "src/components/common/InstallPWAButton.tsx",
+      "source_location": "L20"
+    },
+    {
+      "id": "src_components_common_installpwabutton_isios",
+      "label": "isIOS()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "isios()",
+      "source_file": "src/components/common/InstallPWAButton.tsx",
+      "source_location": "L12"
     },
     {
       "id": "src_components_common_rulesagreementmodal_rulesagreementmodal",
@@ -3303,6 +3003,42 @@
       "source_location": "L4"
     },
     {
+      "id": "src_components_customer_catalog_catalog",
+      "label": "Catalog()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "catalog()",
+      "source_file": "src/components/customer/Catalog.tsx",
+      "source_location": "L68"
+    },
+    {
+      "id": "src_components_customer_catalog_isproductavailable",
+      "label": "isProductAvailable()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "isproductavailable()",
+      "source_file": "src/components/customer/Catalog.tsx",
+      "source_location": "L47"
+    },
+    {
+      "id": "src_components_customer_customernotifications_customernotifications",
+      "label": "CustomerNotifications()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "customernotifications()",
+      "source_file": "src/components/customer/CustomerNotifications.tsx",
+      "source_location": "L20"
+    },
+    {
       "id": "src_components_customer_customerorders_customerorders",
       "label": "CustomerOrders()",
       "_callable": true,
@@ -3325,6 +3061,114 @@
       "norm_label": "compressimagefile()",
       "source_file": "src/components/customer/CustomerPortal.tsx",
       "source_location": "L44"
+    },
+    {
+      "id": "src_components_customer_customerportal_customerportal",
+      "label": "CustomerPortal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "customerportal()",
+      "source_file": "src/components/customer/CustomerPortal.tsx",
+      "source_location": "L80"
+    },
+    {
+      "id": "src_components_customer_orderdetail_checkisconfirmedlocally",
+      "label": "checkIsConfirmedLocally()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "checkisconfirmedlocally()",
+      "source_file": "src/components/customer/OrderDetail.tsx",
+      "source_location": "L21"
+    },
+    {
+      "id": "src_components_customer_orderdetail_orderdetail",
+      "label": "OrderDetail()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "orderdetail()",
+      "source_file": "src/components/customer/OrderDetail.tsx",
+      "source_location": "L41"
+    },
+    {
+      "id": "src_components_orders_giftjoinserverbanner_giftjoinserverbanner",
+      "label": "GiftJoinServerBanner()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "giftjoinserverbanner()",
+      "source_file": "src/components/orders/GiftJoinServerBanner.tsx",
+      "source_location": "L13"
+    },
+    {
+      "id": "src_components_orders_orderprogressstepper_orderprogressstepper",
+      "label": "OrderProgressStepper()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "orderprogressstepper()",
+      "source_file": "src/components/orders/OrderProgressStepper.tsx",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_lib_operatinghours_checkisgamepassopen",
+      "label": "checkIsGamepassOpen()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "checkisgamepassopen()",
+      "source_file": "src/lib/operatingHours.ts",
+      "source_location": "L57"
+    },
+    {
+      "id": "src_lib_operatinghours_isgiftclosedtime",
+      "label": "isGiftClosedTime()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "isgiftclosedtime()",
+      "source_file": "src/lib/operatingHours.ts",
+      "source_location": "L7"
+    },
+    {
+      "id": "src_lib_operatinghours_isproductgamepass",
+      "label": "isProductGamepass()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "isproductgamepass()",
+      "source_file": "src/lib/operatingHours.ts",
+      "source_location": "L86"
+    },
+    {
+      "id": "src_lib_operatinghours_isproductgift",
+      "label": "isProductGift()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "isproductgift()",
+      "source_file": "src/lib/operatingHours.ts",
+      "source_location": "L36"
     },
     {
       "id": "src_services_orderservice_saveorderwithretry",
@@ -3387,112 +3231,136 @@
       "source_location": "L5"
     },
     {
-      "id": "src_components_customer_catalog_catalog",
-      "label": "Catalog()",
+      "id": "src_utils_ordercategoryvalidator_filterstrictgiftbookingonly",
+      "label": "filterStrictGiftBookingOnly()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "CustomerPortal",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
       "file_type": "code",
-      "norm_label": "catalog()",
-      "source_file": "src/components/customer/Catalog.tsx",
-      "source_location": "L68"
+      "norm_label": "filterstrictgiftbookingonly()",
+      "source_file": "src/utils/orderCategoryValidator.ts",
+      "source_location": "L71"
     },
     {
-      "id": "src_components_customer_catalog_isproductavailable",
-      "label": "isProductAvailable()",
+      "id": "src_utils_ordercategoryvalidator_isstrictgiftbookingorder",
+      "label": "isStrictGiftBookingOrder()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "CustomerPortal",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
       "file_type": "code",
-      "norm_label": "isproductavailable()",
-      "source_file": "src/components/customer/Catalog.tsx",
-      "source_location": "L47"
+      "norm_label": "isstrictgiftbookingorder()",
+      "source_file": "src/utils/orderCategoryValidator.ts",
+      "source_location": "L1"
     },
     {
-      "id": "src_components_customer_customerportal_customerportal",
-      "label": "CustomerPortal()",
+      "id": "src_utils_productcache_extractpopularproductsfromcatalogs",
+      "label": "extractPopularProductsFromCatalogs()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "CustomerPortal",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
       "file_type": "code",
-      "norm_label": "customerportal()",
-      "source_file": "src/components/customer/CustomerPortal.tsx",
-      "source_location": "L80"
+      "norm_label": "extractpopularproductsfromcatalogs()",
+      "source_file": "src/utils/productCache.ts",
+      "source_location": "L258"
     },
     {
-      "id": "src_context_appcontext_formatdate",
-      "label": "formatDate()",
+      "id": "src_utils_productcache_getcachedcatalogs",
+      "label": "getCachedCatalogs()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "CustomerPortal",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
       "file_type": "code",
-      "norm_label": "formatdate()",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L155"
+      "norm_label": "getcachedcatalogs()",
+      "source_file": "src/utils/productCache.ts",
+      "source_location": "L240"
     },
     {
-      "id": "src_lib_operatinghours_checkisgamepassopen",
-      "label": "checkIsGamepassOpen()",
+      "id": "src_utils_productcache_getcachedpopularproducts",
+      "label": "getCachedPopularProducts()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "CustomerPortal",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
       "file_type": "code",
-      "norm_label": "checkisgamepassopen()",
-      "source_file": "src/lib/operatingHours.ts",
-      "source_location": "L57"
+      "norm_label": "getcachedpopularproducts()",
+      "source_file": "src/utils/productCache.ts",
+      "source_location": "L312"
     },
     {
-      "id": "src_lib_operatinghours_isgiftclosedtime",
-      "label": "isGiftClosedTime()",
+      "id": "src_utils_productcache_getfallbackpopularproducts",
+      "label": "getFallbackPopularProducts()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "CustomerPortal",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
       "file_type": "code",
-      "norm_label": "isgiftclosedtime()",
-      "source_file": "src/lib/operatingHours.ts",
-      "source_location": "L7"
+      "norm_label": "getfallbackpopularproducts()",
+      "source_file": "src/utils/productCache.ts",
+      "source_location": "L254"
     },
     {
-      "id": "src_lib_operatinghours_isproductgamepass",
-      "label": "isProductGamepass()",
+      "id": "src_utils_productcache_setcachedcatalogs",
+      "label": "setCachedCatalogs()",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "CustomerPortal",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
       "file_type": "code",
-      "norm_label": "isproductgamepass()",
-      "source_file": "src/lib/operatingHours.ts",
-      "source_location": "L86"
+      "norm_label": "setcachedcatalogs()",
+      "source_file": "src/utils/productCache.ts",
+      "source_location": "L248"
     },
     {
-      "id": "src_lib_operatinghours_isproductgift",
-      "label": "isProductGift()",
+      "id": "src_components_chat_customerinteractivebotstream_customerinteractivebotstream",
+      "label": "CustomerInteractiveBotStream()",
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "CustomerPortal",
+      "community_name": "CustomerInteractiveBotStream.tsx",
       "file_type": "code",
-      "norm_label": "isproductgift()",
-      "source_file": "src/lib/operatingHours.ts",
-      "source_location": "L36"
+      "norm_label": "customerinteractivebotstream()",
+      "source_file": "src/components/chat/CustomerInteractiveBotStream.tsx",
+      "source_location": "L14"
     },
     {
-      "id": "src_utils_phoneutils_syncguestorderstouser",
-      "label": "syncGuestOrdersToUser()",
+      "id": "src_components_chat_strictordervalidatedform_strictordervalidatedform",
+      "label": "StrictOrderValidatedForm()",
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "CustomerPortal",
+      "community_name": "CustomerInteractiveBotStream.tsx",
       "file_type": "code",
-      "norm_label": "syncguestorderstouser()",
-      "source_file": "src/utils/phoneUtils.ts",
-      "source_location": "L59"
+      "norm_label": "strictordervalidatedform()",
+      "source_file": "src/components/chat/StrictOrderValidatedForm.tsx",
+      "source_location": "L13"
+    },
+    {
+      "id": "src_services_botwelcomeservice_dispatchcatalogactionbubble",
+      "label": "dispatchCatalogActionBubble()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "CustomerInteractiveBotStream.tsx",
+      "file_type": "code",
+      "norm_label": "dispatchcatalogactionbubble()",
+      "source_file": "src/services/botWelcomeService.ts",
+      "source_location": "L4"
+    },
+    {
+      "id": "src_services_formsubmissionrelinkservice_submitformandrelinkorder",
+      "label": "submitFormAndRelinkOrder()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "CustomerInteractiveBotStream.tsx",
+      "file_type": "code",
+      "norm_label": "submitformandrelinkorder()",
+      "source_file": "src/services/formSubmissionRelinkService.ts",
+      "source_location": "L26"
     },
     {
       "id": "src_components_admin_storeschedulesettingmodal_storeschedulesettingmodal",
@@ -3553,30 +3421,6 @@
       "norm_label": "subscribestoreschedule()",
       "source_file": "src/services/storeScheduleService.ts",
       "source_location": "L88"
-    },
-    {
-      "id": "src_components_customer_tongcoinspage_formattransactiondate",
-      "label": "formatTransactionDate()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "TongCoinsPage.tsx",
-      "file_type": "code",
-      "norm_label": "formattransactiondate()",
-      "source_file": "src/components/customer/TongCoinsPage.tsx",
-      "source_location": "L49"
-    },
-    {
-      "id": "src_components_customer_tongcoinspage_tongcoinspage",
-      "label": "TongCoinsPage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "TongCoinsPage.tsx",
-      "file_type": "code",
-      "norm_label": "tongcoinspage()",
-      "source_file": "src/components/customer/TongCoinsPage.tsx",
-      "source_location": "L73"
     },
     {
       "id": "parse_ast3_printtree",
@@ -3687,88 +3531,28 @@
       "source_location": "L8"
     },
     {
-      "id": "src_components_auth_authmodal_authmodal",
-      "label": "AuthModal()",
+      "id": "src_components_notification_mandatorynotificationgate_mandatorynotificationgate",
+      "label": "MandatoryNotificationGate()",
       "_callable": true,
       "_origin": "ast",
       "community": 5,
-      "community_name": "useApp",
+      "community_name": "auth",
       "file_type": "code",
-      "norm_label": "authmodal()",
-      "source_file": "src/components/auth/AuthModal.tsx",
-      "source_location": "L14"
+      "norm_label": "mandatorynotificationgate()",
+      "source_file": "src/components/notification/MandatoryNotificationGate.tsx",
+      "source_location": "L7"
     },
     {
-      "id": "src_components_common_webpushnotificationbanner_webpushnotificationbanner",
-      "label": "WebPushNotificationBanner()",
+      "id": "src_hooks_usecustomerwallet_usecustomerwallet",
+      "label": "useCustomerWallet()",
       "_callable": true,
       "_origin": "ast",
       "community": 5,
-      "community_name": "useApp",
+      "community_name": "auth",
       "file_type": "code",
-      "norm_label": "webpushnotificationbanner()",
-      "source_file": "src/components/common/WebPushNotificationBanner.tsx",
-      "source_location": "L9"
-    },
-    {
-      "id": "src_components_customer_customersettings_customersettings",
-      "label": "CustomerSettings()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "code",
-      "norm_label": "customersettings()",
-      "source_file": "src/components/customer/CustomerSettings.tsx",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_components_orders_giftdeliverymodal_giftdeliverymodal",
-      "label": "GiftDeliveryModal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "code",
-      "norm_label": "giftdeliverymodal()",
-      "source_file": "src/components/orders/GiftDeliveryModal.tsx",
-      "source_location": "L11"
-    },
-    {
-      "id": "src_context_appcontext_useapp",
-      "label": "useApp()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "code",
-      "norm_label": "useapp()",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L3211"
-    },
-    {
-      "id": "src_lib_firebase_syncusertofirestore",
-      "label": "syncUserToFirestore()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "code",
-      "norm_label": "syncusertofirestore()",
-      "source_file": "src/lib/firebase.ts",
-      "source_location": "L204"
-    },
-    {
-      "id": "src_pages_auth_loginpage_loginpage",
-      "label": "LoginPage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "code",
-      "norm_label": "loginpage()",
-      "source_file": "src/pages/auth/LoginPage.tsx",
-      "source_location": "L4"
+      "norm_label": "usecustomerwallet()",
+      "source_file": "src/hooks/useCustomerWallet.ts",
+      "source_location": "L6"
     },
     {
       "id": "parse_debug3_finderrors",
@@ -3805,18 +3589,6 @@
       "norm_label": "finderrors()",
       "source_file": "test_parse.cjs",
       "source_location": "L7"
-    },
-    {
-      "id": "src_components_admin_admincatalogmanager_admincatalogmanager",
-      "label": "AdminCatalogManager()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "firebase.ts",
-      "file_type": "code",
-      "norm_label": "admincatalogmanager()",
-      "source_file": "src/components/admin/AdminCatalogManager.tsx",
-      "source_location": "L18"
     },
     {
       "id": "src_components_admin_adminpanel_adminpanel",
@@ -4107,6 +3879,18 @@
       "source_location": "L176"
     },
     {
+      "id": "src_context_appcontext_formatdate",
+      "label": "formatDate()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "firebase.ts",
+      "file_type": "code",
+      "norm_label": "formatdate()",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L155"
+    },
+    {
       "id": "src_hooks_useautoupdatewatcher_triggerforcesystemrefresh",
       "label": "triggerForceSystemRefresh()",
       "_callable": true,
@@ -4140,7 +3924,7 @@
       "file_type": "code",
       "norm_label": "applysmartsearch()",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L175"
+      "source_location": "L165"
     },
     {
       "id": "src_lib_firebase_extracttimems",
@@ -4152,7 +3936,7 @@
       "file_type": "code",
       "norm_label": "extracttimems()",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L125"
+      "source_location": "L115"
     },
     {
       "id": "src_lib_firebase_getinitialcreationtimestamp",
@@ -4164,7 +3948,7 @@
       "file_type": "code",
       "norm_label": "getinitialcreationtimestamp()",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L170"
+      "source_location": "L160"
     },
     {
       "id": "src_lib_firebase_getpurecreationtime",
@@ -4176,7 +3960,7 @@
       "file_type": "code",
       "norm_label": "getpurecreationtime()",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L166"
+      "source_location": "L156"
     },
     {
       "id": "src_lib_firebase_getsafetimestamp",
@@ -4188,7 +3972,7 @@
       "file_type": "code",
       "norm_label": "getsafetimestamp()",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L199"
+      "source_location": "L189"
     },
     {
       "id": "src_lib_giftexpirationservice_buildexpiredwarningtext",
@@ -4261,18 +4045,6 @@
       "norm_label": "isjunkbotorder()",
       "source_file": "src/lib/orderRefund.ts",
       "source_location": "L22"
-    },
-    {
-      "id": "src_lib_orderrefund_istopuptcorder",
-      "label": "isTopUpTcOrder()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "firebase.ts",
-      "file_type": "code",
-      "norm_label": "istopuptcorder()",
-      "source_file": "src/lib/orderRefund.ts",
-      "source_location": "L75"
     },
     {
       "id": "src_lib_orderrefund_purgeallbotanddummyorders",
@@ -4467,6 +4239,162 @@
       "source_location": "L32"
     },
     {
+      "id": "src_components_admin_floatingpaymentnotifications_extractordertime",
+      "label": "extractOrderTime()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "extractordertime()",
+      "source_file": "src/components/admin/FloatingPaymentNotifications.tsx",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_components_admin_floatingpaymentnotifications_floatingpaymentnotifications",
+      "label": "FloatingPaymentNotifications()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "floatingpaymentnotifications()",
+      "source_file": "src/components/admin/FloatingPaymentNotifications.tsx",
+      "source_location": "L33"
+    },
+    {
+      "id": "src_components_auth_verifyemailpage_verifyemailpage",
+      "label": "VerifyEmailPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "verifyemailpage()",
+      "source_file": "src/components/auth/VerifyEmailPage.tsx",
+      "source_location": "L12"
+    },
+    {
+      "id": "src_components_common_webpushnotificationbanner_webpushnotificationbanner",
+      "label": "WebPushNotificationBanner()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "webpushnotificationbanner()",
+      "source_file": "src/components/common/WebPushNotificationBanner.tsx",
+      "source_location": "L9"
+    },
+    {
+      "id": "src_components_customer_customersettings_customersettings",
+      "label": "CustomerSettings()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "customersettings()",
+      "source_file": "src/components/customer/CustomerSettings.tsx",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_components_customer_tongcoinspage_formattransactiondate",
+      "label": "formatTransactionDate()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "formattransactiondate()",
+      "source_file": "src/components/customer/TongCoinsPage.tsx",
+      "source_location": "L49"
+    },
+    {
+      "id": "src_components_customer_tongcoinspage_tongcoinspage",
+      "label": "TongCoinsPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "tongcoinspage()",
+      "source_file": "src/components/customer/TongCoinsPage.tsx",
+      "source_location": "L73"
+    },
+    {
+      "id": "src_components_orders_giftdeliverymodal_giftdeliverymodal",
+      "label": "GiftDeliveryModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "giftdeliverymodal()",
+      "source_file": "src/components/orders/GiftDeliveryModal.tsx",
+      "source_location": "L11"
+    },
+    {
+      "id": "src_components_orders_workergiftcard_workergiftcard",
+      "label": "WorkerGiftCard()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "workergiftcard()",
+      "source_file": "src/components/orders/WorkerGiftCard.tsx",
+      "source_location": "L5"
+    },
+    {
+      "id": "src_context_appcontext_appprovider",
+      "label": "AppProvider()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "appprovider()",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L242"
+    },
+    {
+      "id": "src_context_appcontext_appprovider_testconnection",
+      "label": "testConnection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "testconnection()",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L543"
+    },
+    {
+      "id": "src_context_appcontext_cleanfirestorepayload",
+      "label": "cleanFirestorePayload()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "cleanfirestorepayload()",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L144"
+    },
+    {
+      "id": "src_context_appcontext_extractgameitemsfromcatalogs",
+      "label": "extractGameItemsFromCatalogs()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "extractgameitemsfromcatalogs()",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L221"
+    },
+    {
       "id": "src_context_appcontext_formattime",
       "label": "formatTime()",
       "_callable": true,
@@ -4477,6 +4405,114 @@
       "norm_label": "formattime()",
       "source_file": "src/context/AppContext.tsx",
       "source_location": "L199"
+    },
+    {
+      "id": "src_context_appcontext_handlefirestoreerror",
+      "label": "handleFirestoreError()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "handlefirestoreerror()",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L40"
+    },
+    {
+      "id": "src_context_appcontext_useapp",
+      "label": "useApp()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "useapp()",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L3216"
+    },
+    {
+      "id": "src_lib_orderrefund_istopuptcorder",
+      "label": "isTopUpTcOrder()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "istopuptcorder()",
+      "source_file": "src/lib/orderRefund.ts",
+      "source_location": "L75"
+    },
+    {
+      "id": "src_utils_phoneutils_syncguestorderstouser",
+      "label": "syncGuestOrdersToUser()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "syncguestorderstouser()",
+      "source_file": "src/utils/phoneUtils.ts",
+      "source_location": "L59"
+    },
+    {
+      "id": "src_utils_safestorage_safegetitem",
+      "label": "safeGetItem()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "safegetitem()",
+      "source_file": "src/utils/safeStorage.ts",
+      "source_location": "L26"
+    },
+    {
+      "id": "src_utils_safestorage_safegetjson",
+      "label": "safeGetJSON()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "safegetjson()",
+      "source_file": "src/utils/safeStorage.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "src_utils_safestorage_saferemoveitem",
+      "label": "safeRemoveItem()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "saferemoveitem()",
+      "source_file": "src/utils/safeStorage.ts",
+      "source_location": "L46"
+    },
+    {
+      "id": "src_utils_safestorage_safesetitem",
+      "label": "safeSetItem()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "safesetitem()",
+      "source_file": "src/utils/safeStorage.ts",
+      "source_location": "L36"
+    },
+    {
+      "id": "src_utils_safestorage_safesetjson",
+      "label": "safeSetJSON()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "safesetjson()",
+      "source_file": "src/utils/safeStorage.ts",
+      "source_location": "L15"
     },
     {
       "id": "src_components_admin_attendancepanel_attendancepanel",
@@ -4621,18 +4657,6 @@
       "norm_label": "reviewpromptcard()",
       "source_file": "src/components/customer/CustomerChat.tsx",
       "source_location": "L149"
-    },
-    {
-      "id": "src_components_customer_customernotifications_customernotifications",
-      "label": "CustomerNotifications()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "CustomerChat.tsx",
-      "file_type": "code",
-      "norm_label": "customernotifications()",
-      "source_file": "src/components/customer/CustomerNotifications.tsx",
-      "source_location": "L20"
     },
     {
       "id": "src_lib_mediautils_compressimage",
@@ -5085,6 +5109,17 @@
       "source_location": "L1"
     },
     {
+      "id": "src_components_auth_authmodal",
+      "label": "AuthModal.tsx",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "authmodal.tsx",
+      "source_file": "src/components/auth/AuthModal.tsx",
+      "source_location": "L1"
+    },
+    {
       "id": "src_components_auth_resetpasswordpage",
       "label": "ResetPasswordPage.tsx",
       "_origin": "ast",
@@ -5093,17 +5128,6 @@
       "file_type": "code",
       "norm_label": "resetpasswordpage.tsx",
       "source_file": "src/components/auth/ResetPasswordPage.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_auth_verifyemailpage",
-      "label": "VerifyEmailPage.tsx",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "App.tsx",
-      "file_type": "code",
-      "norm_label": "verifyemailpage.tsx",
-      "source_file": "src/components/auth/VerifyEmailPage.tsx",
       "source_location": "L1"
     },
     {
@@ -5182,6 +5206,17 @@
       "norm_label": "rootelement",
       "source_file": "src/main.tsx",
       "source_location": "L38"
+    },
+    {
+      "id": "src_pages_auth_loginpage",
+      "label": "LoginPage.tsx",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "loginpage.tsx",
+      "source_file": "src/pages/auth/LoginPage.tsx",
+      "source_location": "L1"
     },
     {
       "id": "src_services_ordernotificationdispatcher",
@@ -5682,14 +5717,14 @@
       "source_location": "L1"
     },
     {
-      "id": "src_components_common_installpwabutton",
-      "label": "InstallPWAButton.tsx",
+      "id": "src_components_chat_interactivechatbot",
+      "label": "InteractiveChatBot.tsx",
       "_origin": "ast",
       "community": 11,
-      "community_name": "InstallPWAButton.tsx",
+      "community_name": "InteractiveChatBot.tsx",
       "file_type": "code",
-      "norm_label": "installpwabutton.tsx",
-      "source_file": "src/components/common/InstallPWAButton.tsx",
+      "norm_label": "interactivechatbot.tsx",
+      "source_file": "src/components/chat/InteractiveChatBot.tsx",
       "source_location": "L1"
     },
     {
@@ -6643,28 +6678,6 @@
       "source_location": "L1"
     },
     {
-      "id": "src_components_admin_adminkelolatongcoins",
-      "label": "AdminKelolaTongCoins.tsx",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "adminkelolatongcoins.tsx",
-      "source_file": "src/components/admin/AdminKelolaTongCoins.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_admin_admintongcoinspanel",
-      "label": "AdminTongCoinsPanel.tsx",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "admintongcoinspanel.tsx",
-      "source_file": "src/components/admin/AdminTongCoinsPanel.tsx",
-      "source_location": "L1"
-    },
-    {
       "id": "src_components_admin_jokiordercard",
       "label": "JokiOrderCard.tsx",
       "_origin": "ast",
@@ -6676,94 +6689,6 @@
       "source_location": "L1"
     },
     {
-      "id": "src_components_chat_customerinteractivebotstream",
-      "label": "CustomerInteractiveBotStream.tsx",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "customerinteractivebotstream.tsx",
-      "source_file": "src/components/chat/CustomerInteractiveBotStream.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_chat_interactivechatbot",
-      "label": "InteractiveChatBot.tsx",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "interactivechatbot.tsx",
-      "source_file": "src/components/chat/InteractiveChatBot.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_chat_lazymessagestream",
-      "label": "LazyMessageStream.tsx",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "lazymessagestream.tsx",
-      "source_file": "src/components/chat/LazyMessageStream.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_chat_lazymessagestream_memoizedbubble",
-      "label": "MemoizedBubble",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "memoizedbubble",
-      "source_file": "src/components/chat/LazyMessageStream.tsx",
-      "source_location": "L19"
-    },
-    {
-      "id": "src_components_chat_strictordervalidatedform",
-      "label": "StrictOrderValidatedForm.tsx",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "strictordervalidatedform.tsx",
-      "source_file": "src/components/chat/StrictOrderValidatedForm.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_notification_mandatorynotificationgate",
-      "label": "MandatoryNotificationGate.tsx",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "mandatorynotificationgate.tsx",
-      "source_file": "src/components/notification/MandatoryNotificationGate.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_hooks_usecustomerwallet",
-      "label": "useCustomerWallet.ts",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "usecustomerwallet.ts",
-      "source_file": "src/hooks/useCustomerWallet.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_lib_firebase_auth",
-      "label": "auth",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "auth",
-      "source_file": "src/lib/firebase.ts",
-      "source_location": "L89"
-    },
-    {
       "id": "src_lib_firebase_db",
       "label": "db",
       "_origin": "ast",
@@ -6772,7 +6697,7 @@
       "file_type": "code",
       "norm_label": "db",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L88"
+      "source_location": "L78"
     },
     {
       "id": "src_services_adminstatussyncservice",
@@ -6786,61 +6711,6 @@
       "source_location": "L1"
     },
     {
-      "id": "src_services_botwelcomeservice",
-      "label": "botWelcomeService.ts",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "botwelcomeservice.ts",
-      "source_file": "src/services/botWelcomeService.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_services_chatautocleanupservice",
-      "label": "chatAutoCleanupService.ts",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "chatautocleanupservice.ts",
-      "source_file": "src/services/chatAutoCleanupService.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_services_chatservice",
-      "label": "chatService.ts",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "chatservice.ts",
-      "source_file": "src/services/chatService.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_services_chatunreadservice",
-      "label": "chatUnreadService.ts",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "chatunreadservice.ts",
-      "source_file": "src/services/chatUnreadService.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_services_formsubmissionrelinkservice",
-      "label": "formSubmissionRelinkService.ts",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "formsubmissionrelinkservice.ts",
-      "source_file": "src/services/formSubmissionRelinkService.ts",
-      "source_location": "L1"
-    },
-    {
       "id": "src_services_orderhangusservice",
       "label": "orderHangusService.ts",
       "_origin": "ast",
@@ -6849,17 +6719,6 @@
       "file_type": "code",
       "norm_label": "orderhangusservice.ts",
       "source_file": "src/services/orderHangusService.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_services_tongcoinservice",
-      "label": "tongCoinService.ts",
-      "_origin": "ast",
-      "community": 14,
-      "community_name": "db",
-      "file_type": "code",
-      "norm_label": "tongcoinservice.ts",
-      "source_file": "src/services/tongCoinService.ts",
       "source_location": "L1"
     },
     {
@@ -7121,6 +6980,28 @@
       "source_location": "L1"
     },
     {
+      "id": "src_components_chat_lazymessagestream",
+      "label": "LazyMessageStream.tsx",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "LazyMessageStream.tsx",
+      "file_type": "code",
+      "norm_label": "lazymessagestream.tsx",
+      "source_file": "src/components/chat/LazyMessageStream.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_chat_lazymessagestream_memoizedbubble",
+      "label": "MemoizedBubble",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "LazyMessageStream.tsx",
+      "file_type": "code",
+      "norm_label": "memoizedbubble",
+      "source_file": "src/components/chat/LazyMessageStream.tsx",
+      "source_location": "L19"
+    },
+    {
       "id": "test_admin",
       "label": "test_admin.ts",
       "_origin": "ast",
@@ -7286,70 +7167,15 @@
       "source_location": "L1"
     },
     {
-      "id": "src_components_customer_orderdetail",
-      "label": "OrderDetail.tsx",
+      "id": "src_services_chatservice",
+      "label": "chatService.ts",
       "_origin": "ast",
       "community": 18,
-      "community_name": "OrderDetail.tsx",
+      "community_name": "chatService.ts",
       "file_type": "code",
-      "norm_label": "orderdetail.tsx",
-      "source_file": "src/components/customer/OrderDetail.tsx",
+      "norm_label": "chatservice.ts",
+      "source_file": "src/services/chatService.ts",
       "source_location": "L1"
-    },
-    {
-      "id": "src_components_orders_giftjoinserverbanner",
-      "label": "GiftJoinServerBanner.tsx",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
-      "file_type": "code",
-      "norm_label": "giftjoinserverbanner.tsx",
-      "source_file": "src/components/orders/GiftJoinServerBanner.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_orders_orderprogressstepper",
-      "label": "OrderProgressStepper.tsx",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
-      "file_type": "code",
-      "norm_label": "orderprogressstepper.tsx",
-      "source_file": "src/components/orders/OrderProgressStepper.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_orders_workergiftcard",
-      "label": "WorkerGiftCard.tsx",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
-      "file_type": "code",
-      "norm_label": "workergiftcard.tsx",
-      "source_file": "src/components/orders/WorkerGiftCard.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_utils_ordercategoryvalidator",
-      "label": "orderCategoryValidator.ts",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
-      "file_type": "code",
-      "norm_label": "ordercategoryvalidator.ts",
-      "source_file": "src/utils/orderCategoryValidator.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_utils_ordercategoryvalidator_isstrictgiftorder",
-      "label": "isStrictGiftOrder",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "OrderDetail.tsx",
-      "file_type": "code",
-      "norm_label": "isstrictgiftorder",
-      "source_file": "src/utils/orderCategoryValidator.ts",
-      "source_location": "L80"
     },
     {
       "id": "public_manifest",
@@ -7517,47 +7343,47 @@
       "source_location": "L11"
     },
     {
-      "id": "src_components_admin_floatingpaymentnotifications",
-      "label": "FloatingPaymentNotifications.tsx",
+      "id": "src_components_admin_adminkelolatongcoins",
+      "label": "AdminKelolaTongCoins.tsx",
       "_origin": "ast",
       "community": 2,
-      "community_name": "AppProvider",
+      "community_name": "AdminTongCoinsPanel.tsx",
       "file_type": "code",
-      "norm_label": "floatingpaymentnotifications.tsx",
-      "source_file": "src/components/admin/FloatingPaymentNotifications.tsx",
+      "norm_label": "adminkelolatongcoins.tsx",
+      "source_file": "src/components/admin/AdminKelolaTongCoins.tsx",
       "source_location": "L1"
     },
     {
-      "id": "src_utils_productcache",
-      "label": "productCache.ts",
+      "id": "src_components_admin_admintongcoinspanel",
+      "label": "AdminTongCoinsPanel.tsx",
       "_origin": "ast",
       "community": 2,
-      "community_name": "AppProvider",
+      "community_name": "AdminTongCoinsPanel.tsx",
       "file_type": "code",
-      "norm_label": "productcache.ts",
-      "source_file": "src/utils/productCache.ts",
+      "norm_label": "admintongcoinspanel.tsx",
+      "source_file": "src/components/admin/AdminTongCoinsPanel.tsx",
       "source_location": "L1"
     },
     {
-      "id": "src_utils_productcache_default_fallback_catalogs",
-      "label": "DEFAULT_FALLBACK_CATALOGS",
+      "id": "src_services_tongcoinservice",
+      "label": "tongCoinService.ts",
       "_origin": "ast",
       "community": 2,
-      "community_name": "AppProvider",
+      "community_name": "AdminTongCoinsPanel.tsx",
       "file_type": "code",
-      "norm_label": "default_fallback_catalogs",
-      "source_file": "src/utils/productCache.ts",
-      "source_location": "L4"
+      "norm_label": "tongcoinservice.ts",
+      "source_file": "src/services/tongCoinService.ts",
+      "source_location": "L1"
     },
     {
-      "id": "src_utils_safestorage",
-      "label": "safeStorage.ts",
+      "id": "src_services_chatunreadservice",
+      "label": "chatUnreadService.ts",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "AppProvider",
+      "community": 20,
+      "community_name": "chatUnreadService.ts",
       "file_type": "code",
-      "norm_label": "safestorage.ts",
-      "source_file": "src/utils/safeStorage.ts",
+      "norm_label": "chatunreadservice.ts",
+      "source_file": "src/services/chatUnreadService.ts",
       "source_location": "L1"
     },
     {
@@ -7748,70 +7574,15 @@
       "source_location": "L12"
     },
     {
-      "id": "src_context_appcontext_operationtype_create",
-      "label": "CREATE",
+      "id": "src_services_chatautocleanupservice",
+      "label": "chatAutoCleanupService.ts",
       "_origin": "ast",
       "community": 24,
-      "community_name": "OperationType",
+      "community_name": "chatAutoCleanupService.ts",
       "file_type": "code",
-      "norm_label": "create",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_context_appcontext_operationtype_delete",
-      "label": "DELETE",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "OperationType",
-      "file_type": "code",
-      "norm_label": "delete",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L17"
-    },
-    {
-      "id": "src_context_appcontext_operationtype_get",
-      "label": "GET",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "OperationType",
-      "file_type": "code",
-      "norm_label": "get",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L19"
-    },
-    {
-      "id": "src_context_appcontext_operationtype_list",
-      "label": "LIST",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "OperationType",
-      "file_type": "code",
-      "norm_label": "list",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L18"
-    },
-    {
-      "id": "src_context_appcontext_operationtype_update",
-      "label": "UPDATE",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "OperationType",
-      "file_type": "code",
-      "norm_label": "update",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L16"
-    },
-    {
-      "id": "src_context_appcontext_operationtype_write",
-      "label": "WRITE",
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "OperationType",
-      "file_type": "code",
-      "norm_label": "write",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L20"
+      "norm_label": "chatautocleanupservice.ts",
+      "source_file": "src/services/chatAutoCleanupService.ts",
+      "source_location": "L1"
     },
     {
       "id": "kilo_kilo",
@@ -7946,6 +7717,17 @@
       "source_location": "L6"
     },
     {
+      "id": "ext_lib_firebase",
+      "label": "../../lib/firebase",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "../../lib/firebase",
+      "source_file": "../../lib/firebase"
+    },
+    {
       "id": "firestore",
       "label": "firebase/firestore",
       "_origin": "ast",
@@ -7957,6 +7739,94 @@
       "source_file": "firebase/firestore"
     },
     {
+      "id": "overhaul_status_sync",
+      "label": "overhaul_status_sync.cjs",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "overhaul_status_sync.cjs",
+      "source_file": "overhaul_status_sync.cjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "overhaul_status_sync_content",
+      "label": "content",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "content",
+      "source_file": "overhaul_status_sync.cjs",
+      "source_location": "L2"
+    },
+    {
+      "id": "overhaul_status_sync_eidx",
+      "label": "eIdx",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "eidx",
+      "source_file": "overhaul_status_sync.cjs",
+      "source_location": "L9"
+    },
+    {
+      "id": "overhaul_status_sync_fs",
+      "label": "fs",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "fs",
+      "source_file": "overhaul_status_sync.cjs",
+      "source_location": "L1"
+    },
+    {
+      "id": "overhaul_status_sync_hend",
+      "label": "hEnd",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "hend",
+      "source_file": "overhaul_status_sync.cjs",
+      "source_location": "L65"
+    },
+    {
+      "id": "overhaul_status_sync_hstart",
+      "label": "hStart",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "hstart",
+      "source_file": "overhaul_status_sync.cjs",
+      "source_location": "L64"
+    },
+    {
+      "id": "overhaul_status_sync_sidx",
+      "label": "sIdx",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "sidx",
+      "source_file": "overhaul_status_sync.cjs",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_components_admin_admincatalogmanager",
+      "label": "AdminCatalogManager.tsx",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "admincatalogmanager.tsx",
+      "source_file": "src/components/admin/AdminCatalogManager.tsx",
+      "source_location": "L1"
+    },
+    {
       "id": "src_components_checkout_checkoutmodal",
       "label": "CheckoutModal.tsx",
       "_origin": "ast",
@@ -7965,6 +7835,17 @@
       "file_type": "code",
       "norm_label": "checkoutmodal.tsx",
       "source_file": "src/components/checkout/CheckoutModal.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_common_installpwabutton",
+      "label": "InstallPWAButton.tsx",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "installpwabutton.tsx",
+      "source_file": "src/components/common/InstallPWAButton.tsx",
       "source_location": "L1"
     },
     {
@@ -7990,6 +7871,28 @@
       "source_location": "L1"
     },
     {
+      "id": "src_components_customer_catalog",
+      "label": "Catalog.tsx",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "catalog.tsx",
+      "source_file": "src/components/customer/Catalog.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_customer_customernotifications",
+      "label": "CustomerNotifications.tsx",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "customernotifications.tsx",
+      "source_file": "src/components/customer/CustomerNotifications.tsx",
+      "source_location": "L1"
+    },
+    {
       "id": "src_components_customer_customerorders",
       "label": "CustomerOrders.tsx",
       "_origin": "ast",
@@ -8012,6 +7915,72 @@
       "source_location": "L1"
     },
     {
+      "id": "src_components_customer_orderdetail",
+      "label": "OrderDetail.tsx",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "orderdetail.tsx",
+      "source_file": "src/components/customer/OrderDetail.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_orders_giftjoinserverbanner",
+      "label": "GiftJoinServerBanner.tsx",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "giftjoinserverbanner.tsx",
+      "source_file": "src/components/orders/GiftJoinServerBanner.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_orders_orderprogressstepper",
+      "label": "OrderProgressStepper.tsx",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "orderprogressstepper.tsx",
+      "source_file": "src/components/orders/OrderProgressStepper.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_lib_firebase_storage",
+      "label": "storage",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "storage",
+      "source_file": "src/lib/firebase.ts",
+      "source_location": "L80"
+    },
+    {
+      "id": "src_lib_operatinghours",
+      "label": "operatingHours.ts",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "operatinghours.ts",
+      "source_file": "src/lib/operatingHours.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_lib_operatinghours_gift_operational_hours",
+      "label": "GIFT_OPERATIONAL_HOURS",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "gift_operational_hours",
+      "source_file": "src/lib/operatingHours.ts",
+      "source_location": "L52"
+    },
+    {
       "id": "src_services_orderservice",
       "label": "orderService.ts",
       "_origin": "ast",
@@ -8032,6 +8001,50 @@
       "norm_label": "gifttimehelper.ts",
       "source_file": "src/utils/giftTimeHelper.ts",
       "source_location": "L1"
+    },
+    {
+      "id": "src_utils_ordercategoryvalidator",
+      "label": "orderCategoryValidator.ts",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "ordercategoryvalidator.ts",
+      "source_file": "src/utils/orderCategoryValidator.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_utils_ordercategoryvalidator_isstrictgiftorder",
+      "label": "isStrictGiftOrder",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "isstrictgiftorder",
+      "source_file": "src/utils/orderCategoryValidator.ts",
+      "source_location": "L80"
+    },
+    {
+      "id": "src_utils_productcache",
+      "label": "productCache.ts",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "productcache.ts",
+      "source_file": "src/utils/productCache.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_utils_productcache_default_fallback_catalogs",
+      "label": "DEFAULT_FALLBACK_CATALOGS",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "CustomerPortal.tsx",
+      "file_type": "code",
+      "norm_label": "default_fallback_catalogs",
+      "source_file": "src/utils/productCache.ts",
+      "source_location": "L4"
     },
     {
       "id": "src_utils_rulesconstants",
@@ -8177,37 +8190,48 @@
       "source_location": "L4"
     },
     {
-      "id": "src_components_customer_catalog",
-      "label": "Catalog.tsx",
+      "id": "src_components_chat_customerinteractivebotstream",
+      "label": "CustomerInteractiveBotStream.tsx",
       "_origin": "ast",
       "community": 3,
-      "community_name": "CustomerPortal",
+      "community_name": "CustomerInteractiveBotStream.tsx",
       "file_type": "code",
-      "norm_label": "catalog.tsx",
-      "source_file": "src/components/customer/Catalog.tsx",
+      "norm_label": "customerinteractivebotstream.tsx",
+      "source_file": "src/components/chat/CustomerInteractiveBotStream.tsx",
       "source_location": "L1"
     },
     {
-      "id": "src_lib_operatinghours",
-      "label": "operatingHours.ts",
+      "id": "src_components_chat_strictordervalidatedform",
+      "label": "StrictOrderValidatedForm.tsx",
       "_origin": "ast",
       "community": 3,
-      "community_name": "CustomerPortal",
+      "community_name": "CustomerInteractiveBotStream.tsx",
       "file_type": "code",
-      "norm_label": "operatinghours.ts",
-      "source_file": "src/lib/operatingHours.ts",
+      "norm_label": "strictordervalidatedform.tsx",
+      "source_file": "src/components/chat/StrictOrderValidatedForm.tsx",
       "source_location": "L1"
     },
     {
-      "id": "src_lib_operatinghours_gift_operational_hours",
-      "label": "GIFT_OPERATIONAL_HOURS",
+      "id": "src_services_botwelcomeservice",
+      "label": "botWelcomeService.ts",
       "_origin": "ast",
       "community": 3,
-      "community_name": "CustomerPortal",
+      "community_name": "CustomerInteractiveBotStream.tsx",
       "file_type": "code",
-      "norm_label": "gift_operational_hours",
-      "source_file": "src/lib/operatingHours.ts",
-      "source_location": "L52"
+      "norm_label": "botwelcomeservice.ts",
+      "source_file": "src/services/botWelcomeService.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_services_formsubmissionrelinkservice",
+      "label": "formSubmissionRelinkService.ts",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "CustomerInteractiveBotStream.tsx",
+      "file_type": "code",
+      "norm_label": "formsubmissionrelinkservice.ts",
+      "source_file": "src/services/formSubmissionRelinkService.ts",
+      "source_location": "L1"
     },
     {
       "id": "src_components_admin_storeschedulesettingmodal",
@@ -8360,127 +8384,6 @@
       "norm_label": "step 8 - token reduction benchmark (only if total_words > 5000)",
       "source_file": ".claude/skills/graphify/references/exports.md",
       "source_location": "L79"
-    },
-    {
-      "id": "src_components_customer_tongcoinspage",
-      "label": "TongCoinsPage.tsx",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "TongCoinsPage.tsx",
-      "file_type": "code",
-      "norm_label": "tongcoinspage.tsx",
-      "source_file": "src/components/customer/TongCoinsPage.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_customer_tongcoinspage_preset_amounts",
-      "label": "PRESET_AMOUNTS",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "TongCoinsPage.tsx",
-      "file_type": "code",
-      "norm_label": "preset_amounts",
-      "source_file": "src/components/customer/TongCoinsPage.tsx",
-      "source_location": "L71"
-    },
-    {
-      "id": "src_types_tongcoins_tos",
-      "label": "TONGCOINS_TOS",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "TongCoinsPage.tsx",
-      "file_type": "code",
-      "norm_label": "tongcoins_tos",
-      "source_file": "src/types.ts",
-      "source_location": "L308"
-    },
-    {
-      "id": "ext_lib_firebase",
-      "label": "../../lib/firebase",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "overhaul_status_sync.cjs",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "../../lib/firebase",
-      "source_file": "../../lib/firebase"
-    },
-    {
-      "id": "overhaul_status_sync",
-      "label": "overhaul_status_sync.cjs",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "overhaul_status_sync.cjs",
-      "file_type": "code",
-      "norm_label": "overhaul_status_sync.cjs",
-      "source_file": "overhaul_status_sync.cjs",
-      "source_location": "L1"
-    },
-    {
-      "id": "overhaul_status_sync_content",
-      "label": "content",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "overhaul_status_sync.cjs",
-      "file_type": "code",
-      "norm_label": "content",
-      "source_file": "overhaul_status_sync.cjs",
-      "source_location": "L2"
-    },
-    {
-      "id": "overhaul_status_sync_eidx",
-      "label": "eIdx",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "overhaul_status_sync.cjs",
-      "file_type": "code",
-      "norm_label": "eidx",
-      "source_file": "overhaul_status_sync.cjs",
-      "source_location": "L9"
-    },
-    {
-      "id": "overhaul_status_sync_fs",
-      "label": "fs",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "overhaul_status_sync.cjs",
-      "file_type": "code",
-      "norm_label": "fs",
-      "source_file": "overhaul_status_sync.cjs",
-      "source_location": "L1"
-    },
-    {
-      "id": "overhaul_status_sync_hend",
-      "label": "hEnd",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "overhaul_status_sync.cjs",
-      "file_type": "code",
-      "norm_label": "hend",
-      "source_file": "overhaul_status_sync.cjs",
-      "source_location": "L65"
-    },
-    {
-      "id": "overhaul_status_sync_hstart",
-      "label": "hStart",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "overhaul_status_sync.cjs",
-      "file_type": "code",
-      "norm_label": "hstart",
-      "source_file": "overhaul_status_sync.cjs",
-      "source_location": "L64"
-    },
-    {
-      "id": "overhaul_status_sync_sidx",
-      "label": "sIdx",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "overhaul_status_sync.cjs",
-      "file_type": "code",
-      "norm_label": "sidx",
-      "source_file": "overhaul_status_sync.cjs",
-      "source_location": "L8"
     },
     {
       "id": "parse_ast3",
@@ -9598,81 +9501,37 @@
       "source_location": "L2"
     },
     {
-      "id": "src_components_auth_authmodal",
-      "label": "AuthModal.tsx",
+      "id": "src_components_notification_mandatorynotificationgate",
+      "label": "MandatoryNotificationGate.tsx",
       "_origin": "ast",
       "community": 5,
-      "community_name": "useApp",
+      "community_name": "auth",
       "file_type": "code",
-      "norm_label": "authmodal.tsx",
-      "source_file": "src/components/auth/AuthModal.tsx",
+      "norm_label": "mandatorynotificationgate.tsx",
+      "source_file": "src/components/notification/MandatoryNotificationGate.tsx",
       "source_location": "L1"
     },
     {
-      "id": "src_components_common_webpushnotificationbanner",
-      "label": "WebPushNotificationBanner.tsx",
+      "id": "src_hooks_usecustomerwallet",
+      "label": "useCustomerWallet.ts",
       "_origin": "ast",
       "community": 5,
-      "community_name": "useApp",
+      "community_name": "auth",
       "file_type": "code",
-      "norm_label": "webpushnotificationbanner.tsx",
-      "source_file": "src/components/common/WebPushNotificationBanner.tsx",
+      "norm_label": "usecustomerwallet.ts",
+      "source_file": "src/hooks/useCustomerWallet.ts",
       "source_location": "L1"
     },
     {
-      "id": "src_components_customer_customersettings",
-      "label": "CustomerSettings.tsx",
+      "id": "src_lib_firebase_auth",
+      "label": "auth",
       "_origin": "ast",
       "community": 5,
-      "community_name": "useApp",
+      "community_name": "auth",
       "file_type": "code",
-      "norm_label": "customersettings.tsx",
-      "source_file": "src/components/customer/CustomerSettings.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_orders_giftdeliverymodal",
-      "label": "GiftDeliveryModal.tsx",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "code",
-      "norm_label": "giftdeliverymodal.tsx",
-      "source_file": "src/components/orders/GiftDeliveryModal.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_lib_firebase_messaging",
-      "label": "messaging",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "code",
-      "norm_label": "messaging",
+      "norm_label": "auth",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L93"
-    },
-    {
-      "id": "src_pages_auth_loginpage",
-      "label": "LoginPage.tsx",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "code",
-      "norm_label": "loginpage.tsx",
-      "source_file": "src/pages/auth/LoginPage.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_common_webpushnotificationbanner_rationale_54",
-      "label": "NOTE: In production, you'd want to configure a proper VAPID key via env vars.",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "useApp",
-      "file_type": "rationale",
-      "norm_label": "note: in production, you'd want to configure a proper vapid key via env vars.",
-      "source_file": "src/components/common/WebPushNotificationBanner.tsx",
-      "source_location": "L54"
+      "source_location": "L79"
     },
     {
       "id": "parse_debug3",
@@ -10115,17 +9974,6 @@
       "source_location": "L3"
     },
     {
-      "id": "src_components_admin_admincatalogmanager",
-      "label": "AdminCatalogManager.tsx",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "firebase.ts",
-      "file_type": "code",
-      "norm_label": "admincatalogmanager.tsx",
-      "source_file": "src/components/admin/AdminCatalogManager.tsx",
-      "source_location": "L1"
-    },
-    {
       "id": "src_components_admin_adminpanel",
       "label": "AdminPanel.tsx",
       "_origin": "ast",
@@ -10288,7 +10136,7 @@
       "file_type": "code",
       "norm_label": "config",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L31"
+      "source_location": "L29"
     },
     {
       "id": "src_lib_firebase_firebaseconfig",
@@ -10299,18 +10147,7 @@
       "file_type": "code",
       "norm_label": "firebaseconfig",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L21"
-    },
-    {
-      "id": "src_lib_firebase_storage",
-      "label": "storage",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "firebase.ts",
-      "file_type": "code",
-      "norm_label": "storage",
-      "source_file": "src/lib/firebase.ts",
-      "source_location": "L90"
+      "source_location": "L19"
     },
     {
       "id": "src_lib_giftexpirationservice",
@@ -11441,6 +11278,94 @@
       "source_location": "L1"
     },
     {
+      "id": "src_components_admin_floatingpaymentnotifications",
+      "label": "FloatingPaymentNotifications.tsx",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "floatingpaymentnotifications.tsx",
+      "source_file": "src/components/admin/FloatingPaymentNotifications.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_auth_verifyemailpage",
+      "label": "VerifyEmailPage.tsx",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "verifyemailpage.tsx",
+      "source_file": "src/components/auth/VerifyEmailPage.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_common_webpushnotificationbanner",
+      "label": "WebPushNotificationBanner.tsx",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "webpushnotificationbanner.tsx",
+      "source_file": "src/components/common/WebPushNotificationBanner.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_customer_customersettings",
+      "label": "CustomerSettings.tsx",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "customersettings.tsx",
+      "source_file": "src/components/customer/CustomerSettings.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_customer_tongcoinspage",
+      "label": "TongCoinsPage.tsx",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "tongcoinspage.tsx",
+      "source_file": "src/components/customer/TongCoinsPage.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_customer_tongcoinspage_preset_amounts",
+      "label": "PRESET_AMOUNTS",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "preset_amounts",
+      "source_file": "src/components/customer/TongCoinsPage.tsx",
+      "source_location": "L71"
+    },
+    {
+      "id": "src_components_orders_giftdeliverymodal",
+      "label": "GiftDeliveryModal.tsx",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "giftdeliverymodal.tsx",
+      "source_file": "src/components/orders/GiftDeliveryModal.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_orders_workergiftcard",
+      "label": "WorkerGiftCard.tsx",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "workergiftcard.tsx",
+      "source_file": "src/components/orders/WorkerGiftCard.tsx",
+      "source_location": "L1"
+    },
+    {
       "id": "src_context_appcontext",
       "label": "AppContext.tsx",
       "_origin": "ast",
@@ -11463,6 +11388,83 @@
       "source_location": "L142"
     },
     {
+      "id": "src_context_appcontext_operationtype_create",
+      "label": "CREATE",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "create",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_context_appcontext_operationtype_delete",
+      "label": "DELETE",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "delete",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L17"
+    },
+    {
+      "id": "src_context_appcontext_operationtype_get",
+      "label": "GET",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "get",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L19"
+    },
+    {
+      "id": "src_context_appcontext_operationtype_list",
+      "label": "LIST",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "list",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L18"
+    },
+    {
+      "id": "src_context_appcontext_operationtype_update",
+      "label": "UPDATE",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "update",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L16"
+    },
+    {
+      "id": "src_context_appcontext_operationtype_write",
+      "label": "WRITE",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "write",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L20"
+    },
+    {
+      "id": "src_lib_firebase_messaging",
+      "label": "messaging",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "messaging",
+      "source_file": "src/lib/firebase.ts",
+      "source_location": "L83"
+    },
+    {
       "id": "src_types",
       "label": "types.ts",
       "_origin": "ast",
@@ -11472,6 +11474,17 @@
       "norm_label": "types.ts",
       "source_file": "src/types.ts",
       "source_location": "L1"
+    },
+    {
+      "id": "src_types_tongcoins_tos",
+      "label": "TONGCOINS_TOS",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "tongcoins_tos",
+      "source_file": "src/types.ts",
+      "source_location": "L308"
     },
     {
       "id": "src_utils_quickrepliesdata",
@@ -11494,6 +11507,28 @@
       "norm_label": "default_quick_replies",
       "source_file": "src/utils/quickRepliesData.ts",
       "source_location": "L3"
+    },
+    {
+      "id": "src_utils_safestorage",
+      "label": "safeStorage.ts",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "code",
+      "norm_label": "safestorage.ts",
+      "source_file": "src/utils/safeStorage.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_common_webpushnotificationbanner_rationale_54",
+      "label": "NOTE: In production, you'd want to configure a proper VAPID key via env vars.",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "AppContext.tsx",
+      "file_type": "rationale",
+      "norm_label": "note: in production, you'd want to configure a proper vapid key via env vars.",
+      "source_file": "src/components/common/WebPushNotificationBanner.tsx",
+      "source_location": "L54"
     },
     {
       "id": "patch_exact_return",
@@ -11867,17 +11902,6 @@
       "file_type": "code",
       "norm_label": "customerchat.tsx",
       "source_file": "src/components/customer/CustomerChat.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_customer_customernotifications",
-      "label": "CustomerNotifications.tsx",
-      "_origin": "ast",
-      "community": 9,
-      "community_name": "CustomerChat.tsx",
-      "file_type": "code",
-      "norm_label": "customernotifications.tsx",
-      "source_file": "src/components/customer/CustomerNotifications.tsx",
       "source_location": "L1"
     },
     {
@@ -14520,7 +14544,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L1036",
+      "source_location": "L1041",
       "weight": 1.0
     },
     {
@@ -14532,7 +14556,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L1446",
+      "source_location": "L1451",
       "weight": 1.0
     },
     {
@@ -14544,7 +14568,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L1682",
+      "source_location": "L1687",
       "weight": 1.0
     },
     {
@@ -14556,7 +14580,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L1903",
+      "source_location": "L1908",
       "weight": 1.0
     },
     {
@@ -14568,7 +14592,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L1936",
+      "source_location": "L1941",
       "weight": 1.0
     },
     {
@@ -14580,7 +14604,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L1970",
+      "source_location": "L1975",
       "weight": 1.0
     },
     {
@@ -14592,91 +14616,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L2174",
-      "weight": 1.0
-    },
-    {
-      "source": "src_context_appcontext_appprovider",
-      "target": "src_lib_orderrefund_isjunkbotorder",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L251",
-      "weight": 1.0
-    },
-    {
-      "source": "src_context_appcontext_appprovider",
-      "target": "src_lib_orderrefund_istopuptcorder",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L251",
-      "weight": 1.0
-    },
-    {
-      "source": "src_context_appcontext_appprovider",
-      "target": "src_lib_firebase_extracttimems",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L252",
-      "weight": 1.0
-    },
-    {
-      "source": "src_context_appcontext_appprovider",
-      "target": "src_lib_firebase_getpurecreationtime",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L252",
-      "weight": 1.0
-    },
-    {
-      "source": "src_context_appcontext_appprovider",
-      "target": "src_context_appcontext_extractgameitemsfromcatalogs",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L315",
-      "weight": 1.0
-    },
-    {
-      "source": "src_context_appcontext_appprovider",
-      "target": "src_utils_productcache_getcachedcatalogs",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L315",
-      "weight": 1.0
-    },
-    {
-      "source": "src_context_appcontext_appprovider",
-      "target": "src_context_appcontext_cleanfirestorepayload",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/context/AppContext.tsx",
-      "source_location": "L409",
+      "source_location": "L2179",
       "weight": 1.0
     },
     {
@@ -14688,7 +14628,91 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L606",
+      "source_location": "L244",
+      "weight": 1.0
+    },
+    {
+      "source": "src_context_appcontext_appprovider",
+      "target": "src_lib_orderrefund_isjunkbotorder",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L256",
+      "weight": 1.0
+    },
+    {
+      "source": "src_context_appcontext_appprovider",
+      "target": "src_lib_orderrefund_istopuptcorder",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L256",
+      "weight": 1.0
+    },
+    {
+      "source": "src_context_appcontext_appprovider",
+      "target": "src_lib_firebase_extracttimems",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L257",
+      "weight": 1.0
+    },
+    {
+      "source": "src_context_appcontext_appprovider",
+      "target": "src_lib_firebase_getpurecreationtime",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L257",
+      "weight": 1.0
+    },
+    {
+      "source": "src_context_appcontext_appprovider",
+      "target": "src_context_appcontext_extractgameitemsfromcatalogs",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L320",
+      "weight": 1.0
+    },
+    {
+      "source": "src_context_appcontext_appprovider",
+      "target": "src_utils_productcache_getcachedcatalogs",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L320",
+      "weight": 1.0
+    },
+    {
+      "source": "src_context_appcontext_appprovider",
+      "target": "src_context_appcontext_cleanfirestorepayload",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/context/AppContext.tsx",
+      "source_location": "L414",
       "weight": 1.0
     },
     {
@@ -14700,7 +14724,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L677",
+      "source_location": "L682",
       "weight": 1.0
     },
     {
@@ -14712,7 +14736,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L685",
+      "source_location": "L690",
       "weight": 1.0
     },
     {
@@ -14760,7 +14784,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L171",
+      "source_location": "L161",
       "weight": 1.0
     },
     {
@@ -14772,7 +14796,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L167",
+      "source_location": "L157",
       "weight": 1.0
     },
     {
@@ -14784,7 +14808,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L200",
+      "source_location": "L190",
       "weight": 1.0
     },
     {
@@ -14941,6 +14965,30 @@
       "context": "call",
       "source_file": "src/lib/pocketbase.ts",
       "source_location": "L130",
+      "weight": 1.0
+    },
+    {
+      "source": "src_lib_roblox_fetchrobloxdirect",
+      "target": "src_lib_roblox_fallbackavatar",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/lib/roblox.ts",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "src_lib_roblox_fetchrobloxprofile",
+      "target": "src_lib_roblox_fetchrobloxdirect",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/lib/roblox.ts",
+      "source_location": "L46",
       "weight": 1.0
     },
     {
@@ -15468,7 +15516,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L538",
+      "source_location": "L543",
       "weight": 1.0
     },
     {
@@ -15624,7 +15672,7 @@
       "confidence_score": 1.0,
       "context": "export",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L122",
+      "source_location": "L112",
       "weight": 1.0
     },
     {
@@ -16004,7 +16052,7 @@
       "context": "import",
       "deferred": true,
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L1129",
+      "source_location": "L1134",
       "weight": 1.0
     },
     {
@@ -24812,7 +24860,7 @@
       "confidence_score": 1.0,
       "context": "re-export",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L122",
+      "source_location": "L112",
       "weight": 1.0
     },
     {
@@ -24824,7 +24872,7 @@
       "confidence_score": 1.0,
       "context": "re-export",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L122",
+      "source_location": "L112",
       "weight": 1.0
     },
     {
@@ -24836,7 +24884,7 @@
       "confidence_score": 1.0,
       "context": "re-export",
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L122",
+      "source_location": "L112",
       "weight": 1.0
     },
     {
@@ -30252,7 +30300,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/context/AppContext.tsx",
-      "source_location": "L3211",
+      "source_location": "L3216",
       "weight": 1.0
     },
     {
@@ -30384,7 +30432,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L125",
+      "source_location": "L115",
       "weight": 1.0
     },
     {
@@ -30395,7 +30443,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L166",
+      "source_location": "L156",
       "weight": 1.0
     },
     {
@@ -30406,7 +30454,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L170",
+      "source_location": "L160",
       "weight": 1.0
     },
     {
@@ -30417,7 +30465,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L175",
+      "source_location": "L165",
       "weight": 1.0
     },
     {
@@ -30428,18 +30476,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L199",
-      "weight": 1.0
-    },
-    {
-      "source": "src_lib_firebase",
-      "target": "src_lib_firebase_syncusertofirestore",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/firebase.ts",
-      "source_location": "L204",
+      "source_location": "L189",
       "weight": 1.0
     },
     {
@@ -30450,7 +30487,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L21",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "src_lib_firebase",
+      "target": "src_lib_firebase_syncusertofirestore",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/firebase.ts",
+      "source_location": "L194",
       "weight": 1.0
     },
     {
@@ -30461,7 +30509,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L31",
+      "source_location": "L29",
       "weight": 1.0
     },
     {
@@ -30472,7 +30520,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L88",
+      "source_location": "L78",
       "weight": 1.0
     },
     {
@@ -30483,7 +30531,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L89",
+      "source_location": "L79",
       "weight": 1.0
     },
     {
@@ -30494,7 +30542,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L90",
+      "source_location": "L80",
       "weight": 1.0
     },
     {
@@ -30505,7 +30553,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/firebase.ts",
-      "source_location": "L93",
+      "source_location": "L83",
       "weight": 1.0
     },
     {
@@ -30763,7 +30811,29 @@
     },
     {
       "source": "src_lib_roblox",
+      "target": "src_lib_roblox_fetchrobloxdirect",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/roblox.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "src_lib_roblox",
       "target": "src_lib_roblox_fetchrobloxprofile",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/lib/roblox.ts",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
+      "source": "src_lib_roblox",
+      "target": "src_lib_roblox_fallbackavatar",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -33452,5 +33522,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "2724424040143bdec97bc6ba9cee246acb681de1"
+  "built_at_commit": "4d61525a31dc24a0ec415a63a848d787a6c8a091"
 }
