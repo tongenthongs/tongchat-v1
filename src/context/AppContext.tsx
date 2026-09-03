@@ -1503,25 +1503,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         const parsedClouds: CloudInstance[] = snap.docs.map(d => {
           const data = d.data();
           return {
+            ...(data as CloudInstance),
             id: d.id,
             name: data.name || `Cloud ${d.id.slice(-2)}`,
             provider: data.provider || 'VPS Server',
-            ipAddress: data.ipAddress || '',
-            status: data.status || 'AVAILABLE',
-            notes: data.notes || '',
-            rentStartDate: data.rentStartDate || '',
-            rentEndDate: data.rentEndDate || '',
-            durationDays: data.durationDays || 30,
-            totalCost: data.totalCost || 0,
-            assignedOrderId: data.assignedOrderId || null,
-            assignedCustomerName: data.assignedCustomerName || null,
-            assignedGameName: data.assignedGameName || null,
-            assignedPackageName: data.assignedPackageName || null,
-            assignedGameUsername: data.assignedGameUsername || null,
-            assignedOrderStatus: data.assignedOrderStatus || null,
-            assignedAt: data.assignedAt || null,
-            createdAt: data.createdAt || null,
-            updatedAt: data.updatedAt || null
+            status: data.status || 'AVAILABLE'
           } as CloudInstance;
         });
         parsedClouds.sort((a, b) => (a.name || '').localeCompare(b.name || '', undefined, { numeric: true }));

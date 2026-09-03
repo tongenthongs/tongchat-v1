@@ -42,10 +42,7 @@ export const isStrictGiftBookingOrder = (order: any): boolean => {
     return false;
   }
 
-  // 3. Status harus Booking atau New untuk antrean siap forward (atau Diorder/Selesai/Hangus untuk monitoring)
-  const status = (order.status || order.orderStatus || order.statusCode || '').toLowerCase().trim();
-
-  // 4. Pastikan merupakan produk Gift / Pass / Item In-Game yang valid
+  // 3. Pastikan merupakan produk Gift / Pass / Item In-Game yang valid
   const isGiftIdentified = 
     category === 'gift' ||
     type === 'gift' ||

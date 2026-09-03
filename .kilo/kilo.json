@@ -1,5 +1,8 @@
 {
   "$schema": "https://app.kilo.ai/config.json",
+  "plugin": [
+    "file:///C:/Users/sandi/Documents/WEB/entong-chat/.kilo/plugins/graphify.js"
+  ],
   "mcp": {
     "firebase": {
       "type": "local",
@@ -10,8 +13,5 @@
         "experimental:mcp"
       ]
     }
-  },
-  "plugin": [
-    "file:///C:/Users/sandi/Documents/WEB/entong-chat/.kilo/plugins/graphify.js"
-  ]
+  }
 }
