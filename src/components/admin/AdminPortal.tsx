@@ -25,6 +25,7 @@ import { StoreScheduleSettingModal } from './StoreScheduleSettingModal';
 import { GiftOrdersPanel } from './GiftOrdersPanel';
 import { AdminTongCoinsPanel } from './AdminTongCoinsPanel';
 import { JokiOrdersPanel } from './JokiOrdersPanel';
+import { OrderanPanel } from './OrderanPanel';
 import { AdminPaymentPending } from './AdminPaymentPending';
 import { ChatMessageRenderer } from '../common/ChatMessageRenderer';
 import { useOrders } from '../../hooks/useOrders';
@@ -476,9 +477,9 @@ export const AdminPortal: React.FC = () => {
     return `${s}s`;
   };
 
-  const [activeMenu, setActiveMenu] = useState<'chat' | 'staff_chat' | 'pos' | 'orders' | 'joki-orders' | 'gift-orders' | 'tongcoins' | 'payment_pending' | 'cloud_monitor' | 'customers' | 'staff' | 'items' | 'reviews' | 'qrs' | 'attendance' | 'finance' | 'settings' | 'database-quota'>('chat');
+  const [activeMenu, setActiveMenu] = useState<'chat' | 'staff_chat' | 'pos' | 'orders' | 'orderan' | 'joki-orders' | 'gift-orders' | 'tongcoins' | 'payment_pending' | 'cloud_monitor' | 'customers' | 'staff' | 'items' | 'reviews' | 'qrs' | 'attendance' | 'finance' | 'settings' | 'database-quota'>('chat');
   // Mobile bottom dock tab for small screens (< 768px)
-  const [mobileTab, setMobileTab] = useState<'chat' | 'orders' | 'payment_pending' | 'cloud_monitor' | 'pos' | 'manage' | 'customers' | 'items' | 'reviews' | 'qrs' | 'attendance' | 'finance' | 'settings' | 'staff_chat' | 'joki-orders' | 'staff'>('chat');
+  const [mobileTab, setMobileTab] = useState<'chat' | 'orders' | 'payment_pending' | 'cloud_monitor' | 'pos' | 'manage' | 'customers' | 'items' | 'reviews' | 'qrs' | 'attendance' | 'finance' | 'settings' | 'staff_chat' | 'joki-orders' | 'gift-orders' | 'orderan' | 'staff'>('chat');
   const [isManualWAOrderModalOpen, setIsManualWAOrderModalOpen] = useState<boolean>(false);
   const [isStoreScheduleModalOpen, setIsStoreScheduleModalOpen] = useState<boolean>(false);
 
@@ -524,13 +525,13 @@ export const AdminPortal: React.FC = () => {
   useEffect(() => {
     if ((activeMenu === 'finance' || mobileTab === 'finance') && !isOwner) {
       alert("Akses Terbatas: Hanya Owner yang dapat mengakses Keuangan Toko");
-      setActiveMenu('joki-orders');
-      setMobileTab('joki-orders');
+      setActiveMenu('orderan');
+      setMobileTab('orderan');
     }
     if ((activeMenu === 'staff' || activeMenu === 'attendance' || mobileTab === 'staff' || mobileTab === 'attendance') && !isOwner) {
       alert('Akses Khusus Owner. Mengalihkan ke Dashboard Kerja...');
-      setActiveMenu('joki-orders');
-      setMobileTab('joki-orders');
+      setActiveMenu('orderan');
+      setMobileTab('orderan');
     }
   }, [activeMenu, mobileTab, isOwner]);
 
@@ -3386,15 +3387,13 @@ export const AdminPortal: React.FC = () => {
             {(openAccordionGroups.orders || isSidebarCollapsed) && (
               <div className="space-y-1 pl-0 sm:pl-1">
                 <button
-                  onClick={() => setIsManualWAOrderModalOpen(true)}
-                  title="Input Order WA (Manual Transaksi)"
-                  className="w-full flex items-center gap-3 px-3 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-[#00E676] font-bold border border-[#00E676]/30 shadow-sm"
+                  onClick={() => setActiveMenu('orderan')}
+                  title="Panel Orderan (GP & Joki)"
+                  className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center px-0 py-3' : 'gap-3 px-3 py-2'} rounded-xl  ${activeMenu === 'orderan' ? 'bg-[#00E676] text-[#111b21] font-bold shadow-lg shadow-[#00E676]/20' : 'text-slate-300 hover:bg-[#202c33]'}`}
                 >
-                  <Phone className="w-4 h-4 shrink-0 text-[#00E676]" />
-                  {!isSidebarCollapsed && <span>Input Order WA</span>}
+                  <ShoppingBag className="w-4 h-4 shrink-0" />
+                  {!isSidebarCollapsed && <span>Orderan</span>}
                 </button>
-
-                
 
                 <button
                   onClick={() => setActiveMenu('pos')}
@@ -3431,24 +3430,6 @@ export const AdminPortal: React.FC = () => {
                   {isSidebarCollapsed && pendingPaymentsCount > 0 && (
                     <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-amber-400 rounded-full" />
                   )}
-                </button>
-
-                <button
-                  onClick={() => setActiveMenu('joki-orders')}
-                  title="Orderan Joki & Leveling"
-                  className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center px-0 py-3' : 'gap-3 px-3 py-2'} rounded-xl  ${activeMenu === 'joki-orders' ? 'bg-[#00E676] text-[#111b21] font-bold shadow-lg shadow-[#00E676]/20' : 'text-slate-300 hover:bg-[#202c33]'}`}
-                >
-                  <Gamepad2 className="w-4 h-4 shrink-0" />
-                  {!isSidebarCollapsed && <span>Orderan Joki</span>}
-                </button>
-
-                <button
-                  onClick={() => setActiveMenu('gift-orders')}
-                  title="Orderan Gift In-Game"
-                  className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center px-0 py-3' : 'gap-3 px-3 py-2'} rounded-xl  ${activeMenu === 'gift-orders' ? 'bg-[#00E676] text-[#111b21] font-bold shadow-lg shadow-[#00E676]/20' : 'text-slate-300 hover:bg-[#202c33]'}`}
-                >
-                  <Gift className="w-4 h-4 shrink-0" />
-                  {!isSidebarCollapsed && <span>Orderan Gift In-Game</span>}
                 </button>
 
                 <button
@@ -5690,13 +5671,6 @@ export const AdminPortal: React.FC = () => {
                 <span className="hidden sm:inline">Bersihkan Bot / Rp 0</span>
               </button>
               <button
-                onClick={() => setIsManualWAOrderModalOpen(true)}
-                className="w-full sm:w-auto px-4 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-[#00E676] border border-[#00E676]/40 font-bold rounded-xl text-xs shadow-md flex items-center justify-center gap-1.5"
-              >
-                <Phone className="w-3.5 h-3.5" />
-                <span>Input Order WA</span>
-              </button>
-              <button
                 onClick={() => {
                   setEditingOrder({
                     id: 'ord-' + Date.now(),
@@ -6299,28 +6273,18 @@ export const AdminPortal: React.FC = () => {
           </div>
         )}
 
-        {activeMenu === 'gift-orders' && (
-          <GiftOrdersPanel 
-            onOpenDirectChat={(ord: any) => {
-              const targetPhone = (ord.customer_phone || ord.whatsapp || '').trim();
-              const targetRoblox = (ord.roblox_username || ord.game_user_id || '').trim().toLowerCase();
-              const targetName = (ord.customer_name || '').trim().toLowerCase();
-              const targetId = ord.customer_id || ord.id || ord.order_id;
-
-              // Find in allChatConversations
-              const matchedConv = allChatConversations.find((c: any) => 
+        {activeMenu === 'orderan' && (
+          <OrderanPanel
+            onOpenChatWithOrder={(orderId, custName, custPhone) => {
+              const targetPhone = (custPhone || '').trim();
+              const matchedConv = allChatConversations.find((c: any) =>
                 (targetPhone && (c.phone === targetPhone || c.id?.includes(targetPhone))) ||
-                (targetId && (c.id === targetId || c.id === `room_${targetId}` || c.orderId === targetId)) ||
-                (targetRoblox && c.robloxUser?.toLowerCase() === targetRoblox) ||
-                (targetName && c.name?.toLowerCase() === targetName)
+                (orderId && (c.id === orderId || c.id === `room_${orderId}` || c.orderId === orderId))
               );
-
               if (matchedConv) {
                 handleSelectConversationItem(matchedConv);
               } else {
-                const targetRoom = targetPhone 
-                  ? `room_${targetPhone}` 
-                  : (ord.customer_id ? `room_${ord.customer_id}` : (ord.id?.startsWith('room_') ? ord.id : `room_${ord.id}`));
+                const targetRoom = targetPhone ? `room_${targetPhone}` : `room_${orderId}`;
                 setSelectedOrderId(targetRoom);
                 setSelectedChatId(targetRoom);
                 setMobileChatView('ROOM');
@@ -6329,31 +6293,6 @@ export const AdminPortal: React.FC = () => {
               setMobileTab('chat');
             }}
           />
-        )}
-
-        {activeMenu === 'joki-orders' && (
-          <div className="flex-1 p-6 overflow-y-auto space-y-4">
-            <JokiOrdersPanel 
-              onOpenChatWithOrder={(orderId, custName, custPhone) => {
-                const targetPhone = (custPhone || '').trim();
-                const matchedConv = allChatConversations.find((c: any) => 
-                  (targetPhone && (c.phone === targetPhone || c.id?.includes(targetPhone))) ||
-                  (orderId && (c.id === orderId || c.id === `room_${orderId}` || c.orderId === orderId))
-                );
-
-                if (matchedConv) {
-                  handleSelectConversationItem(matchedConv);
-                } else {
-                  const targetRoom = targetPhone ? `room_${targetPhone}` : `room_${orderId}`;
-                  setSelectedOrderId(targetRoom);
-                  setSelectedChatId(targetRoom);
-                  setMobileChatView('ROOM');
-                }
-                setActiveMenu('chat');
-                setMobileTab('chat');
-              }}
-            />
-          </div>
         )}
 
         {activeMenu === 'tongcoins' && (
