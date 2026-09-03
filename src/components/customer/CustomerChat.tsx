@@ -26,6 +26,7 @@ import AuthModal from '../auth/AuthModal';
 import { StoreOperationalBanner } from '../banner/StoreOperationalBanner';
 import { detectInteractiveType, ensureInitialWelcomeGreeting } from '../../services/botChatService';
 import { fetchRobloxProfile, RobloxProfile } from '../../lib/roblox';
+import GuestChatForm from '../chat/GuestChatForm';
 
 export { checkStoreOperatingStatus };
 
@@ -411,8 +412,104 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
 
   const [profilePendingCount, setProfilePendingCount] = useState<number>(0);
 
+  // Guest Chat States
+  const [showGuestForm, setShowGuestForm] = useState(false);
+  const [guestData, setGuestData] = useState<any>(null);
+  const [isGuestMode, setIsGuestMode] = useState(false);
+  const [lastActivityTime, setLastActivityTime] = useState<number>(() => {
+    const saved = parseInt(localStorage.getItem('entong_guest_last_activity') || '0', 10);
+    return saved > 0 ? saved : Date.now();
+  });
+  const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
 
+  // Auto-reset guest session setelah 30 menit tidak ada aktivitas
+  useEffect(() => {
+    if (!isGuestMode || !guestData) return;
 
+    const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 menit dalam milidetik
+
+    const checkInactivity = () => {
+      const now = Date.now();
+      const timeSinceLastActivity = now - lastActivityTime;
+
+      if (timeSinceLastActivity >= INACTIVITY_TIMEOUT) {
+        // Reset guest session
+        console.log('Guest session expired due to inactivity. Resetting...');
+
+        // Hapus chat lama dari database
+        if (activeRoomId) {
+          const messagesRef = collection(db, 'chats', activeRoomId, 'messages');
+          getDocs(messagesRef).then(snapshot => {
+            snapshot.forEach(docSnap => {
+              deleteDoc(doc(db, 'chats', activeRoomId, 'messages', docSnap.id)).catch(() => {});
+            });
+          }).catch(() => {});
+
+          // Hapus room document
+          deleteDoc(doc(db, 'chats', activeRoomId)).catch(() => {});
+        }
+
+        // Clear local storage
+        localStorage.removeItem('entong_guest_data');
+        localStorage.removeItem('entong_guest_room_id');
+        localStorage.removeItem('entong_guest_last_activity');
+
+        // Reset state
+        setGuestData(null);
+        setIsGuestMode(false);
+        setActiveRoomId(null);
+        setMessages([]);
+      }
+    };
+
+    // Cek segera saat guest mode aktif, lalu tiap 1 menit
+    checkInactivity();
+    const interval = setInterval(checkInactivity, 60000);
+
+    return () => clearInterval(interval);
+  }, [isGuestMode, guestData, lastActivityTime, activeRoomId]);
+
+  // Auto-delete chat lama untuk menghemat database (maksimal 50 pesan terakhir)
+  useEffect(() => {
+    if (!activeRoomId || !isGuestMode) return;
+
+    const MAX_MESSAGES = 50; // Maksimal 50 pesan untuk guest chat
+    
+    const cleanupOldMessages = async () => {
+      try {
+        const messagesRef = collection(db, 'chats', activeRoomId, 'messages');
+        const messagesQuery = query(messagesRef, orderBy('createdAt', 'desc'));
+        const snapshot = await getDocs(messagesQuery);
+        
+        if (snapshot.size > MAX_MESSAGES) {
+          // Hapus pesan yang lebih lama dari 50 pesan terakhir
+          const messagesToDelete = snapshot.docs.slice(MAX_MESSAGES);
+          console.log(`Deleting ${messagesToDelete.length} old messages to save database costs`);
+          
+          for (const msgDoc of messagesToDelete) {
+            await deleteDoc(doc(db, 'chats', activeRoomId, 'messages', msgDoc.id));
+          }
+        }
+      } catch (error) {
+        console.error('Error cleaning up old messages:', error);
+      }
+    };
+
+    // Jalankan cleanup setiap kali ada pesan baru (dengan debounce)
+    if (messages.length > 0) {
+      const timer = setTimeout(cleanupOldMessages, 5000); // Delay 5 detik
+      return () => clearTimeout(timer);
+    }
+  }, [activeRoomId, isGuestMode, messages.length]);
+
+  // Update last activity time ketika ada aktivitas
+  useEffect(() => {
+    if (isGuestMode && (messages.length > 0 || msgInput.trim())) {
+      const now = Date.now();
+      setLastActivityTime(now);
+      localStorage.setItem('entong_guest_last_activity', String(now));
+    }
+  }, [messages.length, msgInput, isGuestMode]);
 
   useEffect(() => {
     const activeUser = currentUser || safeGetJSON<any>('entong_active_user', {});
@@ -899,9 +996,78 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
   const chatEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Ambil/Buat ID Room Customer Persisten (Pillar 1)
-  const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
+  // Handler untuk Guest Form Submission
+  const handleGuestFormSubmit = async (guestFormData: {
+    name: string;
+    robloxUsername: string;
+    robloxUserId: string;
+    whatsapp: string;
+  }) => {
+    try {
+      const guestRoomId = `guest_${guestFormData.whatsapp}`;
+      
+      // Create guest user object
+      const guestUserData = {
+        id: guestRoomId,
+        name: `Guest - ${guestFormData.name}`,
+        displayName: `Guest - ${guestFormData.name}`,
+        robloxUsername: guestFormData.robloxUsername,
+        robloxUserId: guestFormData.robloxUserId,
+        phone: guestFormData.whatsapp,
+        whatsapp: guestFormData.whatsapp,
+        role: 'CUSTOMER' as UserRole,
+        isGuest: true,
+        createdAt: new Date().toISOString()
+      };
 
+      // Create chat room document for guest
+      const roomRef = doc(db, 'chats', guestRoomId);
+      await setDoc(roomRef, {
+        id: guestRoomId,
+        customerId: guestRoomId,
+        customer_id: guestRoomId,
+        customerName: `Guest - ${guestFormData.name}`,
+        customer_name: `Guest - ${guestFormData.name}`,
+        robloxUsername: guestFormData.robloxUsername,
+        robloxUserId: guestFormData.robloxUserId,
+        whatsapp: guestFormData.whatsapp,
+        phone: guestFormData.whatsapp,
+        isGuest: true,
+        isCustomerRegistered: false,
+        isRegistered: false,
+        lastMessage: '',
+        last_message: '',
+        lastSender: 'customer',
+        last_sender: 'customer',
+        is_read_admin: false,
+        isReadByAdmin: false,
+        unreadByAdmin: true,
+        unread_by_admin: true,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+
+      // Set guest data and mode
+      setGuestData(guestUserData);
+      setIsGuestMode(true);
+      setShowGuestForm(false);
+      const now = Date.now();
+      setLastActivityTime(now);
+      localStorage.setItem('entong_guest_last_activity', String(now));
+
+      // Send welcome message from bot
+      setTimeout(() => {
+        if (ensureInitialWelcomeGreeting) {
+          ensureInitialWelcomeGreeting(guestRoomId, guestUserData);
+        }
+      }, 500);
+    } catch (error) {
+      console.error('Failed to create guest chat:', error);
+      alert('Gagal membuat sesi chat. Silakan coba lagi.');
+    }
+  };
+
+  // Ambil/Buat ID Room Customer Persisten (Pillar 1)
   useEffect(() => {
     if (!currentUser?.id) {
       setActiveRoomId(null);
@@ -980,6 +1146,36 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
     };
     resolveChatRoom();
   }, [currentUser?.id, currentUser?.phone, (currentUser as any)?.whatsapp, (currentUser as any)?.whatsappNumber]);
+
+  // Guest Mode: Set activeRoomId untuk guest user
+  useEffect(() => {
+    if (isGuestMode && guestData && !currentUser) {
+      const guestRoomId = `guest_${guestData.whatsapp}`;
+      setActiveRoomId(guestRoomId);
+      
+      // Save guest data to localStorage for persistence
+      localStorage.setItem('entong_guest_data', JSON.stringify(guestData));
+      localStorage.setItem('entong_guest_room_id', guestRoomId);
+    }
+  }, [isGuestMode, guestData, currentUser]);
+
+  // Check if there's existing guest session on mount
+  useEffect(() => {
+    if (!currentUser) {
+      const savedGuestData = localStorage.getItem('entong_guest_data');
+      if (savedGuestData) {
+        try {
+          const parsed = JSON.parse(savedGuestData);
+          setGuestData(parsed);
+          setIsGuestMode(true);
+          setLastActivityTime(Date.now());
+          localStorage.setItem('entong_guest_last_activity', String(Date.now()));
+        } catch (e) {
+          console.error('Failed to parse guest data:', e);
+        }
+      }
+    }
+  }, [currentUser]);
 
   // --- SW Registration & Notification Audio ---
   useEffect(() => {
@@ -1361,6 +1557,13 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
 
   const handleSendChat = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Jika user belum login dan bukan guest mode, tampilkan guest form
+    if (!currentUser && !isGuestMode) {
+      setShowGuestForm(true);
+      return;
+    }
+
     const rawVal = chatInputRef.current ? chatInputRef.current.value : msgInput;
     const directText = (rawVal || '').trim();
     if (!activeRoomId || !directText) return;
@@ -1369,18 +1572,20 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
     if (chatInputRef.current) chatInputRef.current.value = '';
     setMsgInput('');
 
-    // 🚫 CEK BAN GUARD
-    if (userStatus.isBanned || currentUser?.isBanned) {
+    // 🚫 CEK BAN GUARD (skip for guest)
+    if (!isGuestMode && (userStatus.isBanned || currentUser?.isBanned)) {
       alert("Akun Anda telah ditangguhkan. Tidak dapat mengirim pesan.");
       return;
     }
 
-    // 🚫 CEK MUTE GUARD
-    const isMuted = isMutedCurrently || (userStatus.mutedUntil && new Date(userStatus.mutedUntil).getTime() > Date.now());
-    if (isMuted) {
-      const remainingMinutes = Math.max(1, Math.ceil((muteCountdown > 0 ? muteCountdown : 60) / 60));
-      alert(`Akses chat Anda sedang dibungkam (Muted) oleh admin. Sisa waktu: ${remainingMinutes} menit.`);
-      return;
+    // 🚫 CEK MUTE GUARD (skip for guest)
+    if (!isGuestMode) {
+      const isMuted = isMutedCurrently || (userStatus.mutedUntil && new Date(userStatus.mutedUntil).getTime() > Date.now());
+      if (isMuted) {
+        const remainingMinutes = Math.max(1, Math.ceil((muteCountdown > 0 ? muteCountdown : 60) / 60));
+        alert(`Akses chat Anda sedang dibungkam (Muted) oleh admin. Sisa waktu: ${remainingMinutes} menit.`);
+        return;
+      }
     }
 
     const now = Date.now();
@@ -1445,11 +1650,16 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
 
     // Instant Optimistic Message in local state to ensure it never flickers or disappears
     const tempMsgId = 'temp-cust-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
+    
+    // Fix untuk guest mode: gunakan guestData jika guest
+    const senderId = isGuestMode && guestData ? guestData.id : (currentUser?.id || 'customer');
+    const senderName = isGuestMode && guestData ? guestData.name : (currentUser?.name || 'Customer');
+    
     const optimisticCustMsg: ChatMessage = {
       id: tempMsgId,
       order_id: activeRoomId,
-      sender_id: currentUser?.id || 'customer',
-      sender_name: currentUser?.name || 'Customer',
+      sender_id: senderId,
+      sender_name: senderName,
       sender_role: 'CUSTOMER',
       sender: 'customer',
       message: directText,
@@ -1584,9 +1794,6 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
               <span className="text-sm font-black text-white truncate">CS Entong Store</span>
-              <span className="text-[9px] px-2 py-0.5 bg-blue-500/20 text-blue-400 font-extrabold rounded-full border border-blue-500/30 uppercase tracking-wider">
-                LIVE SUPPORT
-              </span>
             </div>
             <p className={`text-[11px] ${storeOperatingStatus.isOpen ? 'text-emerald-400' : 'text-rose-400'} font-medium flex items-center gap-1.5 mt-0.5`}>
               <span className={`w-1.5 h-1.5 rounded-full ${storeOperatingStatus.isOpen ? 'bg-emerald-400 animate-pulse' : 'bg-rose-500'}`} />
@@ -1645,7 +1852,29 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
       <StoreOperationalBanner />
 
       {/* ELEMEN 2: AREA PESAN (Tengah / Isi Chat ATAU Inline Guest Form) */}
-      {!currentUser ? null : (
+      {!currentUser && !isGuestMode ? (
+        <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 bg-[#0B0F19] flex flex-col">
+          {/* Header Welcome */}
+          <div className="text-center mb-6 mt-4">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-blue-500/20 border border-blue-500/30 mb-4">
+              <svg className="w-10 h-10 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+              </svg>
+            </div>
+            <h2 className="text-2xl font-black text-white mb-2">👋 Selamat datang!</h2>
+            <p className="text-sm text-slate-400">Isi dulu ya sebelum mulai chat ~</p>
+          </div>
+
+          {/* Form Content - Full Width dalam Chat Area */}
+          <div className="w-full max-w-md mx-auto">
+            <GuestChatForm 
+              onSubmit={handleGuestFormSubmit}
+              onClose={() => {}}
+              isInline={true}
+            />
+          </div>
+        </div>
+      ) : (
       <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3 bg-[#0B0F19] space-y-2.5">
         {showNotifBanner && (
           <div className="mb-2 bg-blue-950/90 border border-blue-500/50 rounded-xl p-3 flex items-center justify-between shadow-lg">
@@ -1721,7 +1950,26 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
           }
 
           const isAdmin = chat.sender_role === 'ADMIN' || chat.sender_role === 'OWNER' || chat.sender_role === 'WORKER' || chat.sender_name === 'Ceo Entong' || (chat as any).senderName === 'Bot Entong Store' || chat.isOfficialBot;
-          const isMe = !isAdmin && (chat.sender_id === currentUser?.id || chat.sender_role === 'CUSTOMER' || chat.sender === 'customer');
+          
+          // Fix untuk guest chat: pastikan pesan dari admin tidak masuk ke bubble user
+          let isMe = false;
+          
+          // Jika pesan dari admin, pasti bukan pesan dari user
+          if (isAdmin) {
+            isMe = false;
+          } else {
+            // Dapatkan ID pengirim yang sebenarnya
+            const currentSenderId = isGuestMode && guestData ? guestData.id : (currentUser?.id || currentUser?.uid);
+            
+            if (currentSenderId && chat.sender_id) {
+              // Cek apakah sender_id sama dengan ID user/guest saat ini
+              isMe = chat.sender_id === currentSenderId;
+            } else {
+              // Fallback: jika tidak ada sender_id, cek berdasarkan sender_role dan sender
+              isMe = chat.sender_role === 'CUSTOMER' || chat.sender === 'customer';
+            }
+          }
+          
           const bubbleClass = chat.is_quick_reply
             ? 'bg-gradient-to-r from-blue-950 to-slate-900 border border-blue-500/50 text-blue-100 shadow-md'
             : (isMe ? 'bg-blue-600 text-white rounded-2xl rounded-br-none shadow-md shadow-blue-600/10' : 'bg-slate-800 text-slate-100 rounded-2xl rounded-bl-none border border-slate-700/60 shadow-md');
@@ -1867,8 +2115,8 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
       </div>
       )}
 
-      {/* ELEMEN 3: AREA INPUT TEXT (Paling Bawah - Hanya tampil jika user aktif) */}
-      {currentUser && (
+      {/* ELEMEN 3: AREA INPUT TEXT (Paling Bawah - Hanya tampil jika user aktif atau guest mode) */}
+      {(currentUser || isGuestMode) && (
         <div className="shrink-0 bg-[#151B2B] p-3 border-t border-slate-800">
           {showSpamWarning && !isMutedCurrently && (
             <div className="bg-amber-950/90 border border-amber-500/30 px-3 py-2 rounded-xl flex items-center justify-between text-xs text-amber-200 mb-2 shadow-lg">
@@ -1943,6 +2191,8 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
         </div>
       )}
 
+      {/* ELEMEN 3b: AREA INPUT UNTUK GUEST - REMOVED karena form sudah inline di area chat */}
+
       {/* MODAL AUTH PORTAL ENTONG STORE (HANYA DITAMPILKAN JIKA USER KLIK TOMBOL LOGIN SECARA EKSPLISIT) */}
       {showAuthModal && (
         <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
@@ -1992,6 +2242,8 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
           </div>
         </div>
       )}
+
+      {/* Guest Chat Form Modal - REMOVED, form sudah inline di area chat */}
     </div>
   );
 };

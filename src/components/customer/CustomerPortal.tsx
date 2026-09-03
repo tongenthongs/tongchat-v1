@@ -117,7 +117,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
 
       if (lastShownDate !== todayStr) {
         const timer = setTimeout(() => {
-          handleProtectedAction(() => setIsChatPopupOpen(true));
+          setIsChatPopupOpen(true);
           localStorage.setItem('entong_daily_chat_popup_date', todayStr);
         }, 1200);
 
@@ -184,7 +184,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     setPrefilledChatMessage(confirmationText);
     setTargetOrderIdForChat(cleanOrderId);
     setActiveOrderForChat(order);
-    handleProtectedAction(() => setIsChatPopupOpen(true));
+    setIsChatPopupOpen(true);
   };
 
   // 🔄 REALTIME LISTENER FOR SELECTED ORDER DETAIL MODAL
@@ -368,7 +368,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
       if (path.includes('/katalog') || hash.includes('katalog') || hash.includes('produk')) {
         setActiveTab('catalog');
       } else if (path.includes('/chat') || hash.includes('chat')) {
-        handleProtectedAction(() => setIsChatPopupOpen(true));
+        setIsChatPopupOpen(true);
       } else if (path.includes('/testimoni') || path.includes('/review') || hash.includes('testimoni') || hash.includes('review')) {
         setActiveTab('testimoni');
       } else if (path.includes('/pesanan') || hash.includes('pesanan') || hash.includes('tracking')) {
@@ -397,7 +397,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
   // Update URL pathname/hash gracefully on tab change
   const navigateTab = (tab: 'home' | 'profile' | 'chat' | 'catalog' | 'tracking' | 'testimoni' | 'leaderboard' | 'settings') => {
     if (tab === 'chat') {
-      handleProtectedAction(() => setIsChatPopupOpen(true));
+      setIsChatPopupOpen(true);
       return;
     }
     setActiveTab(tab);
@@ -432,9 +432,9 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
 
   // Helper untuk membuka Chat Admin Popup (Floating di Desktop, Fullscreen di Mobile)
   const openChatAdmin = () => {
-    handleProtectedAction(() => {
-      handleProtectedAction(() => setIsChatPopupOpen(true));
-    });
+    // Langsung buka chat popup tanpa auth check
+    // Guest form akan muncul di dalam CustomerChat component
+    setIsChatPopupOpen(true);
   };
 
   const [homeCatalogs, setHomeCatalogs] = useState<any[]>(() => getCachedCatalogs());
@@ -2513,7 +2513,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
                           <button
                             onClick={() => {
                               setSelectedOrderDetail(ord);
-                              handleProtectedAction(() => setIsChatPopupOpen(true));
+                              setIsChatPopupOpen(true);
                             }}
                             className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow transition active:scale-95 cursor-pointer"
                           >

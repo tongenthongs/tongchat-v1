@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "public/version.json": {
-    "mtime": 1788366206.691679,
-    "seen": 1788366800.7868607,
-    "ast_hash": "0025a2c9a80f2f281748c6a3f1345665",
+    "mtime": 1788428752.7697942,
+    "seen": 1788428785.850684,
+    "ast_hash": "75a7da64721519ca00ef98a0857c2bca",
     "semantic_hash": ""
   },
   "remove_new_option.cjs": {
@@ -768,9 +768,9 @@
     "semantic_hash": ""
   },
   "src/components/customer/CustomerChat.tsx": {
-    "mtime": 1788330902.0,
-    "seen": 1788366800.7869544,
-    "ast_hash": "ca9377e07c99deeae1ef5c8181302378",
+    "mtime": 1788428752.7730029,
+    "seen": 1788428785.8508742,
+    "ast_hash": "0a36249b8ba6cad0f2eb2a24dc671ee2",
     "semantic_hash": ""
   },
   "src/components/customer/CustomerNotifications.tsx": {
@@ -786,9 +786,9 @@
     "semantic_hash": ""
   },
   "src/components/customer/CustomerPortal.tsx": {
-    "mtime": 1788377627.3338544,
-    "seen": 1788377748.9683173,
-    "ast_hash": "d8f85ce93cfab40c5e51de468976b1a0",
+    "mtime": 1788428752.7754736,
+    "seen": 1788428785.850881,
+    "ast_hash": "2e73fea485d0abd5e39f2f27e81c5d2a",
     "semantic_hash": ""
   },
   "src/components/customer/CustomerSettings.tsx": {
@@ -882,9 +882,9 @@
     "semantic_hash": ""
   },
   "src/context/AppContext.tsx": {
-    "mtime": 1788367511.8175678,
-    "seen": 1788377748.9683428,
-    "ast_hash": "5366a0f36ef009fec5a7f78e026b4669",
+    "mtime": 1788428752.777631,
+    "seen": 1788428785.8509207,
+    "ast_hash": "4e7a777171f099f2893c294d07b3eaf1",
     "semantic_hash": ""
   },
   "src/data/masterReviewsData.ts": {
@@ -1530,9 +1530,9 @@
     "semantic_hash": ""
   },
   "src/components/common/InstallPWAButton.tsx": {
-    "mtime": 1788377281.9206474,
-    "seen": 1788377748.968303,
-    "ast_hash": "a0dcb2529f1a68bfab7f9f30f0dd0c1b",
+    "mtime": 1788408059.2427304,
+    "seen": 1788428785.8508592,
+    "ast_hash": "c7b2235d64d85d7a6ab409d4c60f5f6d",
     "semantic_hash": ""
   },
   ".kilo/command/caveman.md": {
@@ -1545,6 +1545,12 @@
     "mtime": 1788374287.174098,
     "seen": 1788377748.9684856,
     "ast_hash": "bf9f6c435b444e3da4e67ebeff2d00e5",
+    "semantic_hash": ""
+  },
+  "src/components/chat/GuestChatForm.tsx": {
+    "mtime": 1788412567.0871818,
+    "seen": 1788428785.850816,
+    "ast_hash": "c24bab584f178e3fb2ff9a7a4b7027cd",
     "semantic_hash": ""
   }
 }

@@ -2397,14 +2397,35 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    const guestId = localStorage.getItem('entong_guest_room_id') || `guest_${Date.now()}`;
-    const activeUser = currentUser || {
-      id: guestId,
-      name: `Guest_${guestId.slice(-6)}`,
-      role: 'CUSTOMER' as UserRole,
-      username: `guest_${guestId.slice(-6)}`,
-      email: ''
-    };
+    // Check for guest data from localStorage
+    let activeUser = currentUser;
+    if (!activeUser) {
+      const guestDataStr = localStorage.getItem('entong_guest_data');
+      const guestId = localStorage.getItem('entong_guest_room_id') || `guest_${Date.now()}`;
+      
+      if (guestDataStr) {
+        try {
+          const guestData = JSON.parse(guestDataStr);
+          activeUser = guestData;
+        } catch (e) {
+          activeUser = {
+            id: guestId,
+            name: `Guest_${guestId.slice(-6)}`,
+            role: 'CUSTOMER' as UserRole,
+            username: `guest_${guestId.slice(-6)}`,
+            email: ''
+          };
+        }
+      } else {
+        activeUser = {
+          id: guestId,
+          name: `Guest_${guestId.slice(-6)}`,
+          role: 'CUSTOMER' as UserRole,
+          username: `guest_${guestId.slice(-6)}`,
+          email: ''
+        };
+      }
+    }
 
     const isOwner = activeUser.role === 'OWNER' || activeUser.username === 'own';
     const senderName = isOwner ? 'Ceo Entong' : activeUser.name;
