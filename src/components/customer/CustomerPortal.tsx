@@ -1,4 +1,4 @@
-import { LiveTransactionsCarousel } from "./LiveTransactionsCarousel";
+﻿import { LiveTransactionsCarousel } from "./LiveTransactionsCarousel";
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useApp, formatDate, formatChatTime } from '../../context/AppContext';
 import { GameOrder, OrderStatus, GameItem, ChatMessage, resolveChatRoomId, CartEntry } from '../../types';
@@ -13,7 +13,7 @@ import {
   Send, Plus, Gamepad2, ArrowRight, Copy, Check, ShoppingCart, Trash2,
   QrCode, CreditCard, Upload, Eye, X, RefreshCw, FileText, Paperclip, Video, Image, Bell, User,
   Star, ThumbsUp, ShieldCheck, Flame, Zap, Headphones, Sparkles, Home as HomeIcon, LogIn,
-  UserPlus, Settings, ChevronDown, Coins, Mail, Camera, Trophy, Search, ChevronRight
+  UserPlus, Settings, ChevronDown, Coins, Mail, Camera, Trophy, Search, ChevronRight, Phone
 } from 'lucide-react';
 import { compressImage, compressVideo } from '../../lib/mediaUtils';
 import { CustomerChat } from './CustomerChat';
@@ -109,7 +109,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     }
   }, [currentUser?.phone, currentUser?.whatsappNumber]);
 
-  // 🤖 Chatbot Auto-Popup: Muncul otomatis 1x sehari per user/browser, tombol manual tetap aktif selalu
+  // ðŸ¤– Chatbot Auto-Popup: Muncul otomatis 1x sehari per user/browser, tombol manual tetap aktif selalu
   useEffect(() => {
     try {
       const todayStr = new Date().toISOString().slice(0, 10);
@@ -136,7 +136,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
   const [targetOrderIdForChat, setTargetOrderIdForChat] = useState<string>('');
   const [activeOrderForChat, setActiveOrderForChat] = useState<any>(null);
 
-  // 💬 Handle auto-paste chat confirmation to admin
+  // ðŸ’¬ Handle auto-paste chat confirmation to admin
   const handleChatAdminConfirmation = async (order: any) => {
     if (!order) return;
     const docId = order.docUniqueId || order.firestoreId || order.id || order.orderId;
@@ -187,7 +187,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     setIsChatPopupOpen(true);
   };
 
-  // 🔄 REALTIME LISTENER FOR SELECTED ORDER DETAIL MODAL
+  // ðŸ”„ REALTIME LISTENER FOR SELECTED ORDER DETAIL MODAL
   useEffect(() => {
     if (!selectedOrderDetail) return;
     const targetDocId = selectedOrderDetail.docUniqueId || selectedOrderDetail.firestoreId || selectedOrderDetail.id;
@@ -223,7 +223,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
   const [unreadNotifCount, setUnreadNotifCount] = useState(0);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
 
-  // 📦 TRACKING / CEK PESANAN STATES
+  // ðŸ“¦ TRACKING / CEK PESANAN STATES
   const [trackingLookupMode, setTrackingLookupMode] = useState<'USER_DATA' | 'INVOICE'>('USER_DATA');
   const [trackingSearchInput, setTrackingSearchInput] = useState('');
   const [isSearchingTracking, setIsSearchingTracking] = useState(false);
@@ -359,7 +359,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     }
   }, [currentUser?.id, currentUser?.uid, currentUser?.phone, currentUser?.whatsappNumber]);
 
-  // 🌐 ROUTING URL SYNC (/ -> Home, /katalog -> Katalog, /settings -> Pengaturan, /pesanan -> Pesanan, /profil -> Profil)
+  // ðŸŒ ROUTING URL SYNC (/ -> Home, /katalog -> Katalog, /settings -> Pengaturan, /pesanan -> Pesanan, /profil -> Profil)
   useEffect(() => {
     const handleRouteChange = () => {
       const path = window.location.pathname.toLowerCase();
@@ -455,7 +455,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // 🛡️ AUTH GUARD SENTRAL: Mencegat user yang belum login saat mencoba Beli, Chat, Top Up, atau Pesanan
+  // ðŸ›¡ï¸ AUTH GUARD SENTRAL: Mencegat user yang belum login saat mencoba Beli, Chat, Top Up, atau Pesanan
   const handleProtectedAction = (actionCallback: () => void) => {
     if (!currentUser) {
       alert("Silakan login atau daftar terlebih dahulu untuk melanjutkan.");
@@ -471,7 +471,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     window.location.href = '/gpdragdrivesim';
   };
 
-  // 🚀 ISOLATED & FAST: Realtime Catalogs & Products query with SWR (Stale-While-Revalidate) & 300ms Timeout Guard
+  // ðŸš€ ISOLATED & FAST: Realtime Catalogs & Products query with SWR (Stale-While-Revalidate) & 300ms Timeout Guard
   useEffect(() => {
     // 300ms Safety Timeout fallback to prevent infinite skeleton hang (cache sudah dirender seketika)
     const safetyTimer = setTimeout(() => {
@@ -797,7 +797,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     setProfilePendingCount(unverifiedTotal);
   }, [orders, currentUser]);
 
-  // 🛡️ DEDUPLICATION HELPER BERDASARKAN ID DOKUMEN / ORDER ID
+  // ðŸ›¡ï¸ DEDUPLICATION HELPER BERDASARKAN ID DOKUMEN / ORDER ID
   const removeDuplicateOrders = (rawOrdersList: any[]) => {
     const uniqueOrdersMap = new Map<string, any>();
     const seenIds = new Set<string>();
@@ -881,7 +881,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         return;
       }
 
-      // 2. 🚨 FORCED UPDATE MUTLAK PADA DOKUMEN YANG SUDAH ADA (ANTI-DOBEL)
+      // 2. ðŸš¨ FORCED UPDATE MUTLAK PADA DOKUMEN YANG SUDAH ADA (ANTI-DOBEL)
       const orderRef = doc(db, 'orders', targetOrderDocId);
       await updateDoc(orderRef, {
         proofUrl: uploadedImageUrl,
@@ -890,7 +890,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         hasProof: true,
         paymentStatus: 'PENDING_VERIFICATION',
         proofUploadedAt: Date.now()
-        // 🛑 Dilarang menyisipkan `createdAt` atau `orderTimestamp` baru di sini!
+        // ðŸ›‘ Dilarang menyisipkan `createdAt` atau `orderTimestamp` baru di sini!
       });
 
       // 3. Kirim notifikasi bukti ke chat
@@ -942,7 +942,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     }
   };
 
-  // 📢 Real-time Announcement Listener from Firestore
+  // ðŸ“¢ Real-time Announcement Listener from Firestore
   useEffect(() => {
     const unsubAnn = onSnapshot(doc(db, 'settings', 'announcement'), (docSnap) => {
       if (docSnap.exists()) {
@@ -1073,7 +1073,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     }
   }, [customerMainRoomId, setSelectedChatId]);
 
-  // 🛡️ DEDICATED REALTIME ORDER LISTENER FOR CURRENT CUSTOMER (MULTI-IDENTIFIER)
+  // ðŸ›¡ï¸ DEDICATED REALTIME ORDER LISTENER FOR CURRENT CUSTOMER (MULTI-IDENTIFIER)
   const [directCustomerOrders, setDirectCustomerOrders] = useState<any[]>([]);
 
   useEffect(() => {
@@ -1230,7 +1230,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
       const exist = prev.find(c => c.item.id === item.id && c.item.robloxUsername === item.robloxUsername);
       if (exist) {
         if (item.robloxUsername) {
-          alert(`⚠️ Username Roblox @${item.robloxUsername} sudah ada di keranjang untuk paket ini!`);
+          alert(`âš ï¸ Username Roblox @${item.robloxUsername} sudah ada di keranjang untuk paket ini!`);
           return prev;
         }
         return prev.map(c => (c.item.id === item.id && c.item.robloxUsername === item.robloxUsername) ? { ...c, qty: c.qty + 1 } : c);
@@ -1339,7 +1339,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
       const existing = prev.find(c => c.item.id === item.id && c.item.robloxUsername === item.robloxUsername);
       if (existing) {
         if (item.robloxUsername) {
-          alert(`⚠️ Username Roblox @${item.robloxUsername} sudah ada di keranjang untuk paket ini!`);
+          alert(`âš ï¸ Username Roblox @${item.robloxUsername} sudah ada di keranjang untuk paket ini!`);
           return prev;
         }
         return prev.map(c => (c.item.id === item.id && c.item.robloxUsername === item.robloxUsername) ? { ...c, qty: c.qty + 1 } : c);
@@ -1407,7 +1407,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
       return;
     }
 
-    // 🔥 EARLY STATE LOCK: Prevent double-click immediately
+    // ðŸ”¥ EARLY STATE LOCK: Prevent double-click immediately
     setIsSubmitting(true);
     isProcessingRef.current = true;
 
@@ -1427,7 +1427,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     }
 
     // =====================================================================
-    // 🛑 KUNCI ANTI-DOBEL ORDER REALTIME (SISTEM VALIDASI MULTI-PRODUK KETAT)
+    // ðŸ›‘ KUNCI ANTI-DOBEL ORDER REALTIME (SISTEM VALIDASI MULTI-PRODUK KETAT)
     // =====================================================================
     const targetUser = (gameUsername || '').toString().trim().toLowerCase();
 
@@ -1445,7 +1445,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
           alert(checkResult.reason || `Username "${targetUser}" masih memiliki pesanan aktif untuk item ini.`);
           setIsSubmitting(false);
           isProcessingRef.current = false;
-          return; // 🛑 EKSEKUSI DIBATALKAN & KUNCI DILEPAS!
+          return; // ðŸ›‘ EKSEKUSI DIBATALKAN & KUNCI DILEPAS!
         }
       }
     }
@@ -1508,7 +1508,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
       const { setDoc, doc, collection, addDoc, serverTimestamp } = await import('firebase/firestore');
       const chatRef = doc(db, 'chats', customerRoomId);
 
-      // 1. 🚨 BUAT PREDICTABLE ID: Gabungan UID + Tanggal (Tanpa Garis Miring)
+      // 1. ðŸš¨ BUAT PREDICTABLE ID: Gabungan UID + Tanggal (Tanpa Garis Miring)
       const orderDate = new Date(exactOrderTime).toLocaleDateString('id-ID').replace(/\//g, '');
       const predictableDocId = `ORD_${activeCustomerId || currentUser?.id || 'GUEST'}_${orderDate}`; 
 
@@ -1601,7 +1601,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         roblox_usernames: robloxUsernames,
         roblox_profiles: robloxProfiles,
 
-        // 🔒 PROPERTI TIMESTAMP KUNCI MATI
+        // ðŸ”’ PROPERTI TIMESTAMP KUNCI MATI
         orderTimestamp: exactOrderTime,
         timestamp: exactOrderTime,
         created: exactIsoString,
@@ -1611,7 +1611,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         statusUpdatedAt: exactIsoString
       };
 
-      // 2. 🚨 ZERO-DUPLICATE ENGINE: GUNAKAN setDoc DENGAN merge: true, BUKAN addDoc
+      // 2. ðŸš¨ ZERO-DUPLICATE ENGINE: GUNAKAN setDoc DENGAN merge: true, BUKAN addDoc
       const orderRef = doc(db, 'orders', predictableDocId);
       
       const { saveOrderWithRetry } = await import('../../services/orderService');
@@ -1669,8 +1669,8 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         }
       }
 
-      // 2. 🟢 INJEKSI AUTO CHAT SISTEM KE SUB-KOLEKSI MESSAGES ROOM
-      const autoSystemText = `📦 **Form Gamepass / Order Gift**\n\nPaket: ${combinedPackageName}\nUsername Target: ${rUsername || '-'}\nTotal: Rp ${cartTotalPrice.toLocaleString('id-ID')}\nStatus: **${!giftStatus.isOperatingHours && isGiftOrder ? 'Booking (Diluar Jam Operasional 13.00-20.50 WIB - Diproses mulai pukul 13.00 WIB)' : 'Menunggu Verifikasi Pembayaran'}**`;
+      // 2. ðŸŸ¢ INJEKSI AUTO CHAT SISTEM KE SUB-KOLEKSI MESSAGES ROOM
+      const autoSystemText = `ðŸ“¦ **Form Gamepass / Order Gift**\n\nPaket: ${combinedPackageName}\nUsername Target: ${rUsername || '-'}\nTotal: Rp ${cartTotalPrice.toLocaleString('id-ID')}\nStatus: **${!giftStatus.isOperatingHours && isGiftOrder ? 'Booking (Diluar Jam Operasional 13.00-20.50 WIB - Diproses mulai pukul 13.00 WIB)' : 'Menunggu Verifikasi Pembayaran'}**`;
       
       try {
         const systemChatMessage = {
@@ -1763,7 +1763,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
       setSelectedOrderDetail(createdOrderObj);
       setActiveTab('tracking');
 
-      // 🎁 Buka popup Request Pengiriman otomatis jika ini pesanan Gift
+      // ðŸŽ Buka popup Request Pengiriman otomatis jika ini pesanan Gift
       if (isGiftOrder) {
         setGiftOrderForRequestModal(createdOrderObj);
       }
@@ -1808,7 +1808,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
       setShowSpamWarning(false);
       setRecentSentTimestamps([]);
       setMsgInput('');
-      alert(`⚠️ SPAM TERDETEKSI! Anda mengirim ${filtered.length} pesan dalam kurun waktu kurang dari 2 menit.\n\nAkun Anda OTOMATIS DI-MUTE selama 15 menit.`);
+      alert(`âš ï¸ SPAM TERDETEKSI! Anda mengirim ${filtered.length} pesan dalam kurun waktu kurang dari 2 menit.\n\nAkun Anda OTOMATIS DI-MUTE selama 15 menit.`);
       return;
     } else if (filtered.length >= 7) {
       // 7 chats threshold reached in 2 minutes
@@ -1835,7 +1835,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
   
       return (
         <span className="px-2.5 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded-full text-xs font-extrabold flex items-center gap-1.5 animate-pulse shadow-sm">
-          ⏳ Menunggu Verifikasi Admin
+          â³ Menunggu Verifikasi Admin
         </span>
       );
     }
@@ -2039,7 +2039,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
           <div className="hidden md:flex bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 border-b border-blue-500/30 px-5 py-3 items-center justify-between gap-4 text-xs z-40 shadow-xl">
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-10 h-10 rounded-2xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 text-lg shrink-0">
-                🔔
+                ðŸ””
               </div>
               <div className="min-w-0">
                 <span className="font-extrabold text-slate-100 text-sm block">Aktifkan Notifikasi Web Real-Time</span>
@@ -2072,7 +2072,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
           {/* Mobile Notification Banner */}
           <div className="flex md:hidden bg-slate-900 border-b border-blue-500/30 px-3 py-2 items-center justify-between gap-2 text-xs z-45 shadow-md">
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-base shrink-0">🔔</span>
+              <span className="text-base shrink-0">ðŸ””</span>
               <span className="font-bold text-slate-200 text-xs truncate">Aktifkan Notifikasi Status Order</span>
             </div>
             <div className="flex items-center gap-1.5 shrink-0">
@@ -2100,240 +2100,124 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         </>
       )}
       
-      {/* 🚀 ENTONG STORE NAVBAR */}
-      <header className="sticky top-0 z-[100] bg-[#070b14]/90 backdrop-blur-md border-b border-slate-800/80 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-lg">
+      {/* ðŸš€ ENTONG STORE NAVBAR */}
+      <header className="sticky top-0 z-[100] bg-[#060d1a]/95 backdrop-blur-xl border-b border-blue-900/20 px-4 md:px-8 py-3 flex items-center justify-between">
         {/* Brand Logo */}
-        <div className="flex items-center gap-3 cursor-pointer select-none" onClick={() => setActiveTab('home')}>
-          <div className="w-9 h-9 rounded-xl bg-slate-800/80 border border-slate-700/60 p-0.5 flex items-center justify-center overflow-hidden shrink-0">
-            <img 
-              src={storeAvatarUrl || "/logo-entong.png"} 
-              alt="Entong Store Logo" 
+        <div className="flex items-center gap-2.5 cursor-pointer select-none shrink-0" onClick={() => setActiveTab('home')}>
+          <div className="w-8 h-8 rounded-xl overflow-hidden border border-blue-800/40 shrink-0">
+            <img
+              src={storeAvatarUrl || "/logo-entong.png"}
+              alt="Entong Store Logo"
               className="w-full h-full object-cover object-top"
             />
           </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="text-lg font-black tracking-tight text-white">ENTONG</span>
-              <span className="text-[10px] font-black px-1.5 py-0.5 bg-blue-600 text-white rounded tracking-widest uppercase">STORE</span>
-            </div>
-            <span className="text-[10px] text-slate-400 font-medium tracking-wide">Pusat Layanan Game Terpercaya</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-base font-black tracking-tight text-white">ENTONG</span>
+            <span className="text-[9px] font-black px-1.5 py-0.5 bg-blue-600 text-white rounded tracking-widest uppercase leading-none">STORE</span>
           </div>
         </div>
 
-        {/* Center Desktop Navigation (Clean without bulky background box) */}
-        <nav className="hidden md:flex items-center gap-1 lg:gap-2">
-          <button
-            onClick={() => setActiveTab('home')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-              activeTab === 'home' 
-                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' 
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            <HomeIcon className="w-3.5 h-3.5" />
-            <span>Beranda</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('catalog')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-              activeTab === 'catalog' 
-                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' 
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            <ShoppingBag className="w-3.5 h-3.5" />
-            <span>Produk</span>
-          </button>
-          <button
-            onClick={() => navigateTab('tracking')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-              activeTab === 'tracking' 
-                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' 
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            <Clock className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Cek Pesanan</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('testimoni')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-              activeTab === 'testimoni' 
-                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' 
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            <Star className="w-3.5 h-3.5 text-amber-400" />
-            <span>Testimoni</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('leaderboard')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-              activeTab === 'leaderboard' 
-                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40' 
-                : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            <Trophy className="w-3.5 h-3.5 text-amber-400" />
-            <span>Leaderboard</span>
-          </button>
+        {/* Center Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-0.5">
+          {[
+            { tab: 'home',      label: 'Beranda',  icon: <HomeIcon className="w-3.5 h-3.5" /> },
+            { tab: 'catalog',   label: 'Produk',   icon: <ShoppingBag className="w-3.5 h-3.5" /> },
+            { tab: 'tracking',  label: 'Pesanan',  icon: <Clock className="w-3.5 h-3.5" /> },
+            { tab: 'testimoni', label: 'Ulasan',   icon: <Star className="w-3.5 h-3.5" /> },
+            { tab: 'chat',      label: 'Chat',     icon: <MessageSquare className="w-3.5 h-3.5" /> },
+          ].map(item => (
+            <button
+              key={item.tab}
+              onClick={() => setActiveTab(item.tab)}
+              className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                activeTab === item.tab
+                  ? 'bg-blue-600/15 text-blue-400 border border-blue-600/20'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              {item.icon}
+              {item.label}
+            </button>
+          ))}
         </nav>
 
         {/* Right Actions */}
         <div className="flex items-center gap-2">
-          {/* PWA Install Button (navbar variant) */}
-          <InstallPWAButton variant="navbar" />
-
-          {/* Notification Bell Button (Desktop Popover & Mobile Drawer Trigger) */}
-          <div className="relative">
-            <button
-              onClick={() => {
-                handleEnableNotifications();
-                setShowNotificationModal(prev => !prev);
-              }}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                setShowNotificationModal(prev => !prev);
-              }}
-              className={`p-2 rounded-xl transition-all shadow active:scale-95 flex items-center justify-center relative cursor-pointer ${
-                showNotificationModal 
-                  ? 'bg-blue-600 text-white border border-blue-400 shadow-blue-500/20' 
-                  : 'bg-slate-900/90 hover:bg-slate-800 text-blue-400 border border-slate-800 hover:border-blue-500/30'
-              }`}
-              title="Notifikasi Pelanggan"
-              aria-label="Notifikasi"
-            >
-              <Bell className="w-4 h-4" />
-              {unreadNotifCount > 0 ? (
-                <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 bg-rose-600 text-white text-[9px] font-black rounded-full flex items-center justify-center border border-slate-900 shadow-sm animate-pulse">
-                  {unreadNotifCount > 9 ? '9+' : unreadNotifCount}
-                </span>
-              ) : (
-                typeof window !== 'undefined' && 'Notification' in window && Notification.permission !== 'granted' && (
-                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-blue-500 rounded-full animate-ping" />
-                )
-              )}
-            </button>
-          </div>
-
-          {/* Cart Button */}
+          {/* Cart */}
           {cartTotalItems > 0 && (
             <button
               onClick={() => handleRequestCheckout(true)}
-              className="relative px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 border border-blue-400/40 shadow-lg shadow-blue-600/20 transition-all active:scale-95 cursor-pointer"
-              title="Keranjang Belanja"
+              className="relative w-9 h-9 flex items-center justify-center rounded-xl bg-blue-600/10 border border-blue-600/20 text-blue-400 hover:bg-blue-600/20 transition-all cursor-pointer"
             >
-              <ShoppingCart className="w-4 h-4 text-white" />
-              <span className="w-4 h-4 rounded-full bg-white text-blue-900 text-[10px] font-black flex items-center justify-center">
+              <ShoppingCart className="w-4 h-4" />
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-blue-600 text-white text-[9px] font-black flex items-center justify-center">
                 {cartTotalItems}
               </span>
             </button>
           )}
 
-          {/* Auth State Button & Dropdown */}
+          {/* Notification Bell */}
+          <button
+            onClick={() => { handleEnableNotifications(); setShowNotificationModal(prev => !prev); }}
+            className="relative w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 border border-white/8 text-slate-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+          >
+            <Bell className="w-4 h-4" />
+            {unreadNotifCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center">
+                {unreadNotifCount > 9 ? '9+' : unreadNotifCount}
+              </span>
+            )}
+          </button>
+
+          {/* User Menu / Login */}
           {currentUser ? (
             <div className="relative" ref={profileDropdownRef}>
               <button
-                onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                className="flex items-center gap-2 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/40 text-slate-200 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+                onClick={() => setShowProfileDropdown(v => !v)}
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/5 border border-white/8 hover:bg-white/10 transition-all cursor-pointer"
               >
-                <div className="w-6 h-6 rounded-lg bg-blue-600/30 border border-blue-500/40 flex items-center justify-center text-[11px] font-black text-blue-400">
-                  {(currentUser.name || currentUser.username || 'U').charAt(0).toUpperCase()}
+                <div className="w-6 h-6 rounded-lg overflow-hidden bg-blue-600/20 border border-blue-600/30 shrink-0">
+                  {currentUser.photoURL ? (
+                    <img src={optimizeGoogleAvatarUrl(currentUser.photoURL)} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <User className="w-3.5 h-3.5 text-blue-400" />
+                    </div>
+                  )}
                 </div>
-                <span className="truncate max-w-[90px] sm:max-w-[120px]">{currentUser.name || currentUser.username || 'User'}</span>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${showProfileDropdown ? 'rotate-180 text-blue-400' : ''}`} />
+                <span className="text-xs font-semibold text-slate-300 max-w-[80px] truncate hidden sm:block">
+                  {currentUser.displayName?.split(' ')[0] || 'Akun'}
+                </span>
+                <ChevronDown className="w-3 h-3 text-slate-500" />
               </button>
 
-              {/* Profile Dropdown Box */}
               {showProfileDropdown && (
-                <div className="absolute right-0 top-full mt-2 w-72 bg-[#0F172A] border border-slate-800 rounded-2xl shadow-2xl z-[9999] p-4 text-left animate-in fade-in zoom-in-95 duration-150">
-                  {/* Header Dropdown */}
-                  <div className="flex items-center gap-3 pb-3 border-b border-slate-800">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-500 flex items-center justify-center text-white font-black text-base shadow-md">
-                      {(currentUser.name || currentUser.username || 'U').charAt(0).toUpperCase()}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="text-xs font-black text-white truncate">{currentUser.name || currentUser.username || 'User'}</div>
-                      <div className="text-[11px] text-slate-400 truncate">{currentUser.email || `@${currentUser.username}`}</div>
-                      <div className="inline-block mt-0.5 px-2 py-0.5 bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[9px] font-black rounded-md uppercase">
-                        {currentUser.role || 'CUSTOMER'}
-                      </div>
-                    </div>
+                <div className="absolute right-0 top-full mt-2 w-52 bg-[#0d1829] border border-blue-900/40 rounded-2xl shadow-2xl shadow-black/50 z-50 overflow-hidden py-1.5">
+                  <div className="px-3.5 py-2.5 border-b border-blue-900/30">
+                    <p className="text-xs font-bold text-white truncate">{currentUser.displayName || 'Pengguna'}</p>
+                    <p className="text-[10px] text-slate-500 truncate">{currentUser.email}</p>
                   </div>
-
-                  {/* List Menu Vertikal */}
-                  <div className="space-y-1 mt-3">
+                  {[
+                    { icon: <User className="w-3.5 h-3.5" />, label: 'Profil & Settings', action: () => { setActiveTab('settings'); setShowProfileDropdown(false); } },
+                    { icon: <ShoppingBag className="w-3.5 h-3.5" />, label: 'Pesanan Saya', action: () => { navigateTab('tracking'); setShowProfileDropdown(false); } },
+                    { icon: <Coins className="w-3.5 h-3.5" />, label: 'TongCoins', action: () => { setActiveTab('tongcoins'); setShowProfileDropdown(false); } },
+                  ].map(item => (
                     <button
-                      onClick={() => {
-                        setShowProfileDropdown(false);
-                        setActiveTab('tongcoins');
-                      }}
-                      className="w-full flex items-center justify-between px-3 py-2 text-xs font-bold text-amber-300 hover:bg-amber-500/10 hover:text-amber-200 rounded-xl transition-all cursor-pointer border border-amber-500/20 bg-amber-500/5"
+                      key={item.label}
+                      onClick={item.action}
+                      className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-blue-600/10 transition-all cursor-pointer"
                     >
-                      <div className="flex items-center gap-2.5">
-                        <Coins className="w-4 h-4 text-amber-400" />
-                        <span>TongCoins (TC)</span>
-                      </div>
-                      <span className="font-mono text-[11px] font-bold text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-md">
-                        {typeof currentUser?.tc_balance === 'number' ? currentUser.tc_balance.toLocaleString('id-ID') : '0'} TC
-                      </span>
+                      <span className="text-slate-500">{item.icon}</span>
+                      {item.label}
                     </button>
-
+                  ))}
+                  <div className="border-t border-blue-900/30 mt-1 pt-1">
                     <button
-                      onClick={() => {
-                        setShowProfileDropdown(false);
-                        setActiveTab('tracking');
-                      }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-800 hover:text-white rounded-xl transition-all cursor-pointer"
+                      onClick={() => { logout(); setShowProfileDropdown(false); }}
+                      className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs font-medium text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
                     >
-                      <Clock className="w-4 h-4 text-blue-400" />
-                      <span>Pesanan</span>
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        setShowProfileDropdown(false);
-                        openChatAdmin();
-                      }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-800 hover:text-white rounded-xl transition-all cursor-pointer"
-                    >
-                      <MessageSquare className="w-4 h-4 text-blue-400" />
-                      <span>Chat Admin</span>
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        setShowProfileDropdown(false);
-                        navigateTab('profile');
-                      }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-800 hover:text-white rounded-xl transition-all cursor-pointer"
-                    >
-                      <User className="w-4 h-4 text-blue-400" />
-                      <span>Profil</span>
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        setShowProfileDropdown(false);
-                        navigateTab('settings');
-                      }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-200 hover:bg-slate-800 hover:text-white rounded-xl transition-all cursor-pointer"
-                    >
-                      <Settings className="w-4 h-4 text-blue-400" />
-                      <span>Pengaturan</span>
-                    </button>
-
-                    <div className="h-px bg-slate-800 my-1.5" />
-
-                    <button
-                      onClick={() => {
-                        setShowProfileDropdown(false);
-                        logout();
-                      }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all cursor-pointer"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>Keluar</span>
+                      <LogOut className="w-3.5 h-3.5" />
+                      Keluar
                     </button>
                   </div>
                 </div>
@@ -2342,19 +2226,19 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
           ) : (
             <button
               onClick={() => setShowAuthModal(true)}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-xl text-xs transition-all shadow-lg shadow-blue-500/20 active:scale-95 flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs transition-all shadow-lg shadow-blue-600/20 active:scale-95 flex items-center gap-1.5 cursor-pointer"
             >
-              <LogIn className="w-4 h-4" />
-              <span>Masuk / Daftar</span>
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Masuk</span>
             </button>
           )}
         </div>
       </header>
 
-      {/* 📢 BANNER JAM OPERASIONAL TOKO TERPUSAT (WIB & RESPONSIVE MULTI-LINE AUTO-WRAP) */}
+      {/* ðŸ“¢ BANNER JAM OPERASIONAL TOKO TERPUSAT (WIB & RESPONSIVE MULTI-LINE AUTO-WRAP) */}
       <StoreOperationalBanner />
 
-      {/* 📢 BAR NOTIFIKASI INFORMASI REAL-TIME DARI FIRESTORE */}
+      {/* ðŸ“¢ BAR NOTIFIKASI INFORMASI REAL-TIME DARI FIRESTORE */}
       {announcementText && announcementText.trim().length > 0 && (
         <div className="w-full bg-[#0F172A] border-b border-slate-800 px-4 py-2 text-xs text-slate-300">
           <div className="flex items-center gap-2.5 overflow-hidden min-w-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -2367,7 +2251,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
       )}
 
       {/* Main Container */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-0 relative pb-28 md:pb-12">
+      <main className={`flex-1 w-full relative ${activeTab === 'home' ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-0 pb-28 md:pb-12'}`}>
         
         {/* Success Toast Notice */}
         {orderSuccessNotice && (
@@ -2376,408 +2260,360 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
               <CheckCircle2 className="w-5 h-5 text-blue-400" />
               <span>Pesanan Anda berhasil dibuat! Tim Admin Entong Store siap memproses secepat kilat.</span>
             </div>
-            <button onClick={() => setOrderSuccessNotice(false)} className="text-white font-bold p-1">✕</button>
+            <button onClick={() => setOrderSuccessNotice(false)} className="text-white font-bold p-1">âœ•</button>
           </div>
         )}
 
         {/* ============================================================== */}
-        {/* 🔥 0. LANDING PAGE UTAMA (BERANDA / HOME - RIERBUX DARK BLUE) */}
+        {/* ðŸ”¥ 0. LANDING PAGE UTAMA (BERANDA / HOME - RIERBUX DARK BLUE) */}
         {/* ============================================================== */}
         {activeTab === 'home' && (
-          <div className="space-y-10 animate-fade-in">
-            
-            {/* HERO SECTION (ENTONG STORE EXCLUSIVE BRANDING) */}
-            <div className="relative pt-4 sm:pt-8 pb-3 text-center max-w-4xl mx-auto space-y-6">
+          <div className="animate-fade-in w-full bg-[#060d1a]">
 
-              
-              {/* Headline Teks */}
-              <div className="space-y-2">
-                <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white leading-none">
-                  Entong <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-400 to-indigo-400">Store</span>
+            {/* â•â• HERO â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+            <section className="relative overflow-hidden bg-gradient-to-b from-[#091424] to-[#060d1a] pt-10 pb-12 sm:pt-16 sm:pb-20">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
+              <div className="relative w-full max-w-5xl mx-auto px-4 sm:px-8 flex flex-col items-center text-center gap-5">
+                {/* Badge */}
+                <span className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-300 text-xs font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                  Toko Roblox Terpercaya #1 Indonesia
+                </span>
+
+                {/* Headline */}
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.05]">
+                  Entong{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">Store</span>
                 </h1>
-                <p className="text-sm sm:text-lg md:text-xl font-semibold text-slate-300 tracking-wide max-w-2xl mx-auto">
-                  Seluruh Kebutuhan Robloxmu Ada Disini
-                </p>
-              </div>
-
-              {/* 4 Feature Highlights */}
-              <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 pt-1">
-                <span className="px-4 py-2 rounded-xl bg-[#0F172A] border border-slate-800 text-slate-200 text-xs sm:text-sm font-bold flex items-center gap-2 shadow-sm hover:border-blue-500/40 transition-colors">
-                  <ShieldCheck className="w-4 h-4 text-blue-400 shrink-0" /> Terpercaya
-                </span>
-                <span className="px-4 py-2 rounded-xl bg-[#0F172A] border border-slate-800 text-slate-200 text-xs sm:text-sm font-bold flex items-center gap-2 shadow-sm hover:border-amber-500/40 transition-colors">
-                  <Zap className="w-4 h-4 text-amber-400 shrink-0" /> Proses Cepat
-                </span>
-                <span className="px-4 py-2 rounded-xl bg-[#0F172A] border border-slate-800 text-slate-200 text-xs sm:text-sm font-bold flex items-center gap-2 shadow-sm hover:border-rose-500/40 transition-colors">
-                  <Flame className="w-4 h-4 text-rose-400 shrink-0" /> Ribuan Transaksi
-                </span>
-                <span className="px-4 py-2 rounded-xl bg-[#0F172A] border border-slate-800 text-slate-200 text-xs sm:text-sm font-bold flex items-center gap-2 shadow-sm hover:border-emerald-500/40 transition-colors">
-                  <Headphones className="w-4 h-4 text-emerald-400 shrink-0" /> Admin Ramah
-                </span>
-              </div>
-
-              {/* Beli Sekarang CTA Button */}
-              <div className="pt-2 sm:pt-3">
-                <button
-                  id="hero-order-joko-btn"
-                  onClick={() => setActiveTab('catalog')}
-                  className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-black text-base sm:text-lg rounded-2xl shadow-xl shadow-blue-600/30 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3 mx-auto border border-blue-400/40 cursor-pointer"
-                >
-                  <ShoppingBag className="w-5 h-5" />
-                  <span>Beli Sekarang</span>
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* REALTIME ACTIVE ORDERS CARD SECTION */}
-            {activeCustomerOrders.length > 0 && (
-              <div className="max-w-4xl mx-auto space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-emerald-500 animate-ping" />
-                    <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                      <span>⚡ Pesanan Aktif Anda ({activeCustomerOrders.length})</span>
-                      <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold rounded-full border border-emerald-500/30">
-                        Live Realtime
-                      </span>
-                    </h3>
+                <p className="text-sm sm:text-base text-slate-400 max-w-md">
+                  Top Up Roblox{' · '}Gift In-Game{' · '}Joki Service
+                  <br className="hidden sm:block" />
+                  <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs text-slate-500">
+                    <span>Proses Cepat</span>
+                    <span className="hidden sm:inline text-slate-700">·</span>
+                    <span>Admin Ramah</span>
+                    <span className="hidden sm:inline text-slate-700">·</span>
+                    <span>Harga Terbaik</span>
                   </div>
+                </p>
+
+                {/* CTA */}
+                <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs sm:max-w-none sm:justify-center">
+                  <button
+                    onClick={() => setActiveTab('catalog')}
+                    className="flex items-center justify-center gap-2 px-8 py-3.5 bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white font-black text-sm rounded-2xl shadow-lg shadow-blue-600/25 border border-blue-400/20 transition-all cursor-pointer"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    Order Sekarang
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
                   <button
                     onClick={() => navigateTab('tracking')}
-                    className="text-xs text-blue-400 hover:text-blue-300 font-bold flex items-center gap-1 cursor-pointer"
+                    className="flex items-center justify-center gap-2 px-8 py-3.5 bg-white/5 hover:bg-white/10 active:scale-[0.98] text-slate-200 font-semibold text-sm rounded-2xl border border-white/10 transition-all cursor-pointer"
                   >
-                    <span>Semua Pesanan</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <Search className="w-4 h-4 text-blue-400" />
+                    Cek Pesanan
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {activeCustomerOrders.map((ord: any) => {
-                    const rawStatus = (ord.status || ord.orderStatus || 'BOOKING').toUpperCase();
-                    const isBooking = rawStatus === 'BOOKING' || rawStatus === 'PENDING';
-                    const isAntrian = rawStatus === 'ANTRIAN_LOGIN' || rawStatus === 'ANTRIAN';
-                    const isProses = rawStatus === 'PROSES_WORKER' || rawStatus === 'PROSES' || rawStatus === 'PROCESSING';
-                    const isReady = rawStatus === 'READY' || rawStatus === 'SIAP';
-                    const isLogul = rawStatus === 'LOGUL';
+                {/* Trust pills */}
+                <div className="flex flex-wrap justify-center gap-2 pt-1">
+                  {[
+                    { icon: <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />, text: 'Terpercaya' },
+                    { icon: <Zap className="w-3.5 h-3.5 text-yellow-400" />, text: 'Proses Cepat' },
+                    { icon: <Headphones className="w-3.5 h-3.5 text-emerald-400" />, text: 'Admin 24 Jam' },
+                    { icon: <CreditCard className="w-3.5 h-3.5 text-purple-400" />, text: 'Banyak Metode Bayar' },
+                  ].map(t => (
+                    <span key={t.text} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0d1829]/80 border border-blue-900/40 rounded-xl text-slate-400 text-[11px] font-medium">
+                      {t.icon}{t.text}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </section>
 
-                    let statusBadgeClass = 'bg-blue-500/20 text-blue-300 border-blue-500/40';
-                    let statusLabel = '⏳ BOOKING';
+            {/* STATS BAR */}
+            <div className="w-full bg-[#080f1e]">
+              <div className="max-w-5xl mx-auto px-4 sm:px-8 grid grid-cols-3">
+                <div className="py-6 text-center">
+                  <div className="text-xl sm:text-2xl font-black text-white">{(6427 + totalOrders).toLocaleString('id-ID')}+</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">Pesanan Sukses</div>
+                </div>
+                <div className="py-6 text-center border-x border-blue-900/20">
+                  <div className="text-xl sm:text-2xl font-black text-white">{totalReviews.toLocaleString('id-ID')}+</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">Ulasan Pembeli</div>
+                </div>
+                <div className="py-6 text-center">
+                  <div className="flex items-center justify-center gap-1 mb-1">{[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}</div>
+                  <div className="text-xl sm:text-2xl font-black text-white">{rating ? Number(rating).toFixed(1) : '4.9'} / 5</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">Rating Toko</div>
+                </div>
+              </div>
+            </div>
 
-                    if (isBooking) {
-                      statusBadgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
-                      statusLabel = '⏳ BOOKING (Antrian)';
-                    } else if (isAntrian) {
-                      statusBadgeClass = 'bg-purple-500/20 text-purple-300 border-purple-500/40';
-                      statusLabel = '🕒 ANTRIAN LOGIN';
-                    } else if (isProses) {
-                      statusBadgeClass = 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40';
-                      statusLabel = '⚡ SEDANG DIPROSES';
-                    } else if (isReady) {
-                      statusBadgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
-                      statusLabel = '✨ READY / SELESAI PROSES';
-                    } else if (isLogul) {
-                      statusBadgeClass = 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40';
-                      statusLabel = '🔑 LOGUL';
-                    }
+            {/* â•â• MAIN CONTENT â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-14">
 
-  
-                    return (
-                      <div 
-                        key={ord.id || ord.orderId}
-                        className="bg-slate-900/90 border border-slate-800 hover:border-emerald-500/40 rounded-2xl p-4 shadow-xl transition-all space-y-3"
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <span className="text-[10px] font-mono font-bold text-slate-400">
-                              #{ord.orderId || ord.id}
+              {/* Live Transactions */}
+              <div>
+                <LiveTransactionsCarousel catalogList={homeCatalogs} />
+              </div>
+
+              {/* Products */}
+              <section className="space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <Flame className="w-4 h-4 text-amber-400" />
+                      <h2 className="text-base sm:text-xl font-black text-white">Produk Terpopuler</h2>
+                    </div>
+                    <p className="text-xs text-slate-600 mt-0.5">Item dan joki paling banyak dipesan</p>
+                  </div>
+                  {/* Category tabs */}
+                  <div className="flex items-center gap-1 p-1 bg-[#0d1829] border border-blue-900/20 rounded-xl self-start shrink-0">
+                    {[{ k: 'all', l: 'Semua' }, { k: 'gift', l: 'Gift & GP' }, { k: 'joko', l: 'Joki' }].map(f => (
+                      <button key={f.k} onClick={() => setHomeCategoryFilter(f.k)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          homeCategoryFilter === f.k ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-200'}`}>
+                        {f.l}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {isProductsLoading ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 animate-pulse">
+                    {[1,2,3,4,5,6,7,8,9,10].map(i => <div key={i} className="bg-[#0d1829] rounded-2xl h-64 border border-blue-900/15" />)}
+                  </div>
+                ) : filteredTopProducts.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-20 bg-[#0d1829] rounded-2xl border border-blue-900/15 gap-3">
+                    <Gamepad2 className="w-10 h-10 text-slate-700" />
+                    <p className="text-sm text-slate-600">Belum ada produk tersedia.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
+                    {filteredTopProducts.map((item, itIdx) => {
+                      const isGiftProduct = isProductGift(item.rawGame || item) || item.category === 'gift';
+                      const isGiftCurrentlyClosed = isGiftProduct && isGiftClosedTime();
+                      return (
+                        <div key={item.id ? `tp-${item.id}-${itIdx}` : `tp-${itIdx}`}
+                          onClick={() => handleSelectProductFromHome(item)}
+                          className="group relative bg-[#0d1829] border border-blue-900/20 hover:border-blue-500/40 rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-blue-900/30 transition-all duration-200 flex flex-col cursor-pointer">
+                          {/* Thumbnail */}
+                          <div className="relative h-32 sm:h-40 overflow-hidden bg-[#060d1a] shrink-0">
+                            <img src={item.img} alt={item.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              referrerPolicy="no-referrer" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0d1829] via-transparent to-transparent opacity-80" />
+                            <span className="absolute top-2 left-2 px-2 py-0.5 bg-blue-600/90 backdrop-blur-sm text-white text-[9px] font-black rounded-md uppercase tracking-wide z-10">
+                              {item.tag}
                             </span>
-                            <h4 className="text-sm font-black text-white">
-                              {ord.package_name || ord.title || ord.game_name || 'Paket Layanan'}
-                            </h4>
-                            {ord.robloxUsername && (
-                              <p className="text-[11px] text-slate-300">
-                                User: <span className="font-mono text-emerald-400 font-bold">@{ord.robloxUsername}</span>
-                              </p>
+                            {isGiftCurrentlyClosed && (
+                              <span className="absolute bottom-2 right-2 px-2 py-0.5 bg-amber-950/90 border border-amber-700/30 text-amber-300 text-[9px] font-bold rounded-md z-10">
+                                Di Luar Jam
+                              </span>
                             )}
                           </div>
-                          <span className={`px-2.5 py-1 rounded-xl text-[10px] font-extrabold border uppercase tracking-wider ${statusBadgeClass}`}>
-                            {statusLabel}
-                          </span>
+                          {/* Info */}
+                          <div className="p-3 flex flex-col flex-1 gap-2.5">
+                            <div className="flex-1">
+                              <span className="text-[9px] text-blue-500 font-bold uppercase tracking-widest">{item.game}</span>
+                              <h3 className="text-xs sm:text-sm font-bold text-slate-200 group-hover:text-white line-clamp-2 leading-snug mt-0.5 transition-colors">
+                                {item.title}
+                              </h3>
+                            </div>
+                            <div className="space-y-2">
+                              <div className="flex items-end justify-between gap-1">
+                                <div>
+                                  {item.originalPrice && item.originalPrice > item.price && (
+                                    <span className="text-[9px] text-slate-600 line-through font-mono block">
+                                      Rp {item.originalPrice.toLocaleString('id-ID')}
+                                    </span>
+                                  )}
+                                  <span className="text-sm font-black text-blue-400 font-mono">
+                                    Rp {item.price.toLocaleString('id-ID')}
+                                  </span>
+                                </div>
+                                <span className="text-[9px] text-slate-600 shrink-0">{item.sold}+ sold</span>
+                              </div>
+                              <button type="button"
+                                onClick={e => { e.stopPropagation(); handleSelectProductFromHome(item); }}
+                                className="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-black transition-all active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
+                                Beli <ArrowRight className="w-3 h-3" />
+                              </button>
+                            </div>
+                          </div>
                         </div>
-
-                        <div className="flex items-center justify-between pt-2 border-t border-slate-800 text-xs">
-                          <span className="font-mono font-black text-emerald-400">
-                            Rp {(Number(ord.price || ord.totalPrice) || 0).toLocaleString('id-ID')}
-                          </span>
-                          <button
-                            onClick={() => {
-                              setSelectedOrderDetail(ord);
-                              setIsChatPopupOpen(true);
-                            }}
-                            className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow transition active:scale-95 cursor-pointer"
-                          >
-                            <MessageSquare className="w-3.5 h-3.5" />
-                            <span>Live Chat Order</span>
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* STATISTIK TOKO SECTION */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
-              <div className="bg-slate-900/80 border border-slate-800 hover:border-blue-500/40 rounded-2xl p-5 text-center transition-all shadow-lg hover:shadow-blue-500/5">
-                <div className="text-3xl sm:text-4xl font-black text-blue-400 mb-1">
-                  {(6427 + totalOrders).toLocaleString('id-ID')}+
-                </div>
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Total Pesanan Selesai
-                </div>
-              </div>
-
-              <div className="bg-slate-900/80 border border-slate-800 hover:border-blue-500/40 rounded-2xl p-5 text-center transition-all shadow-lg hover:shadow-blue-500/5">
-                <div className="text-3xl sm:text-4xl font-black text-blue-400 mb-1">
-                  {totalReviews.toLocaleString('id-ID')}+
-                </div>
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Total Ulasan Pelanggan
-                </div>
-              </div>
-
-              <div className="bg-slate-900/80 border border-slate-800 hover:border-blue-500/40 rounded-2xl p-5 text-center transition-all shadow-lg hover:shadow-blue-500/5">
-                <div className="flex items-center justify-center gap-1.5 text-3xl sm:text-4xl font-black text-amber-400 mb-1">
-                  <Star className="w-7 h-7 fill-amber-400 text-amber-400" />
-                  <span>{rating ? Number(rating).toFixed(1) : '4.9'}</span>
-                  <span className="text-base text-slate-500 font-bold self-end mb-1">/ 5.0</span>
-                </div>
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Rating Kepuasan Toko
-                </div>
-              </div>
-            </div>
-
-            {/* TRANSAKSI SUKSES TERBARU SECTION */}
-            <div className="max-w-4xl mx-auto">
-              <LiveTransactionsCarousel catalogList={homeCatalogs} />
-            </div>
-
-            {/* PRODUCT SHOWCASE SECTION */}
-            <div className="space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <Flame className="w-5 h-5 text-amber-400" />
-                    <h2 className="text-xl font-black text-white tracking-wide">
-                      Produk & Layanan Terpopuler
-                    </h2>
+                      );
+                    })}
                   </div>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Pilihan item game & joko paling banyak diorder hari ini
-                  </p>
-                </div>
+                )}
 
-                {/* Category Filter Tabs */}
-                <div className="flex gap-1.5 p-1 bg-slate-900 border border-slate-800 rounded-xl self-start">
-                  <button
-                    onClick={() => setHomeCategoryFilter('all')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${homeCategoryFilter === 'all' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}
-                  >
-                    Semua
-                  </button>
-                  <button
-                    onClick={() => setHomeCategoryFilter('gift')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${homeCategoryFilter === 'gift' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}
-                  >
-                    Roblox & Gift
-                  </button>
-                  <button
-                    onClick={() => setHomeCategoryFilter('joko')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${homeCategoryFilter === 'joko' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-slate-200'}`}
-                  >
-                    Joko
+                <div className="flex justify-center pt-2">
+                  <button onClick={() => setActiveTab('catalog')}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0d1829] hover:bg-[#112040] border border-blue-900/20 hover:border-blue-700/30 text-blue-400 font-bold text-sm rounded-xl transition-all cursor-pointer">
+                    Lihat Semua Produk <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
+              </section>
 
-              {/* PRODUCT GRID (RESPONSIVE FULL-WIDTH GRID) */}
-              {isProductsLoading ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 animate-pulse">
-                  {[1, 2, 3, 4, 5].map(i => (
-                    <div key={i} className="bg-slate-900 border border-slate-800 rounded-2xl p-3 h-64 space-y-3 flex flex-col justify-between">
-                      <div className="w-full h-32 bg-slate-800 rounded-xl" />
-                      <div className="space-y-2">
-                        <div className="h-3 bg-slate-800 rounded w-1/3" />
-                        <div className="h-4 bg-slate-800 rounded w-3/4" />
+              {/* Why Us */}
+              <section className="space-y-5">
+                <div className="text-center">
+                  <h2 className="text-base sm:text-lg font-black text-white">Kenapa Pilih Entong Store?</h2>
+                  <p className="text-xs text-slate-600 mt-1">Komitmen kami untuk pengalaman Roblox terbaik</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                  {[
+                    { icon: <Zap className="w-5 h-5 text-blue-400" />, bg: 'bg-blue-500/10 border-blue-500/15', title: 'Proses Kilat', desc: 'Order diproses dalam 5â€“15 menit, tanpa antre panjang.' },
+                    { icon: <MessageSquare className="w-5 h-5 text-emerald-400" />, bg: 'bg-emerald-500/10 border-emerald-500/15', title: 'Live Chat Aktif', desc: 'Admin siap membantu kapan saja via chat interaktif.' },
+                    { icon: <CreditCard className="w-5 h-5 text-purple-400" />, bg: 'bg-purple-500/10 border-purple-500/15', title: 'Banyak Metode Bayar', desc: 'QRIS, DANA, OVO, GoPay, ShopeePay, Transfer Bank, TC.' },
+                  ].map(s => (
+                    <div key={s.title} className="bg-[#0d1829] border border-blue-900/20 hover:border-blue-800/40 rounded-2xl p-5 space-y-3 transition-colors">
+                      <div className={`w-10 h-10 rounded-xl border flex items-center justify-center ${s.bg}`}>{s.icon}</div>
+                      <div>
+                        <h4 className="text-sm font-extrabold text-white">{s.title}</h4>
+                        <p className="text-xs text-slate-500 mt-1 leading-relaxed">{s.desc}</p>
                       </div>
-                      <div className="h-8 bg-slate-800 rounded-xl w-full" />
                     </div>
                   ))}
                 </div>
-              ) : filteredTopProducts.length === 0 ? (
-                <div className="text-center py-12 bg-slate-900 rounded-2xl border border-slate-800 p-6 max-w-md mx-auto">
-                  <Gamepad2 className="w-10 h-10 text-slate-600 mx-auto mb-2" />
-                  <h4 className="text-sm font-bold text-slate-300">Belum ada katalog item yang ditambahkan.</h4>
-                  <p className="text-xs text-slate-500 mt-1">Katalog produk untuk kategori ini belum tersedia.</p>
+              </section>
+
+              {/* Review CTA */}
+              <section>
+                <div className="relative overflow-hidden bg-gradient-to-r from-[#0d1f3c] to-[#0a1628] border border-blue-800/20 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5">
+                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_0%_50%,rgba(59,130,246,0.06)_0%,transparent_70%)] pointer-events-none" />
+                  <div className="relative text-center sm:text-left space-y-1.5">
+                    <div className="flex items-center justify-center sm:justify-start gap-0.5">
+                      {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}
+                      <span className="text-xs font-bold text-white ml-2">{rating ? Number(rating).toFixed(1) : '4.9'} / 5.0</span>
+                    </div>
+                    <h3 className="text-sm sm:text-base font-black text-white">
+                      Dipercaya {(6427 + totalOrders).toLocaleString('id-ID')}+ Gamers Indonesia
+                    </h3>
+                    <p className="text-xs text-slate-500">Lihat testimoni dan ulasan asli dari pembeli kami.</p>
+                  </div>
+                  <button onClick={() => setActiveTab('testimoni')}
+                    className="relative shrink-0 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-black transition-all shadow-lg shadow-blue-600/20 active:scale-95 flex items-center gap-2 cursor-pointer">
+                    Lihat Ulasan <ArrowRight className="w-4 h-4" />
+                  </button>
                 </div>
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
-                  {filteredTopProducts.map((item, itIdx) => {
-                    const isGiftProduct = isProductGift(item.rawGame || item) || item.category === 'gift';
-                    const isGiftCurrentlyClosed = isGiftProduct && isGiftClosedTime();
+              </section>
 
-  
-                    return (
-                    <div
-                      key={item.id ? `top-prod-${item.id}-${itIdx}` : `top-prod-${itIdx}`}
-                      onClick={() => handleSelectProductFromHome(item)}
-                      className="group bg-slate-900 border border-slate-800 hover:border-blue-500/60 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-blue-500/10 transition-all flex flex-col justify-between cursor-pointer"
-                    >
-                      {/* Image Thumbnail - Full Cover without padding */}
-                      <div className="relative h-40 w-full overflow-hidden bg-slate-950 rounded-t-2xl">
-                        <img
-                          src={item.img}
-                          alt={item.title}
-                          className="w-full h-40 object-cover rounded-t-2xl group-hover:scale-105 transition-transform duration-300"
-                          referrerPolicy="no-referrer"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80 pointer-events-none" />
-                        
-                        {/* Populer Badge */}
-                        <span className="absolute top-2.5 left-2.5 px-2.5 py-1 bg-blue-600 text-white text-[10px] font-black tracking-wide rounded-lg uppercase shadow-md flex items-center gap-1 z-10">
-                          <span>👑</span> {item.tag}
-                        </span>
+              {/* Web Push */}
+              <WebPushNotificationBanner />
 
-                        {/* Gift Closed or Process Badge */}
-                        {isGiftCurrentlyClosed ? (
-                          <span className="absolute bottom-2.5 right-2.5 px-2.5 py-1 bg-amber-950/90 border border-amber-700/60 text-amber-300 text-[10px] font-black rounded-lg uppercase tracking-wider backdrop-blur-sm shadow-md z-10">
-                            🕒 DI LUAR JAM
-                          </span>
-                        ) : (
-                          <span className="absolute bottom-2.5 right-2.5 px-2 py-0.5 bg-slate-950/80 border border-slate-800 text-blue-300 text-[10px] font-bold rounded-md backdrop-blur-sm z-10">
-                            {item.badge}
-                          </span>
-                        )}
+
+            {/* ══ FOOTER ══ */}
+            <footer className="w-full bg-[#040a14] border-t border-blue-900/20 mt-6">
+              <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12">
+                {/* Top grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10">
+                  {/* Brand — full width on mobile */}
+                  <div className="col-span-2 lg:col-span-2 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-xl overflow-hidden border border-blue-800/40 shrink-0">
+                        <img src={storeAvatarUrl || "/logo-entong.png"} alt="Entong Store" className="w-full h-full object-cover" />
                       </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm font-black text-white tracking-tight">ENTONG</span>
+                        <span className="text-[9px] font-black px-1.5 py-0.5 bg-blue-600 text-white rounded tracking-widest uppercase">STORE</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-500 leading-relaxed max-w-xs">
+                      Toko Roblox terpercaya untuk Top Up, Gift In-Game, dan Joki Service. Proses cepat, admin ramah, harga terbaik.
+                    </p>
+                    <div className="flex items-center gap-2.5">
+                      {[
+                        { href: 'https://www.tiktok.com/@sientong.id', label: '@sientong.id' },
+                        { href: 'https://www.tiktok.com/@entongsupply', label: '@entongsupply' },
+                        { href: 'https://www.tiktok.com/@entongjoki', label: '@entongjoki' },
+                      ].map(tt => (
+                        <a key={tt.href} href={tt.href} target="_blank" rel="noopener noreferrer"
+                          title={tt.label}
+                          className="w-8 h-8 rounded-xl bg-[#0d1829] border border-blue-900/30 hover:border-blue-600/50 flex items-center justify-center text-slate-400 hover:text-white transition-all">
+                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.5a8.16 8.16 0 0 0 4.78 1.52V6.55a4.85 4.85 0 0 1-1.01.14z"/></svg>
+                        </a>
+                      ))}
+                      <a href="https://wa.me/6281958308349" target="_blank" rel="noopener noreferrer"
+                        className="w-8 h-8 rounded-xl bg-[#0d1829] border border-blue-900/30 hover:border-emerald-600/50 flex items-center justify-center text-slate-400 hover:text-emerald-400 transition-all">
+                        <Phone className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </div>
 
-                      {/* Content */}
-                      <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-                        <div>
-                          <span className="text-[10px] text-blue-400 font-extrabold uppercase tracking-wider block">
-                            {item.game}
-                          </span>
-                          <h3 className="text-xs sm:text-sm font-bold text-white group-hover:text-blue-400 transition-colors line-clamp-2 leading-snug mt-0.5">
-                            {item.title}
-                          </h3>
+                  {/* Layanan */}
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-black text-white uppercase tracking-wider">Layanan</h4>
+                    <ul className="space-y-2">
+                      {[
+                        { label: 'Top Up Roblox', tab: 'catalog' },
+                        { label: 'Gift In-Game', tab: 'catalog' },
+                        { label: 'Joki Service', tab: 'catalog' },
+                        { label: 'Cek Pesanan', tab: 'tracking' },
+                        { label: 'Ulasan', tab: 'testimoni' },
+                      ].map(item => (
+                        <li key={item.label}>
+                          <button onClick={() => setActiveTab(item.tab)}
+                            className="text-xs text-slate-500 hover:text-blue-400 transition-colors cursor-pointer flex items-center gap-1.5">
+                            <ChevronRight className="w-3 h-3 shrink-0" />
+                            {item.label}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Kontak */}
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-black text-white uppercase tracking-wider">Kontak</h4>
+                    <div className="space-y-3">
+                      <a href="https://wa.me/6281958308349" target="_blank" rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-xs text-slate-500 hover:text-emerald-400 transition-colors">
+                        <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                          <Phone className="w-3 h-3 text-emerald-400" />
                         </div>
-
-                        <div className="pt-2.5 border-t border-slate-800/80 space-y-2.5">
-                          <div className="flex items-baseline justify-between">
-                            <div>
-                              {item.originalPrice && item.originalPrice > item.price && (
-                                <span className="text-[10px] text-slate-500 line-through block font-mono">
-                                  Rp {item.originalPrice.toLocaleString('id-ID')}
-                                </span>
-                              )}
-                              <span className="text-base font-black text-blue-400 font-mono">
-                                Rp {item.price.toLocaleString('id-ID')}
-                              </span>
-                            </div>
-                            <span className="text-[10px] text-slate-400 font-bold bg-slate-800/60 px-2 py-0.5 rounded-md border border-slate-700/40">
-                              🔥 {item.sold}+ Terjual
-                            </span>
-                          </div>
-
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleSelectProductFromHome(item);
-                              }}
-                              className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-black transition-all shadow-md shadow-blue-600/20 active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer"
-                            >
-                              Beli Sekarang <ArrowRight className="w-3.5 h-3.5" />
-                            </button>
+                        <div>
+                          <p className="text-[10px] text-slate-600">WhatsApp</p>
+                          <p className="text-xs font-semibold text-slate-300">+62 819-5830-8349</p>
+                        </div>
+                      </a>
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
+                          <Clock className="w-3 h-3 text-blue-400" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-slate-600">Jam Operasional</p>
+                          <p className="text-xs font-semibold text-slate-300">Setiap Hari, 13.00 - 23.00 WIB</p>
                         </div>
                       </div>
                     </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* WHY CHOOSE ENTONG STORE */}
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl">
-              <div className="text-center max-w-xl mx-auto space-y-1">
-                <h3 className="text-lg sm:text-xl font-black text-white">
-                  Kenapa Harus Memilih Entong Store?
-                </h3>
-                <p className="text-xs text-slate-400">
-                  Komitmen kami memberikan pengalaman belanja item & joko game terbaik dan teraman.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800/80 hover:border-blue-500/40 transition-all space-y-2.5 shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center font-bold">
-                    <Zap className="w-5 h-5" />
                   </div>
-                  <h4 className="text-sm font-extrabold text-white">Proses Super Kilat</h4>
-                  <p className="text-xs text-slate-400 leading-relaxed">Pesanan Anda langsung diproses secara instan hanya dalam waktu 5-15 menit.</p>
                 </div>
 
-                <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800/80 hover:border-blue-500/40 transition-all space-y-2.5 shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center font-bold">
-                    <MessageSquare className="w-5 h-5" />
+                {/* Bottom bar */}
+                <div className="mt-8 pt-5 border-t border-blue-900/20 flex flex-col sm:flex-row items-center justify-between gap-2">
+                  <p className="text-xs text-slate-600 text-center sm:text-left">
+                    &copy; {new Date().getFullYear()} Entong Store. Semua hak dilindungi.
+                  </p>
+                  <div className="flex items-center gap-4">
+                    {[
+                      { label: "Syarat & Ketentuan", tab: "catalog" },
+                      { label: "Kebijakan Privasi", tab: "catalog" },
+                    ].map(item => (
+                      <button key={item.label} onClick={() => setActiveTab(item.tab)}
+                        className="text-xs text-slate-600 hover:text-slate-400 transition-colors cursor-pointer">
+                        {item.label}
+                      </button>
+                    ))}
                   </div>
-                  <h4 className="text-sm font-extrabold text-white">Live Chat Real-Time</h4>
-                  <p className="text-xs text-slate-400 leading-relaxed">Layanan bantuan pelanggan siap sedia membantu Anda via chat interaktif 24/7.</p>
-                </div>
-
-                <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800/80 hover:border-blue-500/40 transition-all space-y-2.5 shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center font-bold">
-                    <CreditCard className="w-5 h-5" />
-                  </div>
-                  <h4 className="text-sm font-extrabold text-white">Pembayaran Lengkap</h4>
-                  <p className="text-xs text-slate-400 leading-relaxed">Mendukung QRIS instan dari semua E-Wallet (DANA, OVO, GoPay, ShopeePay) & Bank.</p>
                 </div>
               </div>
+            </footer>
             </div>
-
-            {/* TESTIMONI PREVIEW BANNER */}
-            <div className="bg-gradient-to-r from-blue-950 via-slate-900 to-slate-950 border border-blue-900/40 rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
-              <div className="space-y-1 text-center sm:text-left">
-                <div className="flex items-center justify-center sm:justify-start gap-1 text-amber-400">
-                  <Star className="w-4 h-4 fill-amber-400" />
-                  <Star className="w-4 h-4 fill-amber-400" />
-                  <Star className="w-4 h-4 fill-amber-400" />
-                  <Star className="w-4 h-4 fill-amber-400" />
-                  <Star className="w-4 h-4 fill-amber-400" />
-                  <span className="text-xs font-extrabold text-white ml-1.5">4.9 / 5.0 Rating Pelanggan</span>
-                </div>
-                <h4 className="text-sm font-black text-white">Sudah Dipercaya Lebih Dari 10.000+ Gamers</h4>
-                <p className="text-xs text-slate-400">Lihat bukti kepuasan dan testimoni asli langsung dari pembeli kami.</p>
-              </div>
-
-              <button
-                onClick={() => setActiveTab('testimoni')}
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-extrabold transition-all shadow-md shrink-0 flex items-center gap-1.5 active:scale-95 cursor-pointer"
-              >
-                Lihat Semua Ulasan <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            {/* WEB PUSH NOTIFICATION BANNER */}
-            <WebPushNotificationBanner />
-
           </div>
         )}
-
-        {/* 1. PESANAN / TRACKING TAB (CUSTOMER ORDERS LIST & FULL-PAGE DETAIL) */}
         {activeTab === 'tracking' && (
           selectedOrderDetail ? (
             <OrderDetail 
@@ -2898,7 +2734,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
 
                 {/* Alert Box */}
                 <div className="p-3.5 bg-blue-900/20 border border-blue-500/30 rounded-2xl flex items-start gap-3 text-blue-300 text-xs leading-relaxed shadow-sm">
-                  <span className="text-base shrink-0">💡</span>
+                  <span className="text-base shrink-0">ðŸ’¡</span>
                   <div>
                     <strong className="text-blue-200 font-bold">Informasi Khusus:</strong> Kalau kamu beli <strong>Robux Via Login</strong>, pesanan hanya bisa dicari melalui <strong>Invoice ID</strong> demi keamanan data akun Anda.
                   </div>
@@ -3193,7 +3029,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
                     </button>
                   </div>
 
-                  {/* 🌟 KARTU / WIDGET SALDO TONGCOINS (TC) - POSISI PALING ATAS */}
+                  {/* ðŸŒŸ KARTU / WIDGET SALDO TONGCOINS (TC) - POSISI PALING ATAS */}
                   <div className="mt-6 bg-gradient-to-r from-emerald-950/70 via-slate-950 to-teal-950/50 border border-emerald-500/40 rounded-2xl p-4 sm:p-5 shadow-lg relative overflow-hidden">
                     <div className="absolute right-0 top-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
@@ -3278,7 +3114,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
                   className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-500 text-white font-black text-sm sm:text-base rounded-2xl shadow-xl shadow-blue-600/25 transition-all flex items-center justify-center gap-3 cursor-pointer active:scale-[0.99] group"
                 >
                   <Trophy className="w-5 h-5 text-amber-300 group-hover:scale-110 transition-transform" />
-                  <span>🏆 Lihat Leaderboard & Peringkat Belanja</span>
+                  <span>ðŸ† Lihat Leaderboard & Peringkat Belanja</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
 
@@ -3531,7 +3367,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
 
             <div className="mb-4">
               <span className="px-2.5 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-black rounded-lg uppercase tracking-wider inline-block mb-2">
-                ✍️ Berikan Review
+                âœï¸ Berikan Review
               </span>
               <h3 className="text-base font-black text-slate-100">Ulasan Pengerjaan Joko</h3>
               <p className="text-xs text-slate-400 mt-1">
@@ -3564,10 +3400,10 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
                   ))}
                 </div>
                 <p className="text-[10px] text-slate-500">
-                  {reviewRating === 5 ? '🔥 Sangat Puas / Satset Gacor!' :
-                   reviewRating === 4 ? '✨ Puas / Fast Respon!' :
-                   reviewRating === 3 ? '👍 Cukup / Standar' :
-                   reviewRating === 2 ? '⚠️ Kurang Puas' : '❌ Kecewa'}
+                  {reviewRating === 5 ? 'ðŸ”¥ Sangat Puas / Satset Gacor!' :
+                   reviewRating === 4 ? 'âœ¨ Puas / Fast Respon!' :
+                   reviewRating === 3 ? 'ðŸ‘ Cukup / Standar' :
+                   reviewRating === 2 ? 'âš ï¸ Kurang Puas' : 'âŒ Kecewa'}
                 </p>
               </div>
 
@@ -3620,7 +3456,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-slate-900 border border-blue-500/40 p-6 rounded-2xl max-w-sm w-full text-center shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="absolute top-0 right-0 w-24 h-24 bg-blue-600/10 rounded-bl-full pointer-events-none" />
-            <div className="text-4xl mb-3">🎉</div>
+            <div className="text-4xl mb-3">ðŸŽ‰</div>
             <h3 className="text-blue-400 font-extrabold text-sm uppercase tracking-wide mb-2">
               TERIMA KASIH ATAS ULASAN ANDA!
             </h3>
@@ -3632,7 +3468,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
               className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-xl text-xs shadow-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <Check className="w-4 h-4" />
-              [ ✅ Tutup ]
+              [ âœ… Tutup ]
             </button>
           </div>
         </div>
@@ -3835,7 +3671,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         orders={myOrders}
       />
 
-      {/* 🚀 Floating Install PWA prompt (mobile bottom bar) */}
+      {/* ðŸš€ Floating Install PWA prompt (mobile bottom bar) */}
       <InstallPWAButton variant="floating" />
 
     </div>

@@ -1163,15 +1163,46 @@ export const CustomerChat: React.FC<CustomerChatProps> = ({
   useEffect(() => {
     if (!currentUser) {
       const savedGuestData = localStorage.getItem('entong_guest_data');
+      const savedRoomId = localStorage.getItem('entong_guest_room_id');
+      const savedLastActivity = localStorage.getItem('entong_guest_last_activity');
       if (savedGuestData) {
         try {
           const parsed = JSON.parse(savedGuestData);
+          const savedTime = savedLastActivity ? parseInt(savedLastActivity, 10) : 0;
+          const now = Date.now();
+          const INACTIVITY_TIMEOUT = 30 * 60 * 1000;
+
+          // If already expired, clean up immediately without restoring
+          if (savedTime > 0 && (now - savedTime) >= INACTIVITY_TIMEOUT) {
+            console.log('Guest session already expired on mount. Cleaning up...');
+            if (savedRoomId) {
+              const messagesRef = collection(db, 'chats', savedRoomId, 'messages');
+              getDocs(messagesRef).then(snapshot => {
+                snapshot.forEach(docSnap => {
+                  deleteDoc(doc(db, 'chats', savedRoomId, 'messages', docSnap.id)).catch(() => {});
+                });
+              }).catch(() => {});
+              deleteDoc(doc(db, 'chats', savedRoomId)).catch(() => {});
+            }
+            localStorage.removeItem('entong_guest_data');
+            localStorage.removeItem('entong_guest_room_id');
+            localStorage.removeItem('entong_guest_last_activity');
+            return;
+          }
+
+          // Restore session with the ORIGINAL stored timestamp (not Date.now())
           setGuestData(parsed);
           setIsGuestMode(true);
-          setLastActivityTime(Date.now());
-          localStorage.setItem('entong_guest_last_activity', String(Date.now()));
+          // Use stored timestamp to preserve remaining inactivity window
+          setLastActivityTime(savedTime > 0 ? savedTime : now);
+          if (savedRoomId) {
+            setActiveRoomId(savedRoomId);
+          }
         } catch (e) {
           console.error('Failed to parse guest data:', e);
+          localStorage.removeItem('entong_guest_data');
+          localStorage.removeItem('entong_guest_room_id');
+          localStorage.removeItem('entong_guest_last_activity');
         }
       }
     }
