@@ -73,8 +73,10 @@ export const InstallPWAButton: React.FC<{ variant?: 'navbar' | 'floating' }> = (
 
   const triggerInstall = useCallback(async () => {
     if (!deferredPrompt) {
-      if (isIOS()) setShowIOSHint(true);
-      else setShowIOSHint(true);
+      // Hanya tampilkan instruksi manual untuk iOS yang tidak support beforeinstallprompt
+      if (isIOS()) {
+        setShowIOSHint(true);
+      }
       return;
     }
     try {
@@ -101,7 +103,8 @@ export const InstallPWAButton: React.FC<{ variant?: 'navbar' | 'floating' }> = (
   if (installed) return null;
 
   if (variant === 'floating') {
-    if (!visible) return null;
+    // Hanya tampilkan jika ada deferredPrompt (browser support) atau iOS
+    if (!visible || (!deferredPrompt && !isIOS())) return null;
     return (
       <>
         <div className="fixed bottom-20 md:bottom-4 left-1/2 -translate-x-1/2 z-[1050] w-[calc(100%-1.5rem)] max-w-md pointer-events-none">
@@ -147,6 +150,9 @@ export const InstallPWAButton: React.FC<{ variant?: 'navbar' | 'floating' }> = (
       </>
     );
   }
+
+  // Tombol navbar: hanya tampilkan jika ada deferredPrompt atau iOS
+  if (!deferredPrompt && !isIOS()) return null;
 
   return (
     <button
