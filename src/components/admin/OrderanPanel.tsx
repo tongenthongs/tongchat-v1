@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+﻿import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import {
   ShoppingBag, Plus, X, Search, Trash2, CheckCircle2,
   RefreshCw, User, Phone, ChevronDown, ChevronUp, Gamepad2,
@@ -10,7 +10,7 @@ import {
   serverTimestamp, getDocs, where, setDoc, doc, updateDoc
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { fetchRobloxProfile, RobloxProfile } from '../../lib/roblox';
+import { fetchRobloxProfile } from '../../lib/roblox';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -35,7 +35,7 @@ interface PanelOrder {
   robloxUsername: string;
   customerPhone: string;
   customerName: string;
-  robloxAvatarUrl?: string | null;
+
   items: Array<{
     catalogId?: string;
     gameName?: string;
@@ -105,114 +105,6 @@ const STATUS_CFG: Record<string, StatusConfig> = {
 const getCfg = (s: string): StatusConfig =>
   STATUS_CFG[(s || '').toUpperCase()] ?? { label: s || '-', dot: 'bg-slate-500', pill: 'bg-slate-700/40 text-slate-400 border-slate-600/30', glow: '' };
 
-// ─── Roblox Avatar (staggered queue, in-memory cache) ────────────────────────
-const avatarCache  = new Map<string, string>();
-// avatarFailed stores { failedAt } so we can retry after 5 minutes
-const avatarFailed = new Map<string, number>(); // username → timestamp failed
-const AVATAR_RETRY_MS = 5 * 60 * 1000; // retry failed lookups after 5 min
-let queueIndex = 0;
-
-const fetchAvatarStaggered = (username: string, cb: (url: string | null) => void) => {
-  const delay = (queueIndex++ % 20) * 300;
-  setTimeout(async () => {
-    try {
-      const r = await fetch(`/api/roblox-checker?username=${encodeURIComponent(username)}`);
-      const data = r.ok ? await r.json() : null;
-      if (data?.success && data?.data?.avatarUrl) {
-        cb(data.data.avatarUrl);
-      } else if (data?.success && data?.data?.userId) {
-        cb(`https://www.roblox.com/headshot-thumbnail/image?userId=${data.data.userId}&width=150&height=150&format=png`);
-      } else {
-        cb(null);
-      }
-    } catch {
-      // Fallback: direct Roblox POST
-      try {
-        const r2 = await fetch('https://users.roblox.com/v1/usernames/users', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ usernames: [username], excludeBannedUsers: false })
-        });
-        const d2 = r2.ok ? await r2.json() : null;
-        const u = d2?.data?.[0];
-        cb(u?.id ? `https://www.roblox.com/headshot-thumbnail/image?userId=${u.id}&width=150&height=150&format=png` : null);
-      } catch {
-        cb(null);
-      }
-    }
-  }, delay);
-};
-
-// Helper: check if username failed recently (within AVATAR_RETRY_MS)
-const isRecentlyFailed = (username: string): boolean => {
-  const failedAt = avatarFailed.get(username);
-  if (!failedAt) return false;
-  if (Date.now() - failedAt > AVATAR_RETRY_MS) {
-    avatarFailed.delete(username); // expired — allow retry
-    return false;
-  }
-  return true;
-};
-
-const RobloxAvatar: React.FC<{
-  username: string;
-  storedAvatarUrl?: string | null;
-  size?: string;
-  ringColor?: string;
-  fallbackColors?: string;
-}> = ({ username, storedAvatarUrl, size = 'w-11 h-11', ringColor = 'border-blue-500/25', fallbackColors = 'bg-blue-500/20 text-blue-300' }) => {
-  const clean = (username || '').trim();
-  const initials = clean.slice(0, 2).toUpperCase() || '??';
-
-  const init = (): string | null => {
-    if (storedAvatarUrl) { avatarCache.set(clean, storedAvatarUrl); return storedAvatarUrl; }
-    return avatarCache.get(clean) ?? null;
-  };
-
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(init);
-  const [loading,   setLoading]   = useState(() => !init() && !isRecentlyFailed(clean));
-  const [imgErr,    setImgErr]    = useState(false);
-
-  useEffect(() => {
-    if (storedAvatarUrl) {
-      avatarCache.set(clean, storedAvatarUrl);
-      setAvatarUrl(storedAvatarUrl); setLoading(false); setImgErr(false); return;
-    }
-    if (!clean || clean === '-' || clean.length < 2) { setLoading(false); return; }
-    if (avatarCache.has(clean)) { setAvatarUrl(avatarCache.get(clean)!); setLoading(false); return; }
-    if (isRecentlyFailed(clean)) { setLoading(false); return; }
-
-    let cancelled = false;
-    setLoading(true);
-    fetchAvatarStaggered(clean, (url) => {
-      if (cancelled) return;
-      if (url) {
-        avatarCache.set(clean, url);
-        setAvatarUrl(url);
-      } else {
-        // Mark as failed with timestamp — will retry after AVATAR_RETRY_MS
-        avatarFailed.set(clean, Date.now());
-      }
-      setLoading(false);
-    });
-    return () => { cancelled = true; };
-  }, [clean, storedAvatarUrl]);
-
-  if (avatarUrl && !imgErr) {
-    return (
-      <img src={avatarUrl} alt={clean}
-        className={`${size} rounded-xl border-2 ${ringColor} object-cover flex-shrink-0`}
-        onError={() => { avatarFailed.add(clean); setImgErr(true); }}
-      />
-    );
-  }
-
-  return (
-    <div className={`${size} rounded-xl border flex items-center justify-center font-black text-sm flex-shrink-0 ${fallbackColors} ${loading ? 'animate-pulse opacity-50' : ''}`}>
-      {loading ? '' : initials}
-    </div>
-  );
-};
 
 // ─── Status Dropdown ──────────────────────────────────────────────────────────
 const StatusPill: React.FC<{
@@ -301,7 +193,7 @@ const RobloxChecker: React.FC<{
           setProfile(result);
           setSt('found');
           // Pre-cache avatar for immediate display
-          if (result.avatarUrl) avatarCache.set(value.trim(), result.avatarUrl);
+
           onProfile?.(result);
         } else {
           setProfile(null);
@@ -474,9 +366,9 @@ const InputOrderForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
         id: oid, orderId: oid, displayOrderId: `#${uid}`,
         whatsapp: cleanPhone, phone: cleanPhone, customer_phone: cleanPhone, customerPhone: cleanPhone,
         robloxUsername: roblox.trim(), roblox_username: roblox.trim(), game_username: roblox.trim(),
-        robloxAvatarUrl: robloxProfile?.avatarUrl || null,
-        robloxDisplayName: robloxProfile?.displayName || null,
-        robloxUserId: robloxProfile?.userId || null,
+
+
+
         customerName: custName, customer_name: custName,
         userId: (eu as any)?.uid || null, customer_id: (eu as any)?.uid || null,
         isRegistered: !!eu, isManualWA: true,
@@ -626,14 +518,7 @@ const OrderCard: React.FC<{
         {/* ── Header row ── */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            {/* Roblox Avatar — lazy fetch dengan cache */}
-            <RobloxAvatar
-              username={order.robloxUsername}
-              storedAvatarUrl={order.robloxAvatarUrl}
-              size="w-11 h-11"
-              ringColor={isJoki ? 'border-blue-500/30' : 'border-purple-500/30'}
-              fallbackColors={isJoki ? 'bg-blue-500/20 text-blue-300 border-blue-500/25' : 'bg-purple-500/20 text-purple-300 border-purple-500/25'}
-            />
+            <div className={`w-11 h-11 rounded-xl border flex items-center justify-center font-black text-sm flex-shrink-0 ${isJoki ? 'bg-blue-500/20 text-blue-300 border-blue-500/25' : 'bg-purple-500/20 text-purple-300 border-purple-500/25'}`}>{(order.robloxUsername || '??').slice(0, 2).toUpperCase()}</div>
             <div className="min-w-0">
               <p className="text-base font-bold text-slate-100 truncate leading-snug">{order.robloxUsername || '-'}</p>
               <p className="text-xs text-slate-500 mt-0.5 truncate">{order.customerPhone || '-'}</p>
@@ -810,7 +695,7 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
           robloxUsername: x.robloxUsername || x.roblox_username || x.game_username || x.username || '-',
           customerPhone: x.customer_phone || x.customerPhone || x.phone || x.whatsapp || '-',
           customerName: x.customer_name || x.customerName || x.displayName || '-',
-          robloxAvatarUrl: x.robloxAvatarUrl || null,
+
           items: Array.isArray(x.items) && x.items.length > 0 ? x.items : [{
             name: x.packageName || x.package_name || x.item_name || 'Paket',
             packageName: x.packageName || x.package_name || '-',
