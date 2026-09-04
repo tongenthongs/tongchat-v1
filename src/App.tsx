@@ -129,12 +129,11 @@ function MainAppRouter() {
   }
 
   const userRoleUpper = (currentUser?.role || '').toString().toUpperCase();
+  // Hanya ADMIN, OWNER, dan WORKER yang boleh masuk AdminPortal
+  // STAFF, OPERATOR, dan customer biasa diarahkan ke CustomerPortal
   const isStaffUser = Boolean(
     currentUser && (
-      currentUser.isStaff === true ||
-      ['STAFF', 'ADMIN', 'OWNER', 'WORKER', 'OPERATOR'].includes(userRoleUpper) ||
-      (typeof currentUser.username === 'string' && currentUser.username.toLowerCase().startsWith('staff_')) ||
-      (typeof currentUser.id === 'string' && currentUser.id.startsWith('staff_'))
+      ['ADMIN', 'OWNER', 'WORKER'].includes(userRoleUpper)
     )
   );
 

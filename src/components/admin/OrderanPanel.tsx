@@ -3,7 +3,7 @@ import {
   ShoppingBag, Plus, X, Search, Trash2, CheckCircle2,
   RefreshCw, User, Phone, ChevronDown, ChevronUp, Gamepad2,
   Gift, AlertCircle, Check, Calendar, MessageSquare, Layers,
-  Globe, Smartphone, Zap, Package
+  Globe, Smartphone, Zap, Package, Lock, DollarSign, Filter
 } from 'lucide-react';
 import {
   collection, query, onSnapshot, limit, orderBy,
@@ -59,6 +59,8 @@ interface PanelOrder {
   jumlahTabrak?: number;
   tanggalLogin?: any;
   cloudNumber?: string;
+  isJokiOrder?: boolean;
+  jokiPassword?: string;
 }
 
 interface OrderanPanelProps {
@@ -271,10 +273,10 @@ const RobloxChecker: React.FC<{
 };
 
 // ─── Input Order Form ─────────────────────────────────────────────────────────
-const InputOrderForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
-  const [roblox, setRoblox] = useState('');
+const InputOrderForm: React.FC<{ onSuccess: () => void; prefillOrder?: PanelOrder | null }> = ({ onSuccess, prefillOrder }) => {
+  const [roblox, setRoblox] = useState(prefillOrder?.robloxUsername !== '-' ? prefillOrder?.robloxUsername || '' : '');
   const [robloxProfile, setRobloxProfile] = useState<import('../../lib/roblox').RobloxProfile | null>(null);
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState(prefillOrder?.customerPhone !== '-' ? prefillOrder?.customerPhone || '' : '');
   const [items, setItems] = useState<SelectedItem[]>([]);
   const [catalog, setCatalog] = useState<CatalogOption[]>([]);
   const [loadingCat, setLoadingCat] = useState(false);
@@ -285,6 +287,13 @@ const InputOrderForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
   const [err, setErr] = useState('');
   const [ok, setOk] = useState('');
   const dropRef = useRef<HTMLDivElement>(null);
+
+  // ─── Joki fields ───────────────────────────────────────────────────────────
+  const [isJoki, setIsJoki] = useState(prefillOrder?.category === 'joko' || prefillOrder?.isJokiOrder === true);
+  const [jokiPassword, setJokiPassword] = useState('');
+  const [jokiUangAwal, setJokiUangAwal] = useState('');
+  const [jokiRobloxProfile, setJokiRobloxProfile] = useState<import('../../lib/roblox').RobloxProfile | null>(null);
+  const [showJokiPass, setShowJokiPass] = useState(false);
 
   useEffect(() => {
     setLoadingCat(true);
@@ -407,6 +416,17 @@ const InputOrderForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
         orderSource: 'panel', source: 'manual_wa',
         category: autoType, type: autoType, orderType: autoType, service_type: autoType,
         isGift: autoType === 'gift', isJoko: autoType === 'joko',
+        // ← field joki
+        isJokiOrder: isJoki,
+        ...(isJoki && {
+          jokiPassword: jokiPassword.trim() || null,
+          uangAwal: jokiUangAwal.trim() || null,
+          uangSebelumJoko: jokiUangAwal.trim() || null,
+          initialMoney: jokiUangAwal.trim() || null,
+          jokiRobloxId: jokiRobloxProfile?.userId || null,
+          jokiRobloxDisplayName: jokiRobloxProfile?.displayName || null,
+          jokiRobloxAvatarUrl: jokiRobloxProfile?.avatarUrl || null,
+        }),
         gameName: items[0]?.option.gameName || 'Roblox',
         packageName: summary,         // dibaca CustomerPortal sebagai nama produk
         itemGift: summary,
@@ -426,6 +446,7 @@ const InputOrderForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
       }));
       setOk(`Order #${uid} tersimpan! Customer bisa cek di halaman pesanan.`);
       setRoblox(''); setPhone(''); setItems([]);
+      setIsJoki(false); setJokiPassword(''); setJokiUangAwal(''); setJokiRobloxProfile(null);
       setTimeout(() => { setOk(''); onSuccess(); }, 2000);
     } catch (ex: any) { setErr(ex.message || 'Gagal menyimpan order.'); }
     finally { submittingRef.current = false; setSubmitting(false); }
@@ -513,9 +534,89 @@ const InputOrderForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
       {err && <div className="flex items-start gap-2.5 px-4 py-3 bg-red-500/8 border border-red-500/20 rounded-xl"><AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" /><p className="text-sm text-red-300">{err}</p></div>}
       {ok  && <div className="flex items-start gap-2.5 px-4 py-3 bg-[#00E676]/8 border border-[#00E676]/20 rounded-xl"><CheckCircle2 className="w-4 h-4 text-[#00E676] flex-shrink-0 mt-0.5" /><p className="text-sm text-[#00E676]">{ok}</p></div>}
 
-      <button type="submit" disabled={submitting || !roblox.trim() || items.length === 0}
+      {/* ── Checkbox Joki ── */}
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => setIsJoki(p => !p)}
+        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setIsJoki(p => !p)}
+        className={`flex items-center gap-3 px-4 py-3 rounded-xl border cursor-pointer select-none transition-all ${
+          isJoki
+            ? 'bg-blue-500/10 border-blue-500/40 text-blue-300'
+            : 'bg-slate-800/40 border-slate-700/40 text-slate-400 hover:border-slate-600'
+        }`}
+      >
+        <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+          isJoki ? 'bg-blue-500 border-blue-500' : 'border-slate-600'
+        }`}>
+          {isJoki && <Check className="w-3 h-3 text-white" />}
+        </div>
+        <Gamepad2 className="w-4 h-4 flex-shrink-0" />
+        <div>
+          <p className="text-sm font-bold">Ini Joki?</p>
+          <p className="text-xs opacity-60">Centang jika order ini adalah jasa joki akun</p>
+        </div>
+      </div>
+
+      {/* ── Form Joki ── */}
+      {isJoki && (
+        <div className="space-y-4 px-4 py-4 bg-blue-500/5 border border-blue-500/20 rounded-xl">
+          <p className="text-xs font-bold text-blue-400 uppercase tracking-widest flex items-center gap-2">
+            <Gamepad2 className="w-3.5 h-3.5" /> Data Akun Joki
+          </p>
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Username Roblox (Akun yang Dijoki) *</label>
+            <RobloxChecker
+              value={roblox}
+              onChange={v => { setRoblox(v); if (!v.trim()) setJokiRobloxProfile(null); }}
+              onProfile={p => { setRobloxProfile(p); setJokiRobloxProfile(p); }}
+            />
+            <p className="text-[10px] text-slate-500 px-1">Sama dengan username di atas — akan diverifikasi via RobloxChecker</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Password Akun *</label>
+              <div className="relative">
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                <input
+                  type={showJokiPass ? 'text' : 'password'}
+                  value={jokiPassword}
+                  onChange={e => setJokiPassword(e.target.value)}
+                  placeholder="Password akun Roblox"
+                  className="w-full pl-10 pr-10 py-2.5 bg-slate-900/80 border border-slate-700/50 rounded-xl text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/10 transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowJokiPass(p => !p)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                >
+                  {showJokiPass
+                    ? <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    : <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  }
+                </button>
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Uang Awal (Sebelum Joki)</label>
+              <div className="relative">
+                <DollarSign className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                <input
+                  type="text"
+                  value={jokiUangAwal}
+                  onChange={e => setJokiUangAwal(e.target.value)}
+                  placeholder="Contoh: 1.500.000 atau 1.5M"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/50 rounded-xl text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/10 transition-all"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <button type="submit" disabled={submitting || !roblox.trim() || items.length === 0 || (isJoki && !jokiPassword.trim())}
         className="w-full py-3 bg-[#00E676] hover:bg-[#00c853] disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed text-[#111b21] text-sm font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#00E676]/10 active:scale-[0.99]">
-        {submitting ? <><RefreshCw className="w-4 h-4 animate-spin" />Menyimpan...</> : <><CheckCircle2 className="w-4 h-4" />Simpan Order ({totalQty} item)</>}
+        {submitting ? <><RefreshCw className="w-4 h-4 animate-spin" />Menyimpan...</> : <><CheckCircle2 className="w-4 h-4" />Simpan Order ({totalQty} item){isJoki ? ' — Joki' : ''}</>}
       </button>
     </form>
   );
@@ -527,7 +628,8 @@ const OrderCard: React.FC<{
   onHide: (id: string) => void;
   onStatusChange: (id: string, ns: string) => void;
   onChat?: (o: PanelOrder) => void;
-}> = ({ order, cloud, onHide, onStatusChange, onChat }) => {
+  onFillManual?: (o: PanelOrder) => void;
+}> = ({ order, cloud, onHide, onStatusChange, onChat, onFillManual }) => {
   const [expanded, setExpanded] = useState(false);
   const isJoki = order.category === 'joko';
   const multi  = order.items && order.items.length > 1;
@@ -537,67 +639,74 @@ const OrderCard: React.FC<{
   const tglLogin   = cloud?.lastLogin ?? cloud?.tanggalLogin ?? order.tanggalLogin ?? null;
 
   return (
-    <div className={`group relative flex flex-col rounded-2xl overflow-visible transition-all duration-200 hover:shadow-xl hover:scale-[1.01] ${
+    <div className={`group relative flex flex-col rounded-2xl overflow-visible transition-all duration-200 hover:shadow-2xl hover:scale-[1.01] ${
       isJoki
-        ? 'bg-gradient-to-br from-[#1a2c45] to-[#162236] border border-blue-800/40 hover:border-blue-600/50 hover:shadow-blue-900/30'
-        : 'bg-gradient-to-br from-[#221a38] to-[#1a1530] border border-purple-800/40 hover:border-purple-600/50 hover:shadow-purple-900/30'
+        ? 'bg-[#162840] border-2 border-blue-500/30 hover:border-blue-400/60 shadow-lg shadow-blue-950/40'
+        : 'bg-[#1e1535] border-2 border-purple-500/30 hover:border-purple-400/60 shadow-lg shadow-purple-950/40'
     }`}>
       {/* ── Top strip accent ── */}
-      <div className={`h-1 w-full rounded-t-2xl ${isJoki ? 'bg-gradient-to-r from-blue-500 via-blue-400/60 to-transparent' : 'bg-gradient-to-r from-purple-500 via-purple-400/60 to-transparent'}`} />
+      <div className={`h-1.5 w-full rounded-t-2xl ${isJoki ? 'bg-gradient-to-r from-blue-400 via-cyan-400 to-transparent' : 'bg-gradient-to-r from-purple-400 via-pink-400 to-transparent'}`} />
 
-      <div className="p-5 flex flex-col flex-1 gap-4">
+      <div className="p-4 flex flex-col flex-1 gap-3">
         {/* ── Header row ── */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className={`w-11 h-11 rounded-xl border flex items-center justify-center font-black text-sm flex-shrink-0 ${isJoki ? 'bg-blue-500/20 text-blue-300 border-blue-500/25' : 'bg-purple-500/20 text-purple-300 border-purple-500/25'}`}>{(order.robloxUsername || '??').slice(0, 2).toUpperCase()}</div>
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm flex-shrink-0 ${
+              isJoki ? 'bg-blue-500/30 text-blue-200 ring-2 ring-blue-500/20' : 'bg-purple-500/30 text-purple-200 ring-2 ring-purple-500/20'
+            }`}>{(order.robloxUsername || '??').slice(0, 2).toUpperCase()}</div>
             <div className="min-w-0">
-              <p className="text-base font-bold text-slate-100 truncate leading-snug">{order.robloxUsername || '-'}</p>
-              <p className="text-xs text-slate-500 mt-0.5 truncate">{order.customerPhone || '-'}</p>
+              <p className="text-sm font-black text-white truncate leading-snug">{order.robloxUsername || '-'}</p>
+              <p className="text-[11px] text-slate-400 mt-0.5 truncate">{order.customerPhone !== '-' ? order.customerPhone : order.customerName}</p>
             </div>
           </div>
-          {/* Hide btn — shows on hover */}
+          {/* Hide btn */}
           <button onClick={() => onHide(order.firestoreId)} title="Sembunyikan dari panel"
-            className="w-7 h-7 rounded-xl bg-transparent hover:bg-red-500/15 text-slate-700 hover:text-red-400 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 flex-shrink-0 mt-0.5">
+            className="w-7 h-7 rounded-lg bg-transparent hover:bg-red-500/20 text-slate-600 hover:text-red-400 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 flex-shrink-0">
             <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* ── Badge row ── */}
-        <div className="flex flex-wrap gap-1.5">
-          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${isJoki ? 'bg-blue-500/10 text-blue-300 border-blue-500/20' : 'bg-purple-500/10 text-purple-300 border-purple-500/20'}`}>
-            {isJoki ? <Gamepad2 className="w-3 h-3" /> : <Gift className="w-3 h-3" />}
-            {isJoki ? 'Joki' : 'GP/Gift'}
-          </span>
-          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${order.source === 'web' ? 'bg-sky-500/10 text-sky-300 border-sky-500/20' : 'bg-[#00E676]/8 text-[#00E676] border-[#00E676]/20'}`}>
-            {order.source === 'web' ? <Globe className="w-3 h-3" /> : <Smartphone className="w-3 h-3" />}
-            {order.source === 'web' ? 'Web' : 'Panel'}
-          </span>
+        {/* ── Badge + Status row ── */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase ${
+              isJoki ? 'bg-blue-500/20 text-blue-300' : 'bg-purple-500/20 text-purple-300'
+            }`}>
+              {isJoki ? <Gamepad2 className="w-2.5 h-2.5" /> : <Gift className="w-2.5 h-2.5" />}
+              {isJoki ? 'Joki' : 'GP'}
+            </span>
+            {order.isJokiOrder && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase bg-cyan-500/20 text-cyan-300">
+                <Lock className="w-2.5 h-2.5" />Joki+
+              </span>
+            )}
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase ${
+              order.source === 'web' ? 'bg-sky-500/20 text-sky-300' : 'bg-emerald-500/20 text-emerald-300'
+            }`}>
+              {order.source === 'web' ? <Globe className="w-2.5 h-2.5" /> : <Smartphone className="w-2.5 h-2.5" />}
+              {order.source === 'web' ? 'Web' : 'Panel'}
+            </span>
+          </div>
+          <StatusPill orderId={order.firestoreId} status={order.status} category={order.category} onChanged={ns => onStatusChange(order.firestoreId, ns)} />
         </div>
 
         {/* ── Divider ── */}
-        <div className={`h-px ${isJoki ? 'bg-blue-900/50' : 'bg-purple-900/50'}`} />
+        <div className={`h-px opacity-40 ${isJoki ? 'bg-blue-400' : 'bg-purple-400'}`} />
 
-        {/* ── Metadata ── */}
-        <div className="space-y-3 flex-1">
-          {/* Status */}
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-medium text-slate-600">Status</span>
-            <StatusPill orderId={order.firestoreId} status={order.status} category={order.category} onChanged={ns => onStatusChange(order.firestoreId, ns)} />
-          </div>
-
-          {/* Orderan */}
+        {/* ── Orderan ── */}
+        <div className="space-y-2">
           <div className="flex items-start justify-between gap-2">
-            <span className="text-xs font-medium text-slate-600 flex-shrink-0 pt-0.5">Orderan</span>
+            <span className="text-[11px] font-semibold text-slate-400 flex-shrink-0 pt-0.5">Paket</span>
             <div className="text-right min-w-0 flex-1">
               {multi ? (
                 <button type="button" onClick={() => setExpanded(v => !v)}
-                  className="flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-slate-100 transition-colors ml-auto">
-                  <Layers className="w-3.5 h-3.5 text-slate-500" />
+                  className="flex items-center gap-1 text-[11px] font-bold text-slate-200 hover:text-white transition-colors ml-auto">
+                  <Layers className="w-3 h-3 text-slate-400" />
                   <span>{order.items.length} item</span>
-                  {expanded ? <ChevronUp className="w-3 h-3 text-slate-500" /> : <ChevronDown className="w-3 h-3 text-slate-500" />}
+                  {expanded ? <ChevronUp className="w-3 h-3 text-slate-400" /> : <ChevronDown className="w-3 h-3 text-slate-400" />}
                 </button>
               ) : (
-                <p className="text-xs font-semibold text-slate-300 truncate">
+                <p className="text-[11px] font-semibold text-slate-200 truncate">
                   {order.items?.[0]?.name || order.items?.[0]?.packageName || order.packageName || '-'}
                 </p>
               )}
@@ -606,51 +715,42 @@ const OrderCard: React.FC<{
 
           {/* Multi-item expand */}
           {multi && expanded && (
-            <div className="border border-slate-700/40 rounded-xl overflow-hidden -mt-1">
+            <div className="rounded-xl overflow-hidden border border-white/10">
               {order.items.map((it, idx) => (
-                <div key={idx} className="flex items-center gap-2.5 px-3 py-2.5 bg-slate-900/40 border-b border-slate-800/50 last:border-0">
+                <div key={idx} className={`flex items-center gap-2 px-3 py-2 border-b border-white/5 last:border-0 ${isJoki ? 'bg-blue-950/40' : 'bg-purple-950/40'}`}>
                   {it.imageUrl
-                    ? <img src={it.imageUrl} alt="" className="w-6 h-6 rounded-lg object-cover flex-shrink-0" />
-                    : <div className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 ${isJoki ? 'bg-blue-500/15' : 'bg-purple-500/15'}`}>
-                        {isJoki ? <Gamepad2 className="w-3 h-3 text-blue-400" /> : <Gift className="w-3 h-3 text-purple-400" />}
+                    ? <img src={it.imageUrl} alt="" className="w-5 h-5 rounded object-cover flex-shrink-0" />
+                    : <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 ${isJoki ? 'bg-blue-500/20' : 'bg-purple-500/20'}`}>
+                        {isJoki ? <Gamepad2 className="w-2.5 h-2.5 text-blue-400" /> : <Gift className="w-2.5 h-2.5 text-purple-400" />}
                       </div>
                   }
-                  <p className="text-xs text-slate-300 flex-1 truncate">{it.name || it.packageName || '-'}</p>
+                  <p className="text-[11px] text-slate-300 flex-1 truncate">{it.name || it.packageName || '-'}</p>
                   <span className="text-[10px] text-slate-500 flex-shrink-0">×{it.quantity || it.qty || 1}</span>
                 </div>
               ))}
             </div>
           )}
 
-          {/* Roblox username field */}
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-medium text-slate-600">Username</span>
-            <span className="text-xs font-semibold text-slate-300 truncate max-w-[150px]">{order.robloxUsername || '-'}</span>
-          </div>
-
           {/* Joki extra stats */}
           {isJoki && (
-            <div className="space-y-2 pt-1">
-              {/* Cloud number badge */}
+            <div className="space-y-2">
               {(cloud?.cloudNumber || cloud?.cloud_number || cloud?.cloudNum || order.cloudNumber) && (
-                <div className="flex items-center gap-2 px-2.5 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-                  <div className="w-4 h-4 rounded bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-[9px] font-black text-blue-300">☁</span>
-                  </div>
-                  <span className="text-[11px] font-bold text-blue-300">
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-lg">
+                  <span className="text-xs font-black text-cyan-300">☁</span>
+                  <span className="text-[11px] font-bold text-cyan-300">
                     Cloud {cloud?.cloudNumber || cloud?.cloud_number || cloud?.cloudNum || order.cloudNumber}
                   </span>
                 </div>
               )}
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-1.5">
                 {[
-                  { label: 'Uang Awal', val: uangAwal ? `${Number(String(uangAwal).replace(/\D/g, '') || 0).toLocaleString('id-ID')}` : '-', cls: 'text-amber-300' },
-                  { label: 'Tabrak',    val: `${crashCount}×`, cls: crashCount > 0 ? 'text-orange-300' : 'text-slate-500' },
-                  { label: 'Login',     val: tglLogin ? fmtDate(tglLogin) : '-', cls: 'text-slate-400' },
+                  { label: 'Uang Awal', val: uangAwal ? `${Number(String(uangAwal).replace(/\D/g, '') || 0).toLocaleString('id-ID')}` : '-', bg: 'bg-amber-500/15 border-amber-500/25', txt: 'text-amber-300' },
+                  { label: 'Tabrak',    val: `${crashCount}×`, bg: crashCount > 0 ? 'bg-orange-500/15 border-orange-500/25' : 'bg-slate-800/60 border-slate-700/40', txt: crashCount > 0 ? 'text-orange-300' : 'text-slate-500' },
+                  { label: 'Login',     val: tglLogin ? fmtDate(tglLogin) : '-', bg: 'bg-blue-500/10 border-blue-500/20', txt: 'text-blue-300' },
                 ].map(st => (
-                  <div key={st.label} className="px-2.5 py-2 bg-blue-900/20 border border-blue-800/30 rounded-xl text-center">
-                    <p className="text-[9px] font-semibold text-slate-600 uppercase tracking-wider mb-0.5">{st.label}</p>
-                    <p className={`text-xs font-bold truncate ${st.cls}`}>{st.val}</p>
+                  <div key={st.label} className={`px-2 py-1.5 ${st.bg} border rounded-lg text-center`}>
+                    <p className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">{st.label}</p>
+                    <p className={`text-[10px] font-black truncate ${st.txt}`}>{st.val}</p>
                   </div>
                 ))}
               </div>
@@ -658,20 +758,32 @@ const OrderCard: React.FC<{
           )}
         </div>
 
+        {/* ── Divider ── */}
+        <div className={`h-px opacity-30 ${isJoki ? 'bg-blue-400' : 'bg-purple-400'}`} />
+
         {/* ── Footer ── */}
-        <div className={`h-px ${isJoki ? 'bg-blue-900/50' : 'bg-purple-900/50'}`} />
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-xs text-slate-600">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1 text-[10px] text-slate-500">
             <Calendar className="w-3 h-3" />
             <span>{fmtDate(order.createdAt)}</span>
-            {fmtTime(order.createdAt) && <span className="text-slate-700">· {fmtTime(order.createdAt)}</span>}
           </div>
-          {onChat && (
-            <button onClick={() => onChat(order)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/15 text-sky-300 text-xs font-semibold rounded-lg transition-colors active:scale-95">
-              <MessageSquare className="w-3 h-3" /> Chat
-            </button>
-          )}
+          <div className="flex items-center gap-1.5">
+            {/* Tombol Isi Form Manual — hanya untuk order joki */}
+            {isJoki && onFillManual && (
+              <button onClick={() => onFillManual(order)}
+                className="flex items-center gap-1 px-2.5 py-1.5 bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold rounded-lg transition-colors active:scale-95">
+                <Package className="w-3 h-3" /> Isi Form
+              </button>
+            )}
+            {onChat && (
+              <button onClick={() => onChat(order)}
+                className={`flex items-center gap-1 px-2.5 py-1.5 border text-[10px] font-bold rounded-lg transition-colors active:scale-95 ${
+                  isJoki ? 'bg-blue-500/15 hover:bg-blue-500/25 border-blue-500/30 text-blue-300' : 'bg-sky-500/15 hover:bg-sky-500/25 border-sky-500/30 text-sky-300'
+                }`}>
+                <MessageSquare className="w-3 h-3" /> Chat
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -693,10 +805,12 @@ const StatCard: React.FC<{ label: string; value: number; icon: React.ReactNode; 
 export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder }) => {
   const [mainFilter, setMainFilter] = useState<'web' | 'manual'>('manual');
   const [subTab,     setSubTab]     = useState<'joko' | 'gift'>('joko');
+  const [jokiOnly,   setJokiOnly]   = useState(false);
   const [statusFilter, setStatusFilter] = useState('SEMUA');
   const [search,     setSearch]     = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [showForm,   setShowForm]   = useState(false);
+  const [fillManualOrder, setFillManualOrder] = useState<PanelOrder | null>(null);
 
   const [orders,  setOrders]  = useState<PanelOrder[]>([]);
   const [clouds,  setClouds]  = useState<any[]>([]);
@@ -743,6 +857,8 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
           jumlahTabrak: x.jumlahTabrak || x.crashCount || 0,
           tanggalLogin: x.tanggalLogin || x.lastLogin || null,
           cloudNumber: x.cloud_number || x.cloudNumber || x.cloudNum || null,
+          isJokiOrder: x.isJokiOrder === true,
+          jokiPassword: x.jokiPassword || x.game_password || x.robloxPassword || null,
         } as PanelOrder;
       }).filter((o: PanelOrder) => (o.status || '').toUpperCase() !== 'BELUM_ORDER');
       // Sort newest first client-side
@@ -797,10 +913,11 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
 
   const statusList = ['SEMUA', ...(subTab === 'gift' ? GP_STATUSES : JOKI_STATUSES)];
 
-  const baseOrders = useMemo(() =>
-    orders.filter(o => !hiddenIds.has(o.firestoreId) && o.source === mainFilter && o.category === subTab),
-    [orders, hiddenIds, mainFilter, subTab]
-  );
+  const baseOrders = useMemo(() => {
+    let filtered = orders.filter(o => !hiddenIds.has(o.firestoreId) && o.source === mainFilter && o.category === subTab);
+    if (jokiOnly) filtered = filtered.filter(o => o.isJokiOrder === true);
+    return filtered;
+  }, [orders, hiddenIds, mainFilter, subTab, jokiOnly]);
 
   const visible = useMemo(() => {
     return baseOrders.filter(o => {
@@ -860,9 +977,9 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
                 className={`w-9 h-9 rounded-xl flex items-center justify-center border transition-all ${showSearch ? 'bg-slate-700 border-slate-600 text-slate-200' : 'bg-slate-800/50 border-slate-700/40 text-slate-500 hover:text-slate-300 hover:border-slate-600'}`}>
                 <Search className="w-4 h-4" />
               </button>
-              <button onClick={() => setShowForm(v => !v)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold border transition-all ${showForm ? 'bg-slate-700 border-slate-600 text-slate-200' : 'bg-[#00E676] hover:bg-[#00c853] border-transparent text-[#111b21] shadow-lg shadow-[#00E676]/15'}`}>
-                {showForm ? <><X className="w-4 h-4" />Tutup</> : <><Plus className="w-4 h-4" />Input Order</>}
+              <button onClick={() => setShowForm(true)}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold border transition-all bg-[#00E676] hover:bg-[#00c853] border-transparent text-[#111b21] shadow-lg shadow-[#00E676]/15">
+                <Plus className="w-4 h-4" />Input Order
               </button>
             </div>
           </div>
@@ -900,7 +1017,7 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
                 const cnt = orders.filter(o => !hiddenIds.has(o.firestoreId) && o.source === mainFilter && o.category === key).length;
                 return (
                   <button key={key}
-                    onClick={() => { setSubTab(key); setStatusFilter('SEMUA'); }}
+                    onClick={() => { setSubTab(key); setStatusFilter('SEMUA'); setJokiOnly(false); }}
                     className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold transition-all ${
                       subTab === key
                         ? key === 'joko'
@@ -914,6 +1031,25 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
                 );
               })}
             </div>
+
+            {/* Filter Khusus Joki — hanya tampil di tab Joki */}
+            {subTab === 'joko' && (
+              <button
+                onClick={() => setJokiOnly(p => !p)}
+                className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-bold border transition-all ${
+                  jokiOnly
+                    ? 'bg-blue-500/20 text-blue-300 border-blue-500/40 shadow-sm'
+                    : 'bg-transparent text-slate-500 border-slate-700/50 hover:text-slate-300 hover:border-slate-600'
+                }`}
+                title="Tampilkan hanya order yang ditandai Joki"
+              >
+                <Filter className="w-3.5 h-3.5" />
+                Khusus Joki
+                <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-black ${jokiOnly ? 'bg-blue-500/20' : 'bg-slate-800 text-slate-600'}`}>
+                  {orders.filter(o => !hiddenIds.has(o.firestoreId) && o.source === mainFilter && o.category === 'joko' && o.isJokiOrder === true).length}
+                </span>
+              </button>
+            )}
           </div>
 
           {/* Status pills */}
@@ -947,18 +1083,30 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
         </div>
       </div>
 
-      {/* ══ INPUT FORM ═══════════════════════════════════════════════════ */}
+      {/* ══ INPUT FORM MODAL ════════════════════════════════════════════ */}
       {showForm && (
-        <div className="flex-shrink-0 border-b border-slate-800/60 bg-[#0d1b22]">
-          <div className="px-6 py-6">
-            <div className="flex items-center justify-between mb-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-sm">
+          <div className="w-full max-w-2xl bg-[#1a2535] border border-[#00E676]/25 rounded-2xl shadow-[0_0_50px_rgba(0,230,118,0.12)] flex flex-col max-h-[92vh]">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-[#00E676]/8 rounded-t-2xl flex-shrink-0">
               <div>
-                <p className="text-base font-black text-slate-100 flex items-center gap-2"><Zap className="w-4 h-4 text-[#00E676]" /> Input Order Baru</p>
-                <p className="text-xs text-slate-500 mt-0.5">Order akan langsung tampil di panel dan bisa dicek customer via halaman pesanan</p>
+                <p className="text-base font-black text-white flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-[#00E676]" />
+                  {fillManualOrder ? `Isi Form Joki — ${fillManualOrder.robloxUsername}` : 'Input Order Baru'}
+                </p>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {fillManualOrder ? 'Lengkapi data joki untuk order ini' : 'Order akan langsung tampil di panel dan bisa dicek customer via halaman pesanan'}
+                </p>
               </div>
-              <button onClick={() => setShowForm(false)} className="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 flex items-center justify-center transition-colors"><X className="w-4 h-4" /></button>
+              <button onClick={() => { setShowForm(false); setFillManualOrder(null); }}
+                className="w-8 h-8 rounded-xl bg-white/10 hover:bg-red-500/20 text-slate-300 hover:text-red-400 flex items-center justify-center transition-colors flex-shrink-0">
+                <X className="w-4 h-4" />
+              </button>
             </div>
-            <InputOrderForm onSuccess={() => setShowForm(false)} />
+            {/* Modal Body — scrollable */}
+            <div className="flex-1 overflow-y-auto px-5 py-5 bg-[#1a2535] rounded-b-2xl">
+              <InputOrderForm onSuccess={() => { setShowForm(false); setFillManualOrder(null); }} prefillOrder={fillManualOrder} />
+            </div>
           </div>
         </div>
       )}
@@ -1000,6 +1148,7 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
                   onHide={fid => saveHidden(new Set([...hiddenIds, fid]))}
                   onStatusChange={handleStatusChange}
                   onChat={onOpenChatWithOrder ? ord => onOpenChatWithOrder(ord.firestoreId, ord.customerName, ord.customerPhone) : undefined}
+                  onFillManual={ord => { setFillManualOrder(ord); setShowForm(true); }}
                 />
               ))}
             </div>

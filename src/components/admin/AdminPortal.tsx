@@ -541,12 +541,20 @@ export const AdminPortal: React.FC = () => {
       setActiveMenu('orderan');
       setMobileTab('orderan');
     }
-    if ((activeMenu === 'staff' || activeMenu === 'attendance' || activeMenu === 'admin_login' || mobileTab === 'staff' || mobileTab === 'attendance') && !isOwner) {
+    if ((activeMenu === 'staff' || activeMenu === 'attendance' || mobileTab === 'staff' || mobileTab === 'attendance') && !isOwner) {
       alert('Akses Khusus Owner. Mengalihkan ke Dashboard Kerja...');
       setActiveMenu('orderan');
       setMobileTab('orderan');
     }
-  }, [activeMenu, mobileTab, isOwner]);
+    // Guard: admin_login hanya untuk ADMIN/OWNER (bukan staff/worker biasa)
+    if (activeMenu === 'admin_login' && !isAdmin) {
+      setActiveMenu('chat');
+    }
+    // Guard: items, customers, reviews, settings hanya untuk ADMIN/OWNER
+    if ((activeMenu === 'items' || activeMenu === 'customers' || activeMenu === 'reviews' || activeMenu === 'settings') && !isAdmin) {
+      setActiveMenu('chat');
+    }
+  }, [activeMenu, mobileTab, isOwner, isAdmin]);
 
   // Selected order for chat / detail view
   const [selectedOrderId, setSelectedOrderId] = useState<string>(orders[0]?.id || '');
@@ -3581,6 +3589,7 @@ export const AdminPortal: React.FC = () => {
 
             {(openAccordionGroups.management || isSidebarCollapsed) && (
               <div className="space-y-1 pl-0 sm:pl-1">
+                {isAdmin && (
                 <button
                   onClick={() => setActiveMenu('items')}
                   title="Kelola Paket Joko"
@@ -3589,7 +3598,9 @@ export const AdminPortal: React.FC = () => {
                   <Gamepad2 className="w-4 h-4 shrink-0" />
                   {!isSidebarCollapsed && <span>Kelola Paket Joko</span>}
                 </button>
+                )}
 
+                {isAdmin && (
                 <button
                   onClick={() => setActiveMenu('customers')}
                   title="Kelola Customer"
@@ -3598,6 +3609,7 @@ export const AdminPortal: React.FC = () => {
                   <Users className="w-4 h-4 shrink-0" />
                   {!isSidebarCollapsed && <span>Kelola Customer</span>}
                 </button>
+                )}
 
                 {isOwner && (
                 <button
@@ -3632,6 +3644,7 @@ export const AdminPortal: React.FC = () => {
                 </button>
               )}
 
+                {isAdmin && (
                 <button
                   onClick={() => setActiveMenu('reviews')}
                   title="Kelola Ulasan"
@@ -3640,6 +3653,7 @@ export const AdminPortal: React.FC = () => {
                   <Star className="w-4 h-4 shrink-0" />
                   {!isSidebarCollapsed && <span>Kelola Ulasan</span>}
                 </button>
+                )}
               </div>
             )}
           </div>
@@ -3680,6 +3694,7 @@ export const AdminPortal: React.FC = () => {
                   {!isSidebarCollapsed && <span>Cloud Monitor</span>}
                 </button>
 
+                {isAdmin && (
                 <button
                   onClick={() => setActiveMenu('settings')}
                   title="Pengaturan QRIS & Status"
@@ -3688,6 +3703,7 @@ export const AdminPortal: React.FC = () => {
                   <Settings className="w-4 h-4 shrink-0" />
                   {!isSidebarCollapsed && <span>Pengaturan QRIS & Status</span>}
                 </button>
+                )}
               </div>
             )}
           </div>
@@ -6376,7 +6392,7 @@ export const AdminPortal: React.FC = () => {
           </div>
         )}
 
-        {activeMenu === 'customers' && (
+        {activeMenu === 'customers' && isAdmin && (
           <div className="flex-1 p-6 overflow-y-auto space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div>
@@ -6680,13 +6696,13 @@ export const AdminPortal: React.FC = () => {
           </div>
         )}
 
-        {activeMenu === 'items' && (
+        {activeMenu === 'items' && isAdmin && (
           <div className="flex-1 p-6 overflow-y-auto space-y-4">
             <AdminCatalogManager />
           </div>
         )}
 
-        {activeMenu === 'reviews' && (
+        {activeMenu === 'reviews' && isAdmin && (
           <div className="flex-1 p-6 overflow-y-auto space-y-4">
             <AdminReviewsManager />
           </div>
@@ -6750,8 +6766,8 @@ export const AdminPortal: React.FC = () => {
           <AttendancePanel currentUser={currentUser} />
         )}
 
-        {activeMenu === 'admin_login' && (
-          <AdminLoginPanel />
+        {activeMenu === 'admin_login' && isAdmin && (
+          <AdminLoginPanel currentUser={currentUser} />
         )}
 
         {activeMenu === 'finance' && (() => {
@@ -7032,7 +7048,7 @@ export const AdminPortal: React.FC = () => {
           );
         })()}
 
-        {activeMenu === 'settings' && (
+        {activeMenu === 'settings' && isAdmin && (
           <div className="flex-1 p-6 overflow-y-auto space-y-6 max-w-4xl">
             <div>
               <h2 className="text-xl font-black text-slate-100 flex items-center gap-2">

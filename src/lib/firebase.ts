@@ -170,17 +170,25 @@ export const applySmartSearch = (orderList: any[], searchQuery: string) => {
 
   return orderList.filter((order) => {
     // Gabungkan seluruh data order menjadi satu string raksasa untuk dipindai
-    const searchableText = `
-      ${order.orderId || order.id || ''} 
-      ${order.customerName || order.customer_name || ''} 
-      ${order.robloxUsername || order.game_username || order.targetUsername || order.username || ''} 
-      ${order.gamePaket || order.packageName || order.package_name || order.gameName || order.game_name || ''} 
-      ${order.status || order.orderStatus || order.paymentStatus || ''}
-      ${order.customer_phone || order.whatsapp || order.phone || ''}
-      ${order.catatanWorker || order.note || ''}
-    `.toLowerCase();
+    // Mencakup semua alias field yang mungkin berbeda antar sumber data
+    const searchableText = [
+      order.orderId, order.id, order.docUniqueId, order.firestoreId, order.displayOrderId,
+      order.customerName, order.customer_name, order.displayName, order.fullName,
+      order.robloxUsername, order.game_username, order.targetUsername, order.username,
+      order.roblox_username, order.game_user_id, order.username_roblox,
+      order.gamePaket, order.packageName, order.package_name, order.gameName,
+      order.game_name, order.itemGift, order.item_name, order.product_name,
+      order.status, order.orderStatus, order.paymentStatus, order.payment_status,
+      order.customer_phone, order.customerPhone, order.whatsapp, order.phone,
+      order.catatanWorker, order.workerNote, order.note, order.notes,
+      order.customer_email, order.email,
+      order.robloxDisplayName, order.jokiRobloxDisplayName,
+      order.cloudNumber, order.assignedCloudName, order.cloudName,
+      order.category, order.orderType, order.type, order.service_type,
+      order.worker_name, order.workerName,
+    ].filter(Boolean).join(' ').toLowerCase();
 
-    // Pastikan SEMUA kata kunci pencarian ada di dalam searchableText (Murni per kalimat/kata)
+    // Pastikan SEMUA kata kunci pencarian ada di dalam searchableText (AND logic)
     return searchKeywords.every(keyword => searchableText.includes(keyword));
   });
 };
