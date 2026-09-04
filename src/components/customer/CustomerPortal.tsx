@@ -489,6 +489,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         const extractedList = extractPopularProductsFromCatalogs(fetched);
         if (extractedList.length > 0) {
           setProducts(extractedList);
+          setCachedPopularProducts(extractedList); // persist to cache for instant next load
         }
       }
       setIsProductsLoading(false);
@@ -505,7 +506,7 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     };
   }, []);
 
-  // Top 3 Products Filtered & Sorted for Home Landing Section
+  // Top Products Filtered & Sorted for Home Landing Section
   const filteredTopProducts = useMemo(() => {
     if (!products || products.length === 0) return [];
 
@@ -528,9 +529,8 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
 
     // Urutkan berdasarkan total penjualan/terpopuler secara menurun (descending)
     const sorted = [...list].sort((a, b) => (b.sold || 0) - (a.sold || 0));
-
-    // Ketat batasi hanya TOP 3 item
-    return sorted.slice(0, 3);
+    // Show up to 10 products on home page
+    return sorted.slice(0, 10);
   }, [products, homeCategoryFilter]);
 
   // 1. STATISTIK TOKO ASYNC LAZY STATE (NON-BLOCKING)
@@ -538,16 +538,22 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
   const [totalReviews, setTotalReviews] = useState<number>(1141);
   const [rating, setRating] = useState<number>(5.0);
 
-  // Realtime listener for total reviews from Firestore
+  // Realtime listener for total reviews - use count query to avoid downloading all docs
   useEffect(() => {
     const reviewsRef = collection(db, 'reviews');
-    const unsubscribe = onSnapshot(reviewsRef, (snapshot) => {
-      setTotalReviews(Math.max(1141, snapshot.size));
-    }, (err) => {
-      console.warn("Error listening reviews count:", err);
+    // Use getCountFromServer once on mount (fast, no document download)
+    getCountFromServer(reviewsRef).then(snap => {
+      setTotalReviews(Math.max(1141, snap.data().count));
+    }).catch(() => {
+      // Fallback: silent fail, keep default value
     });
-  
-    return () => unsubscribe();
+    // No realtime listener needed for a counter — revalidate every 5 minutes
+    const interval = setInterval(() => {
+      getCountFromServer(reviewsRef).then(snap => {
+        setTotalReviews(Math.max(1141, snap.data().count));
+      }).catch(() => {});
+    }, 5 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
 
   // 2. ASYNC LAZY "TRANSAKSI SUKSES TERBARU" (LIMIT 20, NON-BLOCKING)
