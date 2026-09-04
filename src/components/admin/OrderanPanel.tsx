@@ -354,16 +354,17 @@ const InputOrderForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
     e.preventDefault();
     setErr(''); setOk('');
     if (submittingRef.current || submitting) return;
-    if (!cleanPhone || cleanPhone.length < 8) { setErr('Nomor WA wajib diisi minimal 8 digit.'); return; }
     if (!roblox.trim()) { setErr('Username Roblox wajib diisi.'); return; }
     if (items.length === 0) { setErr('Pilih minimal 1 item dari katalog.'); return; }
     submittingRef.current = true; setSubmitting(true);
     try {
-      const snap = await getDocs(query(collection(db, 'users'), where('phone', 'in', [cleanPhone, '0' + cleanPhone.slice(2)]))).catch(() => null);
+      const snap = cleanPhone && cleanPhone.length >= 8
+        ? await getDocs(query(collection(db, 'users'), where('phone', 'in', [cleanPhone, '0' + cleanPhone.slice(2)]))).catch(() => null)
+        : null;
       const eu = snap && !snap.empty ? { uid: snap.docs[0].id, ...snap.docs[0].data() } : null;
       const uid = Math.floor(100000 + Math.random() * 900000).toString();
       const oid = `ORD-${uid}`;
-      const custName = (eu as any)?.name || `CUST-${cleanPhone.slice(-5)}`;
+      const custName = (eu as any)?.name || (cleanPhone.length >= 5 ? `CUST-${cleanPhone.slice(-5)}` : `CUST-${uid}`);
       const summary  = items.length === 1
         ? `${items[0].option.name} (x${items[0].qty})`
         : `${totalQty} item: ${items.map(i => `${i.option.name} x${i.qty}`).join(', ')}`;
@@ -415,7 +416,7 @@ const InputOrderForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
           <RobloxChecker value={roblox} onChange={v => { setRoblox(v); if (!v.trim()) setRobloxProfile(null); }} onProfile={setRobloxProfile} />
         </div>
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Nomor WhatsApp *</label>
+          <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Nomor WhatsApp</label>
           <div className="relative">
             <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
             <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="628xxxxxxxxxx"
@@ -489,7 +490,7 @@ const InputOrderForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
       {err && <div className="flex items-start gap-2.5 px-4 py-3 bg-red-500/8 border border-red-500/20 rounded-xl"><AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" /><p className="text-sm text-red-300">{err}</p></div>}
       {ok  && <div className="flex items-start gap-2.5 px-4 py-3 bg-[#00E676]/8 border border-[#00E676]/20 rounded-xl"><CheckCircle2 className="w-4 h-4 text-[#00E676] flex-shrink-0 mt-0.5" /><p className="text-sm text-[#00E676]">{ok}</p></div>}
 
-      <button type="submit" disabled={submitting || !cleanPhone || !roblox.trim() || items.length === 0}
+      <button type="submit" disabled={submitting || !roblox.trim() || items.length === 0}
         className="w-full py-3 bg-[#00E676] hover:bg-[#00c853] disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed text-[#111b21] text-sm font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#00E676]/10 active:scale-[0.99]">
         {submitting ? <><RefreshCw className="w-4 h-4 animate-spin" />Menyimpan...</> : <><CheckCircle2 className="w-4 h-4" />Simpan Order ({totalQty} item)</>}
       </button>
@@ -780,8 +781,11 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
 
   const visible = useMemo(() => {
     return baseOrders.filter(o => {
-      if (statusFilter !== 'SEMUA') {
-        const st = (o.status || '').toUpperCase();
+      const st = (o.status || '').toUpperCase();
+      if (statusFilter === 'SEMUA') {
+        // Hide SELESAI from default view — only show when explicitly filtered
+        if (st === 'SELESAI') return false;
+      } else {
         if (statusFilter === 'BATAL' && st !== 'BATAL' && st !== 'CANCEL') return false;
         if (statusFilter !== 'BATAL' && st !== statusFilter && st !== `${statusFilter}_WORKER`) return false;
       }
