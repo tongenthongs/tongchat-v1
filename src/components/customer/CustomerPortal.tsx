@@ -33,7 +33,7 @@ import { TongCoinsPage } from './TongCoinsPage';
 import { isGiftClosedTime, isProductGift, GIFT_OPERATIONAL_HOURS, checkIsGamepassOpen, isProductGamepass } from '../../lib/operatingHours';
 import { getGiftOperatingStatus } from '../../utils/giftTimeHelper';
 import { safeGetJSON } from '../../utils/safeStorage';
-import { getCachedCatalogs, setCachedCatalogs, getCachedPopularProducts, extractPopularProductsFromCatalogs } from '../../utils/productCache';
+import { getCachedCatalogs, setCachedCatalogs, getCachedPopularProducts, setCachedPopularProducts, extractPopularProductsFromCatalogs } from '../../utils/productCache';
 import { isFictionalOrTemplateReview } from '../../utils/reviewUtils';
 import { normalizePhone, normalizePhoneVariants, syncGuestOrdersToUser } from '../../utils/phoneUtils';
 import { CustomerNotifications } from './CustomerNotifications';

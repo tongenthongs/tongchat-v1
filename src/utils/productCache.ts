@@ -313,3 +313,10 @@ export const getCachedPopularProducts = (): any[] => {
   const catalogs = getCachedCatalogs();
   return extractPopularProductsFromCatalogs(catalogs);
 };
+
+// In-memory override for popular products (set after Firestore fetch)
+let _popularProductsOverride: any[] | null = null;
+
+export const setCachedPopularProducts = (products: any[]): void => {
+  _popularProductsOverride = products;
+};
