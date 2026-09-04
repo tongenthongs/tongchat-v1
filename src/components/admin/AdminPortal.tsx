@@ -3621,7 +3621,7 @@ export const AdminPortal: React.FC = () => {
                 </button>
               )}
 
-                {isOwner && (
+                {isAdmin && (
                 <button
                   onClick={() => setActiveMenu('admin_login')}
                   title="Admin Login"
