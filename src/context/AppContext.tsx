@@ -3138,6 +3138,33 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }, { merge: true });
 
     await Promise.all([cloudUpdatePromise, orderUpdatePromise]);
+
+    // ── Catat login event ke admin_logins collection ──────────────────────────
+    // 1 assign = 1 login, upah Rp 2.500 per login
+    try {
+      const adminInfo = auth.currentUser;
+      const loginRecord = {
+        adminId: adminInfo?.uid || currentUser?.id || 'unknown',
+        adminName: currentUser?.name || adminInfo?.displayName || adminInfo?.email || 'Admin',
+        adminEmail: adminInfo?.email || currentUser?.email || '',
+        adminRole: currentUser?.role || 'ADMIN',
+        orderId: matchedOrder.id,
+        cloudId: cloudId,
+        cloudName: matchedCloud.name,
+        robloxUsername: (matchedOrder as any).robloxUsername || (matchedOrder as any).game_username || '',
+        customerName: (matchedOrder as any).customerName || (matchedOrder as any).customer_name || '',
+        packageName: (matchedOrder as any).packageName || (matchedOrder as any).package_name || '',
+        loginAtFormatted,
+        loginAt: nowIso,
+        upah: 2500,
+        createdAt: serverTimestamp(),
+        timestamp: Date.now(),
+      };
+      await addDoc(collection(db, 'admin_logins'), loginRecord);
+    } catch (e) {
+      console.warn('[assignOrderToCloud] Gagal catat login event:', e);
+    }
+
     fetchClouds();
     fetchOrders();
   };

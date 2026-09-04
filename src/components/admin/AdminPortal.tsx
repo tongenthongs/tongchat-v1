@@ -11,7 +11,7 @@ import {
   DollarSign, Calendar, UserCheck, FileText, Lock, ShieldCheck, CheckCircle2, 
   Clock, AlertCircle, AlertTriangle, Gamepad2, Smartphone, Laptop, Eye, EyeOff, Check, Edit2, Trash2, History,
   Filter, CheckCheck, ShoppingCart, User, Paperclip, RefreshCw, X, ChevronLeft, ChevronRight, ChevronDown, ChevronUp,
-  Database, CreditCard, Star, Copy, Phone, Server, Gift, Coins, Package
+  Database, CreditCard, Star, Copy, Phone, Server, Gift, Coins, Package, LogIn
 } from 'lucide-react';
 import { compressImage, compressVideo } from '../../lib/mediaUtils';
 import { AdminCatalogManager } from './AdminCatalogManager';
@@ -27,6 +27,7 @@ import { AdminTongCoinsPanel } from './AdminTongCoinsPanel';
 import { JokiOrdersPanel } from './JokiOrdersPanel';
 import { OrderanPanel } from './OrderanPanel';
 import { AdminPaymentPending } from './AdminPaymentPending';
+import { AdminLoginPanel } from './AdminLoginPanel';
 import { ChatMessageRenderer } from '../common/ChatMessageRenderer';
 import { useOrders } from '../../hooks/useOrders';
 import { executeCancelOrderWithAutoRefund, purgeAllBotAndDummyOrders, isJunkBotOrder } from '../../lib/orderRefund';
@@ -489,7 +490,7 @@ export const AdminPortal: React.FC = () => {
     return `${s}s`;
   };
 
-  const [activeMenu, setActiveMenu] = useState<'chat' | 'staff_chat' | 'pos' | 'orders' | 'orderan' | 'joki-orders' | 'gift-orders' | 'tongcoins' | 'payment_pending' | 'cloud_monitor' | 'customers' | 'staff' | 'items' | 'reviews' | 'qrs' | 'attendance' | 'finance' | 'settings' | 'database-quota'>('chat');
+  const [activeMenu, setActiveMenu] = useState<'chat' | 'staff_chat' | 'pos' | 'orders' | 'orderan' | 'joki-orders' | 'gift-orders' | 'tongcoins' | 'payment_pending' | 'cloud_monitor' | 'customers' | 'staff' | 'items' | 'reviews' | 'qrs' | 'attendance' | 'admin_login' | 'finance' | 'settings' | 'database-quota'>('chat');
   // Mobile bottom dock tab for small screens (< 768px)
   const [mobileTab, setMobileTab] = useState<'chat' | 'orders' | 'payment_pending' | 'cloud_monitor' | 'pos' | 'manage' | 'customers' | 'items' | 'reviews' | 'qrs' | 'attendance' | 'finance' | 'settings' | 'staff_chat' | 'joki-orders' | 'gift-orders' | 'orderan' | 'staff'>('chat');
   const [isManualWAOrderModalOpen, setIsManualWAOrderModalOpen] = useState<boolean>(false);
@@ -540,7 +541,7 @@ export const AdminPortal: React.FC = () => {
       setActiveMenu('orderan');
       setMobileTab('orderan');
     }
-    if ((activeMenu === 'staff' || activeMenu === 'attendance' || mobileTab === 'staff' || mobileTab === 'attendance') && !isOwner) {
+    if ((activeMenu === 'staff' || activeMenu === 'attendance' || activeMenu === 'admin_login' || mobileTab === 'staff' || mobileTab === 'attendance') && !isOwner) {
       alert('Akses Khusus Owner. Mengalihkan ke Dashboard Kerja...');
       setActiveMenu('orderan');
       setMobileTab('orderan');
@@ -3617,6 +3618,17 @@ export const AdminPortal: React.FC = () => {
                 >
                   <Calendar className="w-4 h-4 shrink-0" />
                   {!isSidebarCollapsed && <span>Absensi Staf</span>}
+                </button>
+              )}
+
+                {isOwner && (
+                <button
+                  onClick={() => setActiveMenu('admin_login')}
+                  title="Admin Login"
+                  className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center px-0 py-3' : 'gap-3 px-3 py-2'} rounded-xl  ${activeMenu === 'admin_login' ? 'bg-[#00E676] text-[#111b21] font-bold shadow-lg shadow-[#00E676]/20' : 'text-slate-300 hover:bg-[#202c33]'}`}
+                >
+                  <LogIn className="w-4 h-4 shrink-0" />
+                  {!isSidebarCollapsed && <span>Admin Login</span>}
                 </button>
               )}
 
@@ -6736,6 +6748,10 @@ export const AdminPortal: React.FC = () => {
 
         {activeMenu === 'attendance' && (
           <AttendancePanel currentUser={currentUser} />
+        )}
+
+        {activeMenu === 'admin_login' && (
+          <AdminLoginPanel />
         )}
 
         {activeMenu === 'finance' && (() => {
