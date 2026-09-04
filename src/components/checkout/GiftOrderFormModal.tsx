@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Loader2, ShieldCheck, User, X, Sparkles, ArrowRight, AlertCircle, Phone } from 'lucide-react';
-import { fetchRobloxProfile, RobloxProfile } from '../../lib/roblox';
+import { lookupRobloxProfile, RobloxProfile } from '../../lib/roblox';
 import { GameItem } from '../../types';
 
 interface GiftOrderFormModalProps {
@@ -39,13 +39,17 @@ export const GiftOrderFormModal: React.FC<GiftOrderFormModalProps> = ({
     setError(null);
     const t = setTimeout(async () => {
       try {
-        const p = await fetchRobloxProfile(clean);
-        if (p && p.userId) {
-          setProfile(p);
+        const result = await lookupRobloxProfile(clean);
+        if (result.status === 'found') {
+          setProfile(result.profile);
           setError(null);
-        } else {
+        } else if (result.status === 'notfound') {
           setProfile(null);
           setError(`Username Roblox "${clean}" tidak ditemukan.`);
+        } else {
+          // 'error' = proxy/network unreachable — don't say "not found"
+          setProfile(null);
+          setError('Tidak dapat memverifikasi username. Periksa koneksi atau coba lagi.');
         }
       } catch {
         setProfile(null);

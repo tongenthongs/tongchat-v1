@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User, Phone, Loader2, CheckCircle2, AlertCircle, HelpCircle, ShieldCheck } from 'lucide-react';
-import { fetchRobloxProfile } from '../../lib/roblox';
+import { lookupRobloxProfile } from '../../lib/roblox';
 import { normalizePhone } from '../../utils/phoneUtils';
 
 interface GuestChatFormProps {
@@ -38,13 +38,17 @@ export const GuestChatForm: React.FC<GuestChatFormProps> = ({ onSubmit, onClose,
 
     const timer = setTimeout(async () => {
       try {
-        const profile = await fetchRobloxProfile(clean);
-        if (profile && profile.userId) {
-          setRobloxProfile(profile);
+        const result = await lookupRobloxProfile(clean);
+        if (result.status === 'found') {
+          setRobloxProfile(result.profile);
           setRobloxError('');
-        } else {
+        } else if (result.status === 'notfound') {
           setRobloxProfile(null);
           setRobloxError(`Username Roblox "${clean}" tidak ditemukan.`);
+        } else {
+          // 'error' = proxy/network unreachable — don't say "not found"
+          setRobloxProfile(null);
+          setRobloxError('Tidak dapat memverifikasi username. Periksa koneksi atau coba lagi.');
         }
       } catch (err: any) {
         setRobloxProfile(null);

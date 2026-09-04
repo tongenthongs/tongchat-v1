@@ -10,7 +10,7 @@ import {
   serverTimestamp, getDocs, where, setDoc, doc, updateDoc
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { fetchRobloxProfile } from '../../lib/roblox';
+import { lookupRobloxProfile } from '../../lib/roblox';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -175,7 +175,7 @@ const RobloxChecker: React.FC<{
   onProfile?: (profile: import('../../lib/roblox').RobloxProfile | null) => void;
 }> = ({ value, onChange, onProfile }) => {
   const [profile, setProfile] = useState<import('../../lib/roblox').RobloxProfile | null>(null);
-  const [st, setSt] = useState<'idle' | 'loading' | 'found' | 'notfound'>('idle');
+  const [st, setSt] = useState<'idle' | 'loading' | 'found' | 'notfound' | 'error'>('idle');
   const timer = useRef<any>(null);
 
   useEffect(() => {
@@ -188,21 +188,24 @@ const RobloxChecker: React.FC<{
     timer.current = setTimeout(async () => {
       setSt('loading');
       try {
-        const result = await fetchRobloxProfile(value.trim());
-        if (result) {
-          setProfile(result);
+        const result = await lookupRobloxProfile(value.trim());
+        if (result.status === 'found') {
+          setProfile(result.profile);
           setSt('found');
-          // Pre-cache avatar for immediate display
-
-          onProfile?.(result);
-        } else {
+          onProfile?.(result.profile);
+        } else if (result.status === 'notfound') {
           setProfile(null);
           setSt('notfound');
+          onProfile?.(null);
+        } else {
+          // 'error' = proxy/network unreachable, do not treat as "not found"
+          setProfile(null);
+          setSt('error');
           onProfile?.(null);
         }
       } catch {
         setProfile(null);
-        setSt('notfound');
+        setSt('error');
         onProfile?.(null);
       }
     }, 600);
@@ -219,6 +222,7 @@ const RobloxChecker: React.FC<{
           {st === 'loading'  && <RefreshCw className="w-4 h-4 text-slate-500 animate-spin" />}
           {st === 'found'    && <Check className="w-4 h-4 text-[#00E676]" />}
           {st === 'notfound' && <AlertCircle className="w-4 h-4 text-red-400" />}
+          {st === 'error'    && <AlertCircle className="w-4 h-4 text-yellow-400" />}
         </div>
       </div>
       {st === 'found' && profile && (
@@ -235,6 +239,9 @@ const RobloxChecker: React.FC<{
       )}
       {st === 'notfound' && value.trim().length >= 3 && (
         <p className="text-xs text-red-400 px-1">Username tidak ditemukan di Roblox</p>
+      )}
+      {st === 'error' && value.trim().length >= 3 && (
+        <p className="text-xs text-yellow-400 px-1">Tidak dapat memverifikasi. Coba lagi sebentar.</p>
       )}
     </div>
   );
