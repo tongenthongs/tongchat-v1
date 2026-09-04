@@ -11,6 +11,8 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { lookupRobloxProfile } from '../../lib/roblox';
+import { executeCancelOrderWithAutoRefund } from '../../lib/orderRefund';
+import { markOrderAsHangus } from '../../utils/orderUtils';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -86,8 +88,8 @@ const fmtTime = (ts: any): string => {
   } catch { return ''; }
 };
 
-const JOKI_STATUSES = ['BOOKING', 'PROSES', 'READY', 'LOGUL', 'SELESAI', 'BATAL'];
-const GP_STATUSES   = ['BOOKING', 'DIORDER', 'PROSES', 'SELESAI', 'BATAL'];
+const JOKI_STATUSES = ['BOOKING', 'PROSES', 'READY', 'LOGUL', 'SELESAI', 'HANGUS', 'CANCEL', 'BATAL'];
+const GP_STATUSES   = ['BOOKING', 'DIORDER', 'PROSES', 'SELESAI', 'HANGUS', 'CANCEL', 'BATAL'];
 
 interface StatusConfig { label: string; dot: string; pill: string; glow: string; }
 const STATUS_CFG: Record<string, StatusConfig> = {
@@ -97,8 +99,9 @@ const STATUS_CFG: Record<string, StatusConfig> = {
   READY:         { label: 'Ready',        dot: 'bg-cyan-400',    pill: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/20',    glow: 'shadow-cyan-500/20' },
   LOGUL:         { label: 'Login Ulang',  dot: 'bg-orange-400',  pill: 'bg-orange-500/10 text-orange-300 border-orange-500/20', glow: '' },
   SELESAI:       { label: 'Selesai',      dot: 'bg-emerald-400', pill: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20', glow: 'shadow-emerald-500/20' },
+  HANGUS:        { label: 'Hangus',       dot: 'bg-rose-500',    pill: 'bg-rose-500/10 text-rose-300 border-rose-500/20',    glow: '' },
+  CANCEL:        { label: 'Cancel (Refund TC)', dot: 'bg-red-400', pill: 'bg-red-500/10 text-red-300 border-red-500/20',     glow: '' },
   BATAL:         { label: 'Batal',        dot: 'bg-red-400',     pill: 'bg-red-500/10 text-red-300 border-red-500/20',       glow: '' },
-  CANCEL:        { label: 'Batal',        dot: 'bg-red-400',     pill: 'bg-red-500/10 text-red-300 border-red-500/20',       glow: '' },
   DIORDER:       { label: 'Diorder',      dot: 'bg-teal-400',    pill: 'bg-teal-500/10 text-teal-300 border-teal-500/20',    glow: '' },
   PENDING_VERIFICATION: { label: 'Verifikasi', dot: 'bg-amber-400', pill: 'bg-amber-500/10 text-amber-300 border-amber-500/20', glow: '' },
 };
@@ -126,12 +129,32 @@ const StatusPill: React.FC<{
     if (s === (status || '').toUpperCase()) { setOpen(false); return; }
     setSaving(true);
     try {
-      await updateDoc(doc(db, 'orders', orderId), {
-        status: s, orderStatus: s,
-        updatedAt: serverTimestamp(), updated_at: new Date().toISOString()
-      });
+      if (s === 'HANGUS') {
+        // Hangus = tutup permanen tanpa refund
+        await markOrderAsHangus(orderId);
+      } else if (s === 'CANCEL') {
+        // Cancel = auto-refund TongCoins ke customer
+        const { getDoc, doc: fsDoc } = await import('firebase/firestore');
+        const snap = await getDoc(fsDoc(db, 'orders', orderId));
+        if (snap.exists()) {
+          const result = await executeCancelOrderWithAutoRefund({ ...snap.data(), id: orderId, firestoreId: orderId });
+          if (!result.success) throw new Error(result.message || 'Gagal cancel order');
+        } else {
+          await updateDoc(doc(db, 'orders', orderId), {
+            status: 'CANCEL', orderStatus: 'CANCEL',
+            updatedAt: serverTimestamp(), updated_at: new Date().toISOString()
+          });
+        }
+      } else {
+        await updateDoc(doc(db, 'orders', orderId), {
+          status: s, orderStatus: s,
+          updatedAt: serverTimestamp(), updated_at: new Date().toISOString()
+        });
+      }
       onChanged(s);
-    } catch { /**/ } finally { setSaving(false); setOpen(false); }
+    } catch (err: any) {
+      alert(`Gagal ubah status: ${err?.message || 'Error'}`);
+    } finally { setSaving(false); setOpen(false); }
   };
 
   return (
@@ -783,11 +806,13 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
     return baseOrders.filter(o => {
       const st = (o.status || '').toUpperCase();
       if (statusFilter === 'SEMUA') {
-        // Hide SELESAI from default view — only show when explicitly filtered
-        if (st === 'SELESAI') return false;
+        // Hide terminal statuses from default view — only show when explicitly filtered
+        if (st === 'SELESAI' || st === 'HANGUS' || st === 'CANCEL' || st === 'BATAL') return false;
       } else {
-        if (statusFilter === 'BATAL' && st !== 'BATAL' && st !== 'CANCEL') return false;
-        if (statusFilter !== 'BATAL' && st !== statusFilter && st !== `${statusFilter}_WORKER`) return false;
+        if (statusFilter === 'BATAL' && st !== 'BATAL') return false;
+        if (statusFilter === 'CANCEL' && st !== 'CANCEL') return false;
+        if (statusFilter === 'HANGUS' && st !== 'HANGUS' && st !== 'EXPIRED') return false;
+        if (!['BATAL','CANCEL','HANGUS'].includes(statusFilter) && st !== statusFilter && st !== `${statusFilter}_WORKER`) return false;
       }
       if (search.trim()) {
         const q = search.toLowerCase();
@@ -798,9 +823,13 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
   }, [baseOrders, statusFilter, search]);
 
   const counts = useMemo(() => {
-    const c: Record<string, number> = { SEMUA: baseOrders.length };
+    const c: Record<string, number> = { SEMUA: baseOrders.filter(o => {
+      const st = (o.status || '').toUpperCase();
+      return !['SELESAI','HANGUS','CANCEL','BATAL'].includes(st);
+    }).length };
     baseOrders.forEach(o => {
-      const k = (o.status || '').toUpperCase() === 'CANCEL' ? 'BATAL' : (o.status || '').toUpperCase();
+      const st = (o.status || '').toUpperCase();
+      const k = st === 'EXPIRED' ? 'HANGUS' : st;
       c[k] = (c[k] || 0) + 1;
     });
     return c;

@@ -249,77 +249,87 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
 
     setIsSearchingTracking(true);
     try {
-      // 1. Cek dari local myOrders
-      let localMatches: any[] = [];
+      const ordersRef = collection(db, 'orders');
+
+      // Ambil semua orders (limit 500 cukup untuk usage normal)
+      const snap = await getDocs(query(ordersRef, limit(500)));
+      const allOrders: any[] = snap.docs.map(d => {
+        const data = d.data() || {};
+        return { ...data, id: d.id, docUniqueId: d.id, firestoreId: d.id, orderId: (data as any).orderId || d.id };
+      });
+
+      let matches: any[] = [];
+
       if (trackingLookupMode === 'INVOICE') {
-        const cleanTarget = q.toLowerCase().replace(/^#/, '');
-        localMatches = myOrders.filter(ord => {
+        const cleanTarget = q.toLowerCase().replace(/^#/, '').trim();
+        matches = allOrders.filter(ord => {
           const ordId = (ord.orderId || ord.id || '').toLowerCase().replace(/^#/, '');
-          return ordId === cleanTarget || ordId.includes(cleanTarget) || ord.id?.toLowerCase() === cleanTarget;
+          const dispId = (ord.displayOrderId || '').toLowerCase().replace(/^#/, '');
+          return ordId === cleanTarget || ordId.includes(cleanTarget) || dispId.includes(cleanTarget);
         });
       } else {
-        // Exact match untuk username Roblox (case-insensitive), partial untuk phone/name
-        const cleanTarget = q.toLowerCase().replace(/^@/, '');
-        localMatches = myOrders.filter(ord => {
-          const rUser = (ord.robloxUsername || (ord as any).roblox_username || (ord as any).game_username || (ord as any).targetUsername || '').toLowerCase();
-          const phone = ((ord as any).whatsapp || (ord as any).whatsappNumber || (ord as any).customer_phone || (ord as any).phone || '').replace(/\D/g, '');
-          const name = ((ord as any).customer_name || (ord as any).customerName || (ord as any).name || '').toLowerCase();
-          const inputPhone = q.replace(/\D/g, '');
-          // Username Roblox: exact match only
-          if (rUser && rUser === cleanTarget) return true;
-          // Phone: exact or suffix match
-          if (inputPhone.length >= 6 && phone && (phone === inputPhone || phone.endsWith(inputPhone) || inputPhone.endsWith(phone))) return true;
-          // Name: partial match
-          if (name && name.includes(cleanTarget)) return true;
+        // Username Roblox: case-insensitive exact match
+        // Phone: digit-only match
+        const cleanTarget = q.toLowerCase().replace(/^@/, '').trim();
+        const inputPhone = q.replace(/\D/g, '');
+
+        matches = allOrders.filter(ord => {
+          // Cek semua field variant username Roblox
+          const rUser = (
+            ord.robloxUsername ||
+            ord.roblox_username ||
+            ord.game_username ||
+            ord.targetUsername ||
+            ord.assignedGameUsername ||
+            ''
+          ).toLowerCase().trim();
+
+          // Username: exact match case-insensitive
+          if (cleanTarget.length >= 3 && rUser && rUser === cleanTarget) return true;
+
+          // Phone: digit match
+          if (inputPhone.length >= 8) {
+            const phone = (
+              ord.whatsapp ||
+              ord.phone ||
+              ord.customer_phone ||
+              ord.customerPhone ||
+              ord.whatsappNumber ||
+              ''
+            ).replace(/\D/g, '');
+            if (phone && (phone === inputPhone || phone.endsWith(inputPhone) || inputPhone.endsWith(phone))) return true;
+          }
+
           return false;
         });
       }
 
-      // 2. Query Firestore orders collection langsung dengan where untuk efisiensi
-      const ordersRef = collection(db, 'orders');
-      let firestoreMatches: any[] = [];
-
+      // Juga cek dari local myOrders (user login)
+      let localMatches: any[] = [];
       if (trackingLookupMode === 'INVOICE') {
-        const cleanTarget = q.replace(/^#/, '');
-        // Query by orderId exact match
-        const snapById = await getDocs(query(ordersRef, where('orderId', '==', cleanTarget)));
-        const snapById2 = await getDocs(query(ordersRef, where('orderId', '==', `#${cleanTarget}`))).catch(() => ({ docs: [] as any[] }));
-        const allDocs = [...snapById.docs, ...(snapById2 as any).docs];
-        firestoreMatches = allDocs.map(d => {
-          const data = d.data() || {};
-          return { ...data, id: d.id, docUniqueId: d.id, firestoreId: d.id, orderId: (data as any).orderId || d.id };
+        const cleanTarget = q.toLowerCase().replace(/^#/, '').trim();
+        localMatches = myOrders.filter(ord => {
+          const ordId = (ord.orderId || ord.id || '').toLowerCase().replace(/^#/, '');
+          return ordId === cleanTarget || ordId.includes(cleanTarget);
         });
       } else {
-        const cleanTarget = q.trim().replace(/^@/, '');
-        // Exact match by robloxUsername (case-sensitive in Firestore, try both cases)
-        const queries = [
-          getDocs(query(ordersRef, where('robloxUsername', '==', cleanTarget))),
-          getDocs(query(ordersRef, where('robloxUsername', '==', cleanTarget.toLowerCase()))),
-          getDocs(query(ordersRef, where('roblox_username', '==', cleanTarget))),
-          getDocs(query(ordersRef, where('game_username', '==', cleanTarget))),
-        ];
-        // If input looks like phone number, also query by phone
+        const cleanTarget = q.toLowerCase().replace(/^@/, '').trim();
         const inputPhone = q.replace(/\D/g, '');
-        if (inputPhone.length >= 8) {
-          queries.push(getDocs(query(ordersRef, where('phone', '==', inputPhone))));
-          queries.push(getDocs(query(ordersRef, where('whatsapp', '==', inputPhone))));
-        }
-        const results = await Promise.allSettled(queries);
-        const allDocs = results
-          .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled')
-          .flatMap(r => r.value.docs);
-        firestoreMatches = allDocs.map(d => {
-          const data = d.data() || {};
-          return { ...data, id: d.id, docUniqueId: d.id, firestoreId: d.id, orderId: (data as any).orderId || d.id };
+        localMatches = myOrders.filter(ord => {
+          const rUser = (ord.robloxUsername || (ord as any).roblox_username || (ord as any).game_username || '').toLowerCase().trim();
+          if (cleanTarget.length >= 3 && rUser && rUser === cleanTarget) return true;
+          if (inputPhone.length >= 8) {
+            const phone = ((ord as any).whatsapp || (ord as any).phone || (ord as any).customer_phone || '').replace(/\D/g, '');
+            if (phone && (phone === inputPhone || phone.endsWith(inputPhone))) return true;
+          }
+          return false;
         });
       }
 
-      // Gabungkan & deduplikasi berdasarkan id
+      // Gabung + deduplikasi
       const combinedMap = new Map<string, any>();
-      [...localMatches, ...firestoreMatches].forEach(item => {
-        if (item && item.id) {
-          combinedMap.set(item.id, item);
-        }
+      [...localMatches, ...matches].forEach(item => {
+        if (item && item.id) combinedMap.set(item.id, item);
       });
       const combined = Array.from(combinedMap.values());
 
@@ -1883,7 +1893,11 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
       case 'CANCEL':
       case 'REJECTED':
       case 'CANCELED':
-        return <span className="px-2.5 py-1 bg-red-600/20 text-red-400 border border-red-500/40 rounded-full text-xs font-semibold flex items-center gap-1.5"><X className="w-3.5 h-3.5" /> Batal</span>;
+      case 'DIBATALKAN':
+        return <span className="px-2.5 py-1 bg-red-600/20 text-red-400 border border-red-500/40 rounded-full text-xs font-semibold flex items-center gap-1.5"><X className="w-3.5 h-3.5" /> Cancel (Refund TC)</span>;
+      case 'HANGUS':
+      case 'EXPIRED':
+        return <span className="px-2.5 py-1 bg-rose-900/30 text-rose-300 border border-rose-600/40 rounded-full text-xs font-semibold flex items-center gap-1.5"><AlertCircle className="w-3.5 h-3.5" /> Hangus</span>;
       default:
         return <span className="px-2.5 py-1 bg-slate-700 text-slate-300 rounded-full text-xs">{status}</span>;
     }

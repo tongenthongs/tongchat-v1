@@ -301,13 +301,25 @@ const getStatusBadgeConfig = (statusStr: string) => {
   if (s === 'BOOKING' || s === 'PENDING') {
     return { label: 'BOOKING', colorClass: 'bg-amber-500/15 text-amber-400 border-amber-500/40 shadow-amber-500/5' };
   }
-  if (s === 'PROSES' || s === 'PROCESSING') {
+  if (s === 'PROSES' || s === 'PROCESSING' || s === 'PROSES_WORKER') {
     return { label: 'PROSES', colorClass: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/40 shadow-indigo-500/5' };
+  }
+  if (s === 'READY') {
+    return { label: 'READY', colorClass: 'bg-cyan-500/15 text-cyan-400 border-cyan-500/40 shadow-cyan-500/5' };
+  }
+  if (s === 'LOGUL' || s === 'ANTRIAN_LOGIN' || s === 'BUTUH_LOGIN_ULANG') {
+    return { label: 'LOGUL', colorClass: 'bg-orange-500/15 text-orange-400 border-orange-500/40 shadow-orange-500/5' };
+  }
+  if (s === 'DIORDER') {
+    return { label: 'DIORDER', colorClass: 'bg-teal-500/15 text-teal-400 border-teal-500/40 shadow-teal-500/5' };
   }
   if (s === 'SELESAI' || s === 'COMPLETED' || s === 'DONE') {
     return { label: 'SELESAI', colorClass: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/40 shadow-emerald-500/5' };
   }
-  if (s === 'CANCEL' || s === 'BATAL') {
+  if (s === 'HANGUS' || s === 'EXPIRED') {
+    return { label: 'HANGUS', colorClass: 'bg-rose-900/40 text-rose-300 border-rose-600/40 shadow-rose-500/5' };
+  }
+  if (s === 'CANCEL' || s === 'BATAL' || s === 'DIBATALKAN' || s === 'REJECTED') {
     return { label: 'CANCEL', colorClass: 'bg-rose-500/15 text-rose-400 border-rose-500/40 shadow-rose-500/5' };
   }
   return { label: s, colorClass: 'bg-slate-700/50 text-slate-300 border-slate-600/50' };
@@ -1179,7 +1191,9 @@ export const AdminPortal: React.FC = () => {
       BOOKING: 0,
       PROSES: 0,
       SELESAI: 0,
-      BATAL: 0
+      BATAL: 0,
+      CANCEL: 0,
+      HANGUS: 0,
     };
 
     adminLiveOrders.forEach((ord: any) => {
@@ -1195,8 +1209,13 @@ export const AdminPortal: React.FC = () => {
         counts.PROSES++;
       } else if (st === 'SELESAI') {
         counts.SELESAI++;
-      } else if (st === 'BATAL' || st === 'CANCEL') {
+      } else if (st === 'CANCEL') {
+        counts.CANCEL++;
+        counts.BATAL++; // keep BATAL backward compat
+      } else if (st === 'BATAL' || st === 'DIBATALKAN' || st === 'REJECTED') {
         counts.BATAL++;
+      } else if (st === 'HANGUS' || st === 'EXPIRED') {
+        counts.HANGUS++;
       }
     });
 
@@ -1232,6 +1251,8 @@ export const AdminPortal: React.FC = () => {
         if (selectedStatusFilter === 'PROSES' && st !== 'PROSES_WORKER' && st !== 'PROSES' && st !== 'BUTUH_LOGIN_ULANG') return false;
         if (selectedStatusFilter === 'SELESAI' && st !== 'SELESAI') return false;
         if (selectedStatusFilter === 'BATAL' && st !== 'BATAL' && st !== 'CANCEL') return false;
+        if (selectedStatusFilter === 'HANGUS' && st !== 'HANGUS' && st !== 'EXPIRED') return false;
+        if (selectedStatusFilter === 'CANCEL' && st !== 'CANCEL') return false;
       }
 
       // Filter Jenis Orderan (Gift vs Joko)
@@ -5759,6 +5780,16 @@ export const AdminPortal: React.FC = () => {
                 >
                   ❌ CANCEL ({statusCounts.BATAL})
                 </button>
+                <button
+                  onClick={() => setSelectedStatusFilter('HANGUS')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 ${
+                    selectedStatusFilter === 'HANGUS'
+                      ? 'bg-rose-900 text-rose-200 shadow-md shadow-rose-900/20'
+                      : 'bg-[#202c33] text-rose-300 hover:bg-[#2a3942] border border-slate-700/60'
+                  }`}
+                >
+                  ⚠️ HANGUS ({statusCounts.HANGUS || 0})
+                </button>
               </div>
 
               {/* Sub-Tab Tombol Jenis Orderan */}
@@ -6021,10 +6052,11 @@ export const AdminPortal: React.FC = () => {
                                   'bg-blue-500/10 text-blue-400 border-blue-500/30'
                                 }`}
                               >
-                                                                <option value="BOOKING" className="bg-slate-900 text-white">BOOKING</option>
+                                <option value="BOOKING" className="bg-slate-900 text-white">BOOKING</option>
                                 <option value="PROSES" className="bg-slate-900 text-white">PROSES</option>
                                 <option value="SELESAI" className="bg-slate-900 text-white">SELESAI</option>
-                                <option value="CANCEL" className="bg-slate-900 text-white">CANCEL</option>
+                                <option value="CANCEL" className="bg-slate-900 text-white">CANCEL (Refund TC)</option>
+                                <option value="HANGUS" className="bg-slate-900 text-white">HANGUS</option>
                               </select>
                             ) : (
                               <div className="scale-90 origin-left truncate">
@@ -6189,7 +6221,8 @@ export const AdminPortal: React.FC = () => {
                                                     <option value="BOOKING" className="bg-slate-900 text-white">BOOKING</option>
                           <option value="PROSES" className="bg-slate-900 text-white">PROSES</option>
                           <option value="SELESAI" className="bg-slate-900 text-white">SELESAI</option>
-                          <option value="CANCEL" className="bg-slate-900 text-white">CANCEL</option>
+                          <option value="CANCEL" className="bg-slate-900 text-white">CANCEL (Refund TC)</option>
+                          <option value="HANGUS" className="bg-slate-900 text-white">HANGUS</option>
                         </select>
                       ) : (
                         <div className="flex-1">
