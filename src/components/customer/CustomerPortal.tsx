@@ -255,46 +255,62 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         const cleanTarget = q.toLowerCase().replace(/^#/, '');
         localMatches = myOrders.filter(ord => {
           const ordId = (ord.orderId || ord.id || '').toLowerCase().replace(/^#/, '');
-          return ordId.includes(cleanTarget) || ord.id?.toLowerCase().includes(cleanTarget);
+          return ordId === cleanTarget || ordId.includes(cleanTarget) || ord.id?.toLowerCase() === cleanTarget;
         });
       } else {
-        const cleanTarget = q.toLowerCase();
+        // Exact match untuk username Roblox (case-insensitive), partial untuk phone/name
+        const cleanTarget = q.toLowerCase().replace(/^@/, '');
         localMatches = myOrders.filter(ord => {
           const rUser = (ord.robloxUsername || (ord as any).roblox_username || (ord as any).game_username || (ord as any).targetUsername || '').toLowerCase();
-          const phone = ((ord as any).whatsapp || (ord as any).whatsappNumber || (ord as any).customer_phone || (ord as any).phone || '').toLowerCase();
+          const phone = ((ord as any).whatsapp || (ord as any).whatsappNumber || (ord as any).customer_phone || (ord as any).phone || '').replace(/\D/g, '');
           const name = ((ord as any).customer_name || (ord as any).customerName || (ord as any).name || '').toLowerCase();
-          return rUser.includes(cleanTarget) || phone.includes(cleanTarget) || name.includes(cleanTarget);
+          const inputPhone = q.replace(/\D/g, '');
+          // Username Roblox: exact match only
+          if (rUser && rUser === cleanTarget) return true;
+          // Phone: exact or suffix match
+          if (inputPhone.length >= 6 && phone && (phone === inputPhone || phone.endsWith(inputPhone) || inputPhone.endsWith(phone))) return true;
+          // Name: partial match
+          if (name && name.includes(cleanTarget)) return true;
+          return false;
         });
       }
 
-      // 2. Query Firestore orders collection untuk live / guest lookup
+      // 2. Query Firestore orders collection langsung dengan where untuk efisiensi
       const ordersRef = collection(db, 'orders');
-      const snap = await getDocs(ordersRef);
-      const allFirestoreOrders: any[] = snap.docs.map(d => {
-        const data = d.data() || {};
-        return {
-          ...data,
-          id: d.id,
-          docUniqueId: d.id,
-          firestoreId: d.id,
-          orderId: (data as any).orderId || `#ORD-${d.id.slice(-6).toUpperCase()}`
-        };
-      });
-
       let firestoreMatches: any[] = [];
+
       if (trackingLookupMode === 'INVOICE') {
-        const cleanTarget = q.toLowerCase().replace(/^#/, '');
-        firestoreMatches = allFirestoreOrders.filter(ord => {
-          const ordId = (ord.orderId || ord.id || '').toLowerCase().replace(/^#/, '');
-          return ordId.includes(cleanTarget) || ord.id?.toLowerCase().includes(cleanTarget);
+        const cleanTarget = q.replace(/^#/, '');
+        // Query by orderId exact match
+        const snapById = await getDocs(query(ordersRef, where('orderId', '==', cleanTarget)));
+        const snapById2 = await getDocs(query(ordersRef, where('orderId', '==', `#${cleanTarget}`))).catch(() => ({ docs: [] as any[] }));
+        const allDocs = [...snapById.docs, ...(snapById2 as any).docs];
+        firestoreMatches = allDocs.map(d => {
+          const data = d.data() || {};
+          return { ...data, id: d.id, docUniqueId: d.id, firestoreId: d.id, orderId: (data as any).orderId || d.id };
         });
       } else {
-        const cleanTarget = q.toLowerCase();
-        firestoreMatches = allFirestoreOrders.filter(ord => {
-          const rUser = (ord.robloxUsername || ord.roblox_username || ord.game_username || ord.targetUsername || '').toLowerCase();
-          const phone = (ord.whatsapp || ord.whatsappNumber || ord.customer_phone || ord.phone || '').toLowerCase();
-          const name = (ord.customer_name || ord.customerName || ord.name || '').toLowerCase();
-          return rUser.includes(cleanTarget) || phone.includes(cleanTarget) || name.includes(cleanTarget);
+        const cleanTarget = q.trim().replace(/^@/, '');
+        // Exact match by robloxUsername (case-sensitive in Firestore, try both cases)
+        const queries = [
+          getDocs(query(ordersRef, where('robloxUsername', '==', cleanTarget))),
+          getDocs(query(ordersRef, where('robloxUsername', '==', cleanTarget.toLowerCase()))),
+          getDocs(query(ordersRef, where('roblox_username', '==', cleanTarget))),
+          getDocs(query(ordersRef, where('game_username', '==', cleanTarget))),
+        ];
+        // If input looks like phone number, also query by phone
+        const inputPhone = q.replace(/\D/g, '');
+        if (inputPhone.length >= 8) {
+          queries.push(getDocs(query(ordersRef, where('phone', '==', inputPhone))));
+          queries.push(getDocs(query(ordersRef, where('whatsapp', '==', inputPhone))));
+        }
+        const results = await Promise.allSettled(queries);
+        const allDocs = results
+          .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled')
+          .flatMap(r => r.value.docs);
+        firestoreMatches = allDocs.map(d => {
+          const data = d.data() || {};
+          return { ...data, id: d.id, docUniqueId: d.id, firestoreId: d.id, orderId: (data as any).orderId || d.id };
         });
       }
 
