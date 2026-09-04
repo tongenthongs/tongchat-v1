@@ -12,11 +12,9 @@ export interface RobloxProfile {
 const memCache = new Map<string, { profile: RobloxProfile; at: number }>();
 const MEM_TTL  = 10 * 60 * 1000; // 10 min
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 const fallbackAvatar = (userId: number) =>
   `https://www.roblox.com/headshot-thumbnail/image?userId=${userId}&width=150&height=150&format=png`;
 
-// Fetch with AbortController timeout
 const fetchT = (url: string, opts: RequestInit = {}, ms = 8000): Promise<Response> => {
   const ctrl  = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ms);
@@ -25,7 +23,7 @@ const fetchT = (url: string, opts: RequestInit = {}, ms = 8000): Promise<Respons
 
 // ── Firestore persistent cache ────────────────────────────────────────────────
 const FS_COLLECTION = 'robloxProfiles';
-const FS_TTL        = 7 * 24 * 60 * 60 * 1000; // 7 days
+const FS_TTL = 7 * 24 * 60 * 60 * 1000;
 
 const readFromFirestore = async (key: string): Promise<RobloxProfile | null> => {
   try {
@@ -42,109 +40,127 @@ const writeToFirestore = (key: string, p: RobloxProfile) => {
   setDoc(doc(db, FS_COLLECTION, key), { ...p, cachedAt: serverTimestamp(), updatedAt: new Date().toISOString() }).catch(() => {});
 };
 
-// ── Method 1: Express server proxy (same origin, no CORS) ─────────────────────
+// ── Method 1: Express proxy (same port, no CORS) ──────────────────────────────
 const viaProxy = async (username: string): Promise<RobloxProfile | null> => {
   try {
-    const r = await fetchT(`/api/roblox-checker?username=${encodeURIComponent(username)}`, {}, 8000);
-    if (!r.ok) return null;
+    const r = await fetchT(`/api/roblox-checker?username=${encodeURIComponent(username)}`, {}, 10000);
+    if (!r.ok) {
+      console.debug('[roblox] proxy status:', r.status);
+      return null;
+    }
     const j = await r.json() as any;
-    if (j?.success && j?.data?.userId) return j.data as RobloxProfile;
+    if (j?.success && j?.data?.userId) {
+      console.debug('[roblox] proxy success:', j.data.username);
+      return j.data as RobloxProfile;
+    }
+    console.debug('[roblox] proxy returned no user:', j);
     return null;
-  } catch { return null; }
+  } catch (e) {
+    console.debug('[roblox] proxy failed:', e);
+    return null;
+  }
 };
 
-// ── Method 2: Direct Roblox API (works when CORS not blocked) ─────────────────
+// ── Method 2: Direct POST (works if CORS allowed) ─────────────────────────────
 const viaDirect = async (username: string): Promise<RobloxProfile | null> => {
   try {
     const r = await fetchT('https://users.roblox.com/v1/usernames/users', {
-      method:  'POST',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ usernames: [username], excludeBannedUsers: false }),
+      body: JSON.stringify({ usernames: [username], excludeBannedUsers: false }),
     }, 8000);
-    if (!r.ok) { if (r.status === 429) throw new Error('RATE_LIMITED'); return null; }
+    if (!r.ok) {
+      console.debug('[roblox] direct status:', r.status);
+      if (r.status === 429) throw new Error('RATE_LIMITED');
+      return null;
+    }
     const data = await r.json() as any;
     const user = data?.data?.[0];
-    if (!user?.id) return null;
+    if (!user?.id) {
+      console.debug('[roblox] direct: user not found in response', data);
+      return null;
+    }
     let avatarUrl = fallbackAvatar(user.id);
     try {
       const tr = await fetchT(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=false`, {}, 5000);
       if (tr.ok) { const td = await tr.json() as any; if (td?.data?.[0]?.imageUrl) avatarUrl = td.data[0].imageUrl; }
-    } catch { /* keep fallback */ }
+    } catch { /**/ }
+    console.debug('[roblox] direct success:', user.name);
     return { userId: user.id, username: user.name, displayName: user.displayName, avatarUrl };
-  } catch (e: any) { if (e?.message === 'RATE_LIMITED') throw e; return null; }
+  } catch (e: any) {
+    console.debug('[roblox] direct failed:', e?.message);
+    if (e?.message === 'RATE_LIMITED') throw e;
+    return null;
+  }
 };
 
-// ── Method 3: Roblox user search API (GET, different endpoint, less CORS issues) ──
+// ── Method 3: Search GET endpoint ─────────────────────────────────────────────
 const viaSearch = async (username: string): Promise<RobloxProfile | null> => {
   try {
-    const r = await fetchT(
-      `https://users.roblox.com/v1/users/search?keyword=${encodeURIComponent(username)}&limit=1`,
-      {}, 8000
-    );
-    if (!r.ok) return null;
+    const r = await fetchT(`https://users.roblox.com/v1/users/search?keyword=${encodeURIComponent(username)}&limit=5`, {}, 8000);
+    if (!r.ok) { console.debug('[roblox] search status:', r.status); return null; }
     const data = await r.json() as any;
-    const user = data?.data?.[0];
-    // Only accept exact match (case-insensitive)
-    if (!user?.id || user.name.toLowerCase() !== username.toLowerCase()) return null;
-    const avatarUrl = fallbackAvatar(user.id);
-    return { userId: user.id, username: user.name, displayName: user.displayName, avatarUrl };
-  } catch { return null; }
+    // find exact match case-insensitive
+    const user = (data?.data || []).find((u: any) => u.name?.toLowerCase() === username.toLowerCase());
+    if (!user?.id) { console.debug('[roblox] search: no exact match for', username); return null; }
+    console.debug('[roblox] search success:', user.name);
+    return { userId: user.id, username: user.name, displayName: user.displayName, avatarUrl: fallbackAvatar(user.id) };
+  } catch (e) { console.debug('[roblox] search failed:', e); return null; }
 };
 
-// ── Method 4: Roblox user by username via different endpoint ──────────────────
-const viaUsernameEndpoint = async (username: string): Promise<RobloxProfile | null> => {
-  try {
-    // This endpoint sometimes has different CORS behavior
-    const r = await fetchT(
-      `https://www.roblox.com/users/profile/profileheader-json?username=${encodeURIComponent(username)}`,
-      {}, 8000
-    );
-    if (!r.ok) return null;
-    const data = await r.json() as any;
-    const id = data?.UserId;
-    const name = data?.Username;
-    const displayName = data?.UserName || name;
-    if (!id || !name) return null;
-    return { userId: id, username: name, displayName, avatarUrl: fallbackAvatar(id) };
-  } catch { return null; }
+// ── Method 4: Public CORS proxy as last resort ────────────────────────────────
+const viaCorsProxy = async (username: string): Promise<RobloxProfile | null> => {
+  const ROBLOX_API = 'https://users.roblox.com/v1/usernames/users';
+  // Try multiple public CORS proxies
+  const proxies = [
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(ROBLOX_API)}`,
+    `https://corsproxy.io/?${encodeURIComponent(ROBLOX_API)}`,
+  ];
+  for (const proxyUrl of proxies) {
+    try {
+      const r = await fetchT(proxyUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-requested-with': 'XMLHttpRequest' },
+        body: JSON.stringify({ usernames: [username], excludeBannedUsers: false }),
+      }, 8000);
+      if (!r.ok) continue;
+      const data = await r.json() as any;
+      const user = data?.data?.[0];
+      if (!user?.id) continue;
+      console.debug('[roblox] cors-proxy success via', proxyUrl);
+      return { userId: user.id, username: user.name, displayName: user.displayName, avatarUrl: fallbackAvatar(user.id) };
+    } catch { continue; }
+  }
+  return null;
 };
 
-// ── Main exported function ────────────────────────────────────────────────────
-
-/**
- * Lookup Roblox profile with multiple fallback layers:
- * 1. Memory cache
- * 2. Firestore persistent cache (works offline/without proxy)
- * 3. Express proxy (/api/roblox-checker)
- * 4. Direct POST to users.roblox.com
- * 5. GET search endpoint
- * 6. Profile header endpoint
- */
+// ── Main ──────────────────────────────────────────────────────────────────────
 export const fetchRobloxProfile = async (username: string): Promise<RobloxProfile | null> => {
   const clean = username.trim().replace(/^@/, '');
   if (!clean || clean.length < 2) return null;
   const key = clean.toLowerCase();
 
-  // 1. Memory cache (instant)
+  // 1. Memory cache
   const mem = memCache.get(key);
-  if (mem && Date.now() - mem.at < MEM_TTL) return mem.profile;
+  if (mem && Date.now() - mem.at < MEM_TTL) {
+    console.debug('[roblox] cache hit:', clean);
+    return mem.profile;
+  }
 
-  // 2. Firestore cache (fast, persistent, no CORS)
-  // Run in parallel with proxy attempt to not block fast path
-  const [fsResult, proxyResult] = await Promise.allSettled([
+  // 2. Firestore + Proxy in parallel
+  const [fsRes, proxyRes] = await Promise.allSettled([
     readFromFirestore(key),
     viaProxy(clean),
   ]);
+  const fsProfile    = fsRes.status    === 'fulfilled' ? fsRes.value    : null;
+  const proxyProfile = proxyRes.status === 'fulfilled' ? proxyRes.value : null;
+  let profile = proxyProfile || fsProfile;
+  console.debug('[roblox] fs:', !!fsProfile, 'proxy:', !!proxyProfile);
 
-  const fsProfile  = fsResult.status  === 'fulfilled' ? fsResult.value  : null;
-  const proxProfile = proxyResult.status === 'fulfilled' ? proxyResult.value : null;
-
-  // Prefer proxy (freshest data), fall back to Firestore
-  let profile = proxProfile || fsProfile;
-
+  // 3. Direct API
   if (!profile) {
-    // 3. Direct Roblox POST API
-    try { profile = await viaDirect(clean); } catch (e: any) {
+    try { profile = await viaDirect(clean); }
+    catch (e: any) {
       if (e?.message === 'RATE_LIMITED') {
         await new Promise(r => setTimeout(r, 1500));
         profile = await viaProxy(clean);
@@ -152,19 +168,17 @@ export const fetchRobloxProfile = async (username: string): Promise<RobloxProfil
     }
   }
 
-  if (!profile) {
-    // 4. Search endpoint fallback
-    profile = await viaSearch(clean);
-  }
+  // 4. Search endpoint
+  if (!profile) profile = await viaSearch(clean);
 
-  if (!profile) {
-    // 5. Profile header endpoint fallback
-    profile = await viaUsernameEndpoint(clean);
-  }
+  // 5. Public CORS proxy last resort
+  if (!profile) profile = await viaCorsProxy(clean);
+
+  console.debug('[roblox] final result for', clean, ':', profile ? 'FOUND' : 'NOT FOUND');
 
   if (profile) {
     memCache.set(key, { profile, at: Date.now() });
-    writeToFirestore(key, profile); // non-blocking persist
+    writeToFirestore(key, profile);
   }
 
   return profile;
