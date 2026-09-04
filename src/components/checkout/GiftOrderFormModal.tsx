@@ -65,8 +65,9 @@ export const GiftOrderFormModal: React.FC<GiftOrderFormModalProps> = ({
       return;
     }
     if (!profile) {
-      setError('Username Roblox belum valid. Pastikan akun ada dan coba lagi.');
-      return;
+      // Soft warning — allow unverified username
+      setError('Username tidak terverifikasi di Roblox. Pastikan username benar sebelum lanjut.');
+      // Don't block — allow submit
     }
     const phoneClean = customerPhone.trim().replace(/[^0-9]/g, '');
     if (phoneClean.length < 8) {
@@ -74,7 +75,7 @@ export const GiftOrderFormModal: React.FC<GiftOrderFormModalProps> = ({
       return;
     }
     setSubmitting(true);
-    onConfirm({ robloxUsername: clean, robloxProfile: profile, customerPhone: customerPhone.trim() });
+    onConfirm({ robloxUsername: clean, robloxProfile: profile || null, customerPhone: customerPhone.trim() });
   };
 
   const avatarUrl =

@@ -72,8 +72,11 @@ export const GuestChatForm: React.FC<GuestChatFormProps> = ({ onSubmit, onClose,
     }
 
     if (!robloxProfile) {
-      alert('Username Roblox belum valid. Pastikan akun ada dan coba lagi.');
-      return;
+      // Soft warning — allow unverified usernames (customer may have typo or account not on Roblox yet)
+      const confirmed = window.confirm(
+        `Username Roblox "${cleanUsername}" tidak dapat diverifikasi.\n\nLanjutkan tanpa verifikasi?`
+      );
+      if (!confirmed) return;
     }
 
     if (!whatsapp.trim()) {
@@ -90,8 +93,8 @@ export const GuestChatForm: React.FC<GuestChatFormProps> = ({ onSubmit, onClose,
     setIsSubmitting(true);
     onSubmit({
       name: name.trim(),
-      robloxUsername: robloxProfile.username || robloxProfile.name,
-      robloxUserId: robloxProfile.userId?.toString() || robloxProfile.id?.toString(),
+      robloxUsername: robloxProfile?.username || robloxProfile?.name || cleanUsername,
+      robloxUserId: robloxProfile?.userId?.toString() || robloxProfile?.id?.toString() || '0',
       whatsapp: normalizedPhone
     });
   };
