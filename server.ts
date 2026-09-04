@@ -179,22 +179,32 @@ async function startServer() {
     const username = req.query.username as string;
     const cleanUsername = username ? username.trim().replace(/^@/, '') : '';
 
-    if (!cleanUsername || cleanUsername.length < 3) {
+    if (!cleanUsername || cleanUsername.length < 2) {
       return res.status(400).json({ success: false, message: 'Username terlalu pendek' });
     }
 
     try {
-      // Request Server-to-Server (Bebas CORS Browser)
-      const robloxRes = await fetch('https://users.roblox.com/v1/usernames/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          usernames: [cleanUsername],
-          excludeBannedUsers: true
-        })
-      });
+      // AbortController untuk timeout 10 detik
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 10000);
+
+      let robloxRes: Response;
+      try {
+        robloxRes = await fetch('https://users.roblox.com/v1/usernames/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          // excludeBannedUsers: false agar semua akun ditemukan termasuk banned/restricted
+          body: JSON.stringify({ usernames: [cleanUsername], excludeBannedUsers: false }),
+          signal: controller.signal
+        });
+      } finally {
+        clearTimeout(timer);
+      }
 
       if (!robloxRes.ok) {
+        if (robloxRes.status === 429) {
+          return res.status(429).json({ success: false, message: 'Roblox rate limit, coba lagi sebentar' });
+        }
         return res.status(robloxRes.status).json({ success: false, message: 'Roblox API Error' });
       }
 
@@ -205,10 +215,16 @@ async function startServer() {
         return res.status(404).json({ success: false, message: 'Username tidak ditemukan di Roblox' });
       }
 
-      // Request Avatar Headshot dari API Resmi Roblox Thumbnails
+      // Request Avatar Headshot — fallback ke CDN URL jika thumbnail API gagal
       let avatarUrl = `https://www.roblox.com/headshot-thumbnail/image?userId=${robloxUser.id}&width=150&height=150&format=png`;
       try {
-        const thumbRes = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${robloxUser.id}&size=150x150&format=Png&isCircular=true`);
+        const thumbController = new AbortController();
+        const thumbTimer = setTimeout(() => thumbController.abort(), 5000);
+        const thumbRes = await fetch(
+          `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${robloxUser.id}&size=150x150&format=Png&isCircular=false`,
+          { signal: thumbController.signal }
+        );
+        clearTimeout(thumbTimer);
         if (thumbRes.ok) {
           const thumbData = (await thumbRes.json()) as any;
           if (thumbData?.data?.[0]?.imageUrl) {
@@ -216,7 +232,7 @@ async function startServer() {
           }
         }
       } catch (thumbErr) {
-        console.warn('Gagal fetch thumbnail avatar roblox, fallback ke CDN url:', thumbErr);
+        // Keep fallback CDN avatar URL
       }
 
       return res.status(200).json({
@@ -225,11 +241,14 @@ async function startServer() {
           userId: robloxUser.id,
           username: robloxUser.name,
           displayName: robloxUser.displayName,
-          avatarUrl: avatarUrl
+          avatarUrl
         }
       });
 
     } catch (error: any) {
+      if (error?.name === 'AbortError') {
+        return res.status(504).json({ success: false, message: 'Roblox API timeout, coba lagi' });
+      }
       console.error('Server Internal Roblox Checker Error:', error);
       return res.status(500).json({ success: false, message: error.message || 'Server Error' });
     }

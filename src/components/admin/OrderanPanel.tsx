@@ -107,15 +107,15 @@ const getCfg = (s: string): StatusConfig =>
 
 // ─── Roblox Avatar (staggered queue, in-memory cache) ────────────────────────
 const avatarCache  = new Map<string, string>();
-const avatarFailed = new Set<string>();
-// Stagger queue: index increments per card render, spreads requests 300ms apart
+// avatarFailed stores { failedAt } so we can retry after 5 minutes
+const avatarFailed = new Map<string, number>(); // username → timestamp failed
+const AVATAR_RETRY_MS = 5 * 60 * 1000; // retry failed lookups after 5 min
 let queueIndex = 0;
 
 const fetchAvatarStaggered = (username: string, cb: (url: string | null) => void) => {
-  const delay = (queueIndex++ % 20) * 300; // max 20 slots × 300ms = 6s spread
+  const delay = (queueIndex++ % 20) * 300;
   setTimeout(async () => {
     try {
-      // Primary: server proxy (Express serves both API and frontend on same port)
       const r = await fetch(`/api/roblox-checker?username=${encodeURIComponent(username)}`);
       const data = r.ok ? await r.json() : null;
       if (data?.success && data?.data?.avatarUrl) {
@@ -126,12 +126,12 @@ const fetchAvatarStaggered = (username: string, cb: (url: string | null) => void
         cb(null);
       }
     } catch {
-      // Fallback: direct Roblox POST (works if not CORS-blocked)
+      // Fallback: direct Roblox POST
       try {
         const r2 = await fetch('https://users.roblox.com/v1/usernames/users', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ usernames: [username], excludeBannedUsers: true })
+          body: JSON.stringify({ usernames: [username], excludeBannedUsers: false })
         });
         const d2 = r2.ok ? await r2.json() : null;
         const u = d2?.data?.[0];
@@ -141,6 +141,17 @@ const fetchAvatarStaggered = (username: string, cb: (url: string | null) => void
       }
     }
   }, delay);
+};
+
+// Helper: check if username failed recently (within AVATAR_RETRY_MS)
+const isRecentlyFailed = (username: string): boolean => {
+  const failedAt = avatarFailed.get(username);
+  if (!failedAt) return false;
+  if (Date.now() - failedAt > AVATAR_RETRY_MS) {
+    avatarFailed.delete(username); // expired — allow retry
+    return false;
+  }
+  return true;
 };
 
 const RobloxAvatar: React.FC<{
@@ -159,7 +170,7 @@ const RobloxAvatar: React.FC<{
   };
 
   const [avatarUrl, setAvatarUrl] = useState<string | null>(init);
-  const [loading,   setLoading]   = useState(!init() && !avatarFailed.has(clean));
+  const [loading,   setLoading]   = useState(() => !init() && !isRecentlyFailed(clean));
   const [imgErr,    setImgErr]    = useState(false);
 
   useEffect(() => {
@@ -169,14 +180,19 @@ const RobloxAvatar: React.FC<{
     }
     if (!clean || clean === '-' || clean.length < 2) { setLoading(false); return; }
     if (avatarCache.has(clean)) { setAvatarUrl(avatarCache.get(clean)!); setLoading(false); return; }
-    if (avatarFailed.has(clean)) { setLoading(false); return; }
+    if (isRecentlyFailed(clean)) { setLoading(false); return; }
 
     let cancelled = false;
     setLoading(true);
     fetchAvatarStaggered(clean, (url) => {
       if (cancelled) return;
-      if (url) { avatarCache.set(clean, url); setAvatarUrl(url); }
-      else avatarFailed.add(clean);
+      if (url) {
+        avatarCache.set(clean, url);
+        setAvatarUrl(url);
+      } else {
+        // Mark as failed with timestamp — will retry after AVATAR_RETRY_MS
+        avatarFailed.set(clean, Date.now());
+      }
       setLoading(false);
     });
     return () => { cancelled = true; };
