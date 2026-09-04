@@ -59,7 +59,7 @@
       "destination": "https://gen-lang-client-0399652335.firebaseapp.com/__/auth/:path*"
     },
     {
-      "source": "/((?!version\\.json|assets/|favicon\\.ico|manifest\\.json).*)",
+      "source": "/((?!version\\.json|assets/|favicon\\.ico|manifest\\.json|api/).*)",
       "destination": "/index.html"
     }
   ]
