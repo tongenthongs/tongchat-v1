@@ -1,47 +1,9 @@
-import { db } from './firebase';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-
 export interface RobloxProfile {
   userId: number;
   username: string;
   displayName: string;
   avatarUrl: string;
 }
-
-// ── In-memory cache ───────────────────────────────────────────────────────────
-const memCache = new Map<string, { profile: RobloxProfile; at: number }>();
-const MEM_TTL = 10 * 60 * 1000; // 10 min
-
-const fallbackAvatar = (userId: number) =>
-  `https://www.roblox.com/headshot-thumbnail/image?userId=${userId}&width=150&height=150&format=png`;
-
-// ── Firestore persistent cache ────────────────────────────────────────────────
-const FS_COLLECTION = 'robloxProfiles';
-const FS_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
-
-const readFromFirestore = async (key: string): Promise<RobloxProfile | null> => {
-  try {
-    const snap = await getDoc(doc(db, FS_COLLECTION, key));
-    if (!snap.exists()) return null;
-    const d = snap.data() as any;
-    const at = d.cachedAt?.toMillis?.() ?? d.cachedAt ?? 0;
-    if (Date.now() - at > FS_TTL) return null;
-    return {
-      userId: d.userId,
-      username: d.username,
-      displayName: d.displayName,
-      avatarUrl: d.avatarUrl || fallbackAvatar(d.userId),
-    };
-  } catch { return null; }
-};
-
-const writeToFirestore = (key: string, p: RobloxProfile) => {
-  setDoc(doc(db, FS_COLLECTION, key), {
-    ...p,
-    cachedAt: serverTimestamp(),
-    updatedAt: new Date().toISOString(),
-  }).catch(() => {});
-};
 
 // ── Lookup result type ────────────────────────────────────────────────────────
 // Distinguish the three real outcomes so callers never treat a transient
@@ -54,12 +16,16 @@ export type LookupResult =
   | { status: 'notfound' }
   | { status: 'error' };
 
+// ── In-memory cache (session only, no persistence) ───────────────────────────
+const memCache = new Map<string, { profile: RobloxProfile; at: number }>();
+const MEM_TTL = 10 * 60 * 1000; // 10 min
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 // ── Express server proxy (/api/roblox-checker) ────────────────────────────────
 // The Express server (same origin as the app) proxies to Roblox server-side,
-// bypassing all CORS restrictions. This is the primary path.
-// Works on production (www.entong.store) since node dist/server.cjs serves both.
+// bypassing all CORS restrictions. This is the only network path.
+// Works on both dev (localhost:3000) and production (www.entong.store).
 const viaProxyOnce = async (username: string): Promise<LookupResult> => {
   try {
     const r = await fetch(`/api/roblox-checker?username=${encodeURIComponent(username)}`, {
@@ -116,66 +82,18 @@ const viaProxy = async (username: string): Promise<LookupResult> => {
   return { status: 'error' };
 };
 
-// ── Direct browser fallback ───────────────────────────────────────────────────
-// Used ONLY when the proxy is unreachable (server down / network). Roblox APIs
-// may block this via CORS, so it is best-effort. If it works it saves the day;
-// if CORS blocks it, we fall through and the caller keeps the username as
-// unverified (never a hard "not found").
-const viaDirect = async (username: string): Promise<LookupResult> => {
-  try {
-    const searchRes = await fetch('https://users.roblox.com/v1/usernames/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usernames: [username], excludeBannedUsers: false }),
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!searchRes.ok) return { status: 'error' };
-    const searchData = (await searchRes.json()) as any;
-    const user = searchData?.data?.[0];
-    if (!user?.id) return { status: 'notfound' };
-
-    let avatarUrl = fallbackAvatar(user.id);
-    try {
-      const thumbRes = await fetch(
-        `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${user.id}&size=150x150&format=Png&isCircular=false`,
-        { signal: AbortSignal.timeout(6000) },
-      );
-      if (thumbRes.ok) {
-        const thumbData = (await thumbRes.json()) as any;
-        if (thumbData?.data?.[0]?.imageUrl) avatarUrl = thumbData.data[0].imageUrl;
-      }
-    } catch { /* keep fallback avatar */ }
-
-    return {
-      status: 'found',
-      profile: {
-        userId: user.id,
-        username: user.name,
-        displayName: user.displayName || user.name,
-        avatarUrl,
-      },
-    };
-  } catch (e) {
-    console.debug('[roblox] direct fallback blocked/error:', e);
-    return { status: 'error' };
-  }
-};
-
 // ── Main exported function ────────────────────────────────────────────────────
 /**
  * Lookup Roblox profile. Returns the profile if the username exists, or null
  * if it definitively does not (or cannot be resolved).
  *
  * Resolution order:
- * 1. In-memory cache (session, 10 min) — instant
- * 2. Firestore cache (persistent, 7 days) — fast, no CORS, survives reload
- * 3. /api/roblox-checker proxy (server-side, no CORS) — with retry
- * 4. Direct browser fallback (best-effort) — only if the proxy is unreachable
+ * 1. In-memory cache (session, 10 min) — instant, no DB
+ * 2. /api/roblox-checker proxy (server-side, no CORS) — with retry
  *
- * IMPORTANT: negative results are NEVER cached. A transient proxy/server
- * failure must not permanently mark a valid username as "not found".
- * Use `lookupRobloxProfile` if you need to distinguish "not found" from
- * "could not verify".
+ * Negative results are NEVER cached. A transient proxy/server failure must not
+ * permanently mark a valid username as "not found".
+ * Use `lookupRobloxProfile` to distinguish "not found" from "could not verify".
  */
 export const fetchRobloxProfile = async (username: string): Promise<RobloxProfile | null> => {
   const res = await lookupRobloxProfile(username);
@@ -192,35 +110,20 @@ export const lookupRobloxProfile = async (username: string): Promise<LookupResul
   if (!clean || clean.length < 2) return { status: 'notfound' };
   const key = clean.toLowerCase();
 
-  // 1. Memory cache (instant)
+  // 1. Memory cache (instant, session-only)
   const mem = memCache.get(key);
   if (mem && Date.now() - mem.at < MEM_TTL) {
     return { status: 'found', profile: mem.profile };
   }
 
-  // 2. Firestore cache (fast, persistent)
-  const fsProfile = await readFromFirestore(key);
-  if (fsProfile) {
-    memCache.set(key, { profile: fsProfile, at: Date.now() });
-    return { status: 'found', profile: fsProfile };
-  }
-
-  // 3. Server proxy (primary network path, with retry)
-  let res = await viaProxy(clean);
-
-  // 4. If the proxy is unreachable (not a definitive 404), try the direct
-  //    browser path as a best-effort fallback.
-  if (res.status === 'error') {
-    const direct = await viaDirect(clean);
-    if (direct.status !== 'error') res = direct;
-  }
+  // 2. Server proxy (only reliable network path — no CORS, works in prod + dev)
+  const res = await viaProxy(clean);
 
   if (res.status === 'found') {
+    // Only cache successful lookups. Never cache notfound/error.
     memCache.set(key, { profile: res.profile, at: Date.now() });
-    writeToFirestore(key, res.profile); // async, non-blocking
   }
 
-  // Never cache 'notfound' or 'error' — allow immediate re-check.
   return res;
 };
 
