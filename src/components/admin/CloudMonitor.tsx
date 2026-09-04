@@ -362,7 +362,7 @@ export const CloudMonitor: React.FC = () => {
 
     setUpdatingOrderId(orderId);
     try {
-      if (['SELESAI', 'BATAL', 'BATAL_TOLAK', 'CANCEL'].includes(newStatus)) {
+      if (['SELESAI', 'BATAL', 'BATAL_TOLAK', 'CANCEL', 'HANGUS'].includes(newStatus)) {
         // Update order status and automatically release cloud
         await updateOrderStatus(orderId, newStatus as OrderStatus);
         await releaseOrderFromCloud(cloud.id);
@@ -610,7 +610,7 @@ export const CloudMonitor: React.FC = () => {
 
       // 2. Cek status aktif (bukan selesai / batal)
       const st = (o.status || '').toUpperCase();
-      if (['SELESAI', 'BATAL', 'BATAL_TOLAK', 'CANCEL', 'REJECTED'].includes(st)) return false;
+      if (['SELESAI', 'BATAL', 'BATAL_TOLAK', 'CANCEL', 'REJECTED', 'HANGUS', 'EXPIRED'].includes(st)) return false;
 
       // 3. Filter ketat kategori / kata kunci JOKI / JOKO
       const gameLower = (o.game_name || '').toLowerCase();
@@ -994,7 +994,11 @@ export const CloudMonitor: React.FC = () => {
                                 ? 'PENDING' 
                                 : ['SELESAI', 'COMPLETED'].includes(currentStatus) 
                                 ? 'SELESAI' 
-                                : ['BATAL', 'BATAL_TOLAK', 'CANCEL', 'REJECTED'].includes(currentStatus) 
+                                : currentStatus === 'HANGUS' || currentStatus === 'EXPIRED'
+                                ? 'HANGUS'
+                                : currentStatus === 'CANCEL'
+                                ? 'CANCEL'
+                                : ['BATAL', 'BATAL_TOLAK', 'REJECTED'].includes(currentStatus) 
                                 ? 'BATAL' 
                                 : 'DIPROSES'
                             }
@@ -1002,6 +1006,10 @@ export const CloudMonitor: React.FC = () => {
                             className={`text-[10px] font-extrabold px-2.5 py-1 rounded-lg border focus:outline-none cursor-pointer transition-all appearance-none pr-6 ${
                               currentStatus === 'SELESAI'
                                 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                                : currentStatus === 'HANGUS' || currentStatus === 'EXPIRED'
+                                ? 'bg-rose-900/30 text-rose-300 border-rose-600/40'
+                                : currentStatus === 'CANCEL'
+                                ? 'bg-red-500/10 text-red-400 border-red-500/30'
                                 : currentStatus === 'BATAL'
                                 ? 'bg-red-500/10 text-red-400 border-red-500/30'
                                 : currentStatus === 'READY'
@@ -1018,7 +1026,9 @@ export const CloudMonitor: React.FC = () => {
                             <option value="LOGUL" className="bg-[#151B2B] text-purple-300">🔄 LOGUL</option>
                             <option value="PENDING" className="bg-[#151B2B] text-amber-400">⏳ PENDING</option>
                             <option value="SELESAI" className="bg-[#151B2B] text-emerald-400">✅ SELESAI</option>
-                            <option value="BATAL" className="bg-[#151B2B] text-red-400">❌ BATAL</option>
+                            <option value="CANCEL" className="bg-[#151B2B] text-red-400">❌ CANCEL (Refund TC)</option>
+                            <option value="HANGUS" className="bg-[#151B2B] text-rose-300">⚠️ HANGUS</option>
+                            <option value="BATAL" className="bg-[#151B2B] text-red-400">🚫 BATAL</option>
                           </select>
                           <ChevronDown className="w-3 h-3 text-slate-400 absolute right-1.5 pointer-events-none" />
                         </div>
