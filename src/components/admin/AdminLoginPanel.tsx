@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  collection, query, onSnapshot, orderBy, addDoc, serverTimestamp, getDocs, where
+  collection, query, onSnapshot, orderBy, addDoc, serverTimestamp, getDocs, where, writeBatch, doc
 } from 'firebase/firestore';
 import { db, auth } from '../../lib/firebase';
 import {
   User, TrendingUp, DollarSign, LogIn, Calendar,
   RefreshCw, ChevronDown, ChevronUp, Search, Plus, X,
-  CheckCircle2, AlertCircle, Gamepad2, Clock
+  CheckCircle2, AlertCircle, Gamepad2, Clock, Trash2, RotateCcw
 } from 'lucide-react';
 
 const UPAH_PER_LOGIN = 2500;
@@ -378,6 +378,7 @@ export const AdminLoginPanel: React.FC<{ currentUser?: any }> = ({ currentUser: 
   const [customEnd, setCustomEnd] = useState('');
   const [expandedAdmin, setExpandedAdmin] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [resettingStaff, setResettingStaff] = useState<string | null>(null);
 
   // Ambil currentUser dari Firebase Auth jika tidak disediakan via props
   const currentUser = propCurrentUser || (auth.currentUser ? {
@@ -387,6 +388,23 @@ export const AdminLoginPanel: React.FC<{ currentUser?: any }> = ({ currentUser: 
     email: auth.currentUser.email || '',
     role: 'ADMIN',
   } : null);
+
+  // Reset semua record login untuk satu staff (hapus semua dokumen admin_logins milik staff tsb)
+  const handleResetStaffUpah = async (staff: StaffSummary) => {
+    if (!window.confirm(`Reset semua upah & catatan login untuk ${staff.adminName}? Aksi ini tidak bisa dibatalkan.`)) return;
+    setResettingStaff(staff.adminId);
+    try {
+      const batch = writeBatch(db);
+      staff.records.forEach(r => {
+        batch.delete(doc(db, 'admin_logins', r.id));
+      });
+      await batch.commit();
+    } catch (e: any) {
+      alert('Gagal reset: ' + (e.message || 'Unknown error'));
+    } finally {
+      setResettingStaff(null);
+    }
+  };
 
   // Real-time listener ke admin_logins
   useEffect(() => {
@@ -593,9 +611,22 @@ export const AdminLoginPanel: React.FC<{ currentUser?: any }> = ({ currentUser: 
 
               {expandedAdmin === staff.adminId && (
                 <div className="border-t border-slate-800/60 px-5 pb-4">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-3 mb-2">
-                    Riwayat Login ({staff.records.length})
-                  </p>
+                  <div className="flex items-center justify-between mt-3 mb-2">
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">
+                      Riwayat Login ({staff.records.length})
+                    </p>
+                    <button
+                      onClick={() => handleResetStaffUpah(staff)}
+                      disabled={resettingStaff === staff.adminId}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-[11px] font-bold rounded-lg transition-colors active:scale-95 disabled:opacity-50"
+                    >
+                      {resettingStaff === staff.adminId
+                        ? <RefreshCw className="w-3 h-3 animate-spin" />
+                        : <RotateCcw className="w-3 h-3" />
+                      }
+                      Reset Upah
+                    </button>
+                  </div>
                   <div className="overflow-x-auto rounded-xl border border-slate-800/60">
                     <table className="w-full text-xs">
                       <thead>

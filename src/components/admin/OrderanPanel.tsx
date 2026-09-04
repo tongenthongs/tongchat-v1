@@ -3,7 +3,8 @@ import {
   ShoppingBag, Plus, X, Search, Trash2, CheckCircle2,
   RefreshCw, User, Phone, ChevronDown, ChevronUp, Gamepad2,
   Gift, AlertCircle, Check, Calendar, MessageSquare, Layers,
-  Globe, Smartphone, Zap, Package, Lock, DollarSign, Filter
+  Globe, Smartphone, Zap, Package, Lock, DollarSign, Filter,
+  ShieldCheck, FileText, Edit3, Save
 } from 'lucide-react';
 import {
   collection, query, onSnapshot, limit, orderBy,
@@ -61,6 +62,8 @@ interface PanelOrder {
   cloudNumber?: string;
   isJokiOrder?: boolean;
   jokiPassword?: string;
+  isVerif?: boolean;
+  catatan?: string;
 }
 
 interface OrderanPanelProps {
@@ -630,13 +633,39 @@ const OrderCard: React.FC<{
   onChat?: (o: PanelOrder) => void;
   onFillManual?: (o: PanelOrder) => void;
 }> = ({ order, cloud, onHide, onStatusChange, onChat, onFillManual }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded]     = useState(false);
+  const [isVerif, setIsVerif]       = useState(order.isVerif === true);
+  const [showNote, setShowNote]     = useState(false);
+  const [note, setNote]             = useState(order.catatan || '');
+  const [savingNote, setSavingNote] = useState(false);
+  const [savingVerif, setSavingVerif] = useState(false);
+  const noteRef = useRef<HTMLTextAreaElement>(null);
+
   const isJoki = order.category === 'joko';
   const multi  = order.items && order.items.length > 1;
 
   const crashCount = cloud?.crashCount ?? cloud?.jumlahTabrak ?? order.jumlahTabrak ?? 0;
   const uangAwal   = cloud?.uangAwal ?? cloud?.initialMoney ?? cloud?.uangSebelumJoko ?? order.uangAwal ?? null;
   const tglLogin   = cloud?.lastLogin ?? cloud?.tanggalLogin ?? order.tanggalLogin ?? null;
+
+  const handleToggleVerif = async () => {
+    const next = !isVerif;
+    setIsVerif(next);
+    setSavingVerif(true);
+    try {
+      await updateDoc(doc(db, 'orders', order.firestoreId), { isVerif: next });
+    } catch { setIsVerif(!next); } // rollback on error
+    finally { setSavingVerif(false); }
+  };
+
+  const handleSaveNote = async () => {
+    setSavingNote(true);
+    try {
+      await updateDoc(doc(db, 'orders', order.firestoreId), { catatan: note.trim() });
+      setShowNote(false);
+    } catch { /* keep open */ }
+    finally { setSavingNote(false); }
+  };
 
   return (
     <div className={`group relative flex flex-col rounded-2xl overflow-visible transition-all duration-200 hover:shadow-2xl hover:scale-[1.01] ${
@@ -761,6 +790,76 @@ const OrderCard: React.FC<{
         {/* ── Divider ── */}
         <div className={`h-px opacity-30 ${isJoki ? 'bg-blue-400' : 'bg-purple-400'}`} />
 
+        {/* ── Verif + Catatan toggle row ── */}
+        <div className="flex items-center justify-between gap-2">
+          {/* Ini Verif checkbox */}
+          <button
+            onClick={handleToggleVerif}
+            disabled={savingVerif}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[10px] font-bold transition-all active:scale-95 ${
+              isVerif
+                ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300'
+                : 'bg-slate-800/50 border-slate-700/40 text-slate-500 hover:border-slate-600 hover:text-slate-400'
+            }`}
+          >
+            <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center flex-shrink-0 transition-all ${
+              isVerif ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600'
+            }`}>
+              {isVerif && <Check className="w-2.5 h-2.5 text-white" />}
+            </div>
+            <ShieldCheck className="w-3 h-3" />
+            Ini Verif
+          </button>
+
+          {/* Catatan toggle */}
+          <button
+            onClick={() => { setShowNote(v => !v); setTimeout(() => noteRef.current?.focus(), 50); }}
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border text-[10px] font-bold transition-all active:scale-95 ${
+              note.trim()
+                ? 'bg-yellow-500/15 border-yellow-500/30 text-yellow-300'
+                : showNote
+                  ? 'bg-slate-700 border-slate-600 text-slate-300'
+                  : 'bg-slate-800/50 border-slate-700/40 text-slate-500 hover:border-slate-600 hover:text-slate-400'
+            }`}
+          >
+            <FileText className="w-3 h-3" />
+            {note.trim() ? 'Ada Catatan' : 'Catatan'}
+          </button>
+        </div>
+
+        {/* ── Catatan area ── */}
+        {showNote && (
+          <div className="space-y-2">
+            <textarea
+              ref={noteRef}
+              value={note}
+              onChange={e => setNote(e.target.value)}
+              rows={3}
+              placeholder="Tulis catatan untuk order ini..."
+              className="w-full px-3 py-2 bg-slate-900/80 border border-yellow-500/20 rounded-xl text-xs text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-yellow-500/40 resize-none"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowNote(false)}
+                className="flex-1 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-400 text-[10px] font-bold rounded-lg transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleSaveNote}
+                disabled={savingNote}
+                className="flex-1 py-1.5 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/30 text-yellow-300 text-[10px] font-bold rounded-lg transition-colors flex items-center justify-center gap-1"
+              >
+                {savingNote ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
+                Simpan
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ── Divider ── */}
+        <div className={`h-px opacity-20 ${isJoki ? 'bg-blue-400' : 'bg-purple-400'}`} />
+
         {/* ── Footer ── */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1 text-[10px] text-slate-500">
@@ -859,6 +958,8 @@ export const OrderanPanel: React.FC<OrderanPanelProps> = ({ onOpenChatWithOrder 
           cloudNumber: x.cloud_number || x.cloudNumber || x.cloudNum || null,
           isJokiOrder: x.isJokiOrder === true,
           jokiPassword: x.jokiPassword || x.game_password || x.robloxPassword || null,
+          isVerif: x.isVerif === true,
+          catatan: x.catatan || x.notes || x.note || '',
         } as PanelOrder;
       }).filter((o: PanelOrder) => (o.status || '').toUpperCase() !== 'BELUM_ORDER');
       // Sort newest first client-side
