@@ -3024,8 +3024,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       updatedAt: new Date().toISOString(),
       ...(cloudData.createdAt ? {} : { createdAt: new Date().toISOString() })
     });
+    setClouds(prev => {
+      const exists = prev.some(cloud => cloud.id === cloudId);
+      if (exists) return prev.map(cloud => cloud.id === cloudId ? { ...cloud, ...payload } as CloudInstance : cloud);
+      return [...prev, payload as CloudInstance];
+    });
     await setDoc(doc(db, 'clouds', cloudId), payload, { merge: true });
-    fetchClouds();
+    void fetchClouds();
     return cloudId;
   };
 

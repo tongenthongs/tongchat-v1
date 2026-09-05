@@ -58,6 +58,16 @@ export const getWIBCurrentTime = (): { currentHour: number; currentMinute: numbe
 export const evaluateStoreStatus = (config: StoreScheduleConfig) => {
   const banner = { ...DEFAULT_BANNER, ...(config.banner || {}) };
 
+  // Mode manual banner: followStoreHours OFF → banner selalu tampil pakai teks custom
+  if (banner.followStoreHours === false) {
+    return {
+      isOpen: false,
+      statusLabel: "PENGUMUMAN",
+      phase: "MANUAL_BANNER",
+      message: banner.closedText
+    };
+  }
+
   if (!config.isAutoSchedule) {
     return {
       isOpen: config.isOpenManual,

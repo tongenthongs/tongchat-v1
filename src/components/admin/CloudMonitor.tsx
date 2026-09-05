@@ -673,8 +673,7 @@ export const CloudMonitor: React.FC = () => {
         return Boolean(c.assignedOrderId);
       }
       if (filterStatus === 'EXPIRED') {
-        const cd = formatCountdown(c.rentEndDate);
-        return cd.isExpired || c.status === 'EXPIRED';
+        return c.status === 'EXPIRED';
       }
 
       return true;
@@ -689,8 +688,7 @@ export const CloudMonitor: React.FC = () => {
     let expired = 0;
 
     clouds.forEach((c) => {
-      const cd = formatCountdown(c.rentEndDate);
-      if (cd.isExpired || c.status === 'EXPIRED') {
+      if (c.status === 'EXPIRED') {
         expired++;
       } else if (c.assignedOrderId || c.status === 'IN_USE') {
         occupied++;
@@ -879,7 +877,7 @@ export const CloudMonitor: React.FC = () => {
           {filteredClouds.map((cloud, idx) => {
             const isOccupied = Boolean(cloud.assignedOrderId);
             const countdown = formatCountdown(cloud);
-            const isExpired = countdown.isExpired || cloud.status === 'EXPIRED';
+            const isExpired = cloud.status === 'EXPIRED';
             const isWarning = countdown.isWarning;
             const currentStatus = (cloud.assignedOrderStatus || 'DIPROSES').toUpperCase();
             const rawAssignedId = String(cloud.assignedOrderId || '');

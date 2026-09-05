@@ -10,7 +10,7 @@ const COLOR_CLOSED: Record<string, { bg: string; border: string; badge: string; 
 
 export function StoreOperationalBanner() {
   const [config, setConfig] = useState<StoreScheduleConfig | null>(null);
-  const [tick, setTick] = useState(0);
+  const [, setTick] = useState(0);
 
   useEffect(() => {
     const unsub = subscribeStoreSchedule((newConfig) => {
