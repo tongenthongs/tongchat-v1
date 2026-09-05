@@ -87,6 +87,9 @@ export const CloudMonitor: React.FC = () => {
   const [editingNoteOrderId, setEditingNoteOrderId] = useState<string | null>(null);
   const [noteInputText, setNoteInputText] = useState<string>('');
 
+  const [editingLastMoneyCloudId, setEditingLastMoneyCloudId] = useState<string | null>(null);
+  const [lastMoneyInputText, setLastMoneyInputText] = useState<string>('');
+
   // Inline Edit Uang Awal (Initial Money)
   const [editingInitialMoneyCloudId, setEditingInitialMoneyCloudId] = useState<string | null>(null);
   const [initialMoneyInputText, setInitialMoneyInputText] = useState<string>('');
@@ -129,6 +132,37 @@ export const CloudMonitor: React.FC = () => {
       return input;
     }
     return input;
+  };
+
+  const handleSaveLastMoney = async (cloud: CloudInstance, targetOrder?: GameOrder) => {
+    const rawVal = lastMoneyInputText.trim();
+    const parsedVal = parseShortcutAmount(rawVal) || rawVal;
+    try {
+      const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
+      const { db } = await import('../../lib/firebase');
+      // Simpan ke cloud_instances
+      await setDoc(doc(db, "cloud_instances", cloud.id), {
+        lastMoney: parsedVal || null,
+        uangTerakhir: parsedVal || null,
+        updatedAt: serverTimestamp()
+      }, { merge: true }).catch(() => {});
+      await saveCloud({ ...cloud, lastMoney: parsedVal || null, updatedAt: new Date().toISOString() } as any);
+      // Sinkronkan ke order terkait
+      if (targetOrder) {
+        const updatedOrder = {
+          ...targetOrder,
+          uangTerakhir: parsedVal,
+          lastMoney: parsedVal,
+          uangSetelahJoko: parsedVal,
+          updated: new Date().toISOString()
+        };
+        await updateOrder(updatedOrder);
+      }
+      setEditingLastMoneyCloudId(null);
+      showNotification('Uang Joki Terakhir berhasil disimpan!', 'success');
+    } catch (err: any) {
+      showNotification(`Gagal menyimpan: ${err.message || 'error'}`, 'error');
+    }
   };
 
   const handleSaveInitialMoney = async (cloud: CloudInstance, targetOrder?: GameOrder) => {
@@ -1191,6 +1225,75 @@ export const CloudMonitor: React.FC = () => {
                             </div>
                           </div>
                         )}
+
+                        {/* Uang Joki Terakhir */}
+                        {(() => {
+                          const displayLastMoney =
+                            (cloud as any).lastMoney ||
+                            (cloud as any).uangTerakhir ||
+                            (matchingOrder as any)?.uangTerakhir ||
+                            (matchingOrder as any)?.lastMoney ||
+                            (matchingOrder as any)?.uangSetelahJoko ||
+                            null;
+                          const isEditingThis = editingLastMoneyCloudId === cloud.id;
+                          return (
+                            <div className="pt-1 border-t border-slate-800/80">
+                              {isEditingThis ? (
+                                <div className="space-y-1.5 bg-black/40 border border-dashed border-violet-500/40 rounded-xl p-2 mt-1">
+                                  <div className="flex items-center justify-between text-[11px] text-violet-300 font-bold">
+                                    <span>Uang Joki Terakhir:</span>
+                                    <button type="button" onClick={() => setEditingLastMoneyCloudId(null)}
+                                      className="text-slate-400 hover:text-white text-xs cursor-pointer">✕</button>
+                                  </div>
+                                  <input
+                                    type="text"
+                                    value={lastMoneyInputText}
+                                    onChange={e => setLastMoneyInputText(e.target.value)}
+                                    placeholder="Contoh: 2.500.000 / 2.5jt"
+                                    className="w-full bg-slate-900 border border-violet-500/30 rounded-lg px-2.5 py-1.5 text-[11px] text-white placeholder:text-slate-600 focus:outline-none focus:border-violet-400"
+                                    onKeyDown={e => { if (e.key === 'Enter') handleSaveLastMoney(cloud, matchingOrder || undefined); if (e.key === 'Escape') setEditingLastMoneyCloudId(null); }}
+                                    autoFocus
+                                  />
+                                  <div className="flex gap-1.5">
+                                    <button type="button" onClick={() => handleSaveLastMoney(cloud, matchingOrder || undefined)}
+                                      className="flex-1 py-1 bg-violet-600 hover:bg-violet-500 text-white text-[10px] font-bold rounded-lg cursor-pointer flex items-center justify-center gap-1">
+                                      <CheckCircle2 className="w-3 h-3" />
+                                      <span>Simpan</span>
+                                    </button>
+                                    <button type="button" onClick={() => setEditingLastMoneyCloudId(null)}
+                                      className="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] rounded-lg cursor-pointer">
+                                      Batal
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="text-slate-400 text-[11px] shrink-0">💰 Uang Terakhir:</span>
+                                  <div className="flex items-center gap-1.5">
+                                    {displayLastMoney ? (
+                                      <span className="font-bold text-violet-300 text-[11px] font-mono">
+                                        {displayLastMoney}
+                                      </span>
+                                    ) : (
+                                      <span className="text-slate-600 text-[11px]">-</span>
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setEditingLastMoneyCloudId(cloud.id);
+                                        setLastMoneyInputText(displayLastMoney || '');
+                                      }}
+                                      className="w-5 h-5 bg-violet-500/20 hover:bg-violet-500/40 border border-violet-500/30 text-violet-400 rounded flex items-center justify-center transition-colors cursor-pointer"
+                                      title="Edit Uang Joki Terakhir"
+                                    >
+                                      <Edit3 className="w-2.5 h-2.5" />
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })()}
 
                         {/* Layanan Row */}
                         <div className="flex items-start justify-between gap-2 pt-1 border-t border-slate-800/80">

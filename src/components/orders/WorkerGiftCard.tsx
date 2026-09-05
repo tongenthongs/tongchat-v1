@@ -22,7 +22,7 @@ export default function WorkerGiftCard({ onOpenHelp, orderData }: { onOpenHelp?:
     const pkg = orderData?.package_name || orderData?.packageName || orderData?.itemGift || 'Item Gift Roblox';
     const price = Number(orderData?.price || orderData?.totalPrice || 0).toLocaleString('id-ID');
 
-    const message = `Halo Admin Entong Store, saya mau request pengiriman pesanan Gift:\n- Invoice: ${invoice}\n- Username Roblox: @${robloxUser}\n- Paket: ${pkg}\n- Total: Rp ${price}\n\nSaya sudah add friend / standby in-game. Mohon diproses ya Min, terima kasih!`;
+    const message = `Halo Admin Entong Store, saya mau request pengiriman pesanan Gift:\n- Invoice: ${invoice}\n- Username Roblox: @${robloxUser}\n- Paket: ${pkg}\n- Total: Rp ${price}\n\nSaya sudah add friend / standby in-game. Mohon diproses ya Min, terima kasih!\n\n⚠️ *Mohon dicek pembayarannya ya min, pembayaran saya BELUM diverifikasi. Tolong konfirmasi pembayaran setelah pesan ini diterima.*`;
 
     const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');

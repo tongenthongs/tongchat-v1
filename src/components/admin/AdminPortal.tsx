@@ -506,15 +506,18 @@ export const AdminPortal: React.FC = () => {
     storeAvatarUrl: storeAvatarUrl || ''
   });
   
+  // Sync non-WA fields dari context setiap kali berubah
   React.useEffect(() => {
-    setLocalSettings({
-      qrisImageUrl: qrisImageUrl || '',
-      danaNumber: danaNumber || '',
-      danaName: danaName || '',
-      adminWhatsappNumber: adminWhatsappNumber || '',
-      storeAvatarUrl: storeAvatarUrl || ''
-    });
-  }, [qrisImageUrl, danaNumber, danaName, adminWhatsappNumber, storeAvatarUrl]);
+    setLocalSettings(prev => ({
+      ...prev,
+      qrisImageUrl: qrisImageUrl || prev.qrisImageUrl,
+      danaNumber: danaNumber || prev.danaNumber,
+      danaName: danaName || prev.danaName,
+      storeAvatarUrl: storeAvatarUrl || prev.storeAvatarUrl,
+      // WA hanya di-update jika field masih kosong (initial load) — tidak override saat user sedang edit
+      adminWhatsappNumber: prev.adminWhatsappNumber ? prev.adminWhatsappNumber : (adminWhatsappNumber || ''),
+    }));
+  }, [qrisImageUrl, danaNumber, danaName, storeAvatarUrl, adminWhatsappNumber]);
 
   // Banner settings state — di level component untuk menghindari Rules of Hooks violation
   const [bannerCfg, setBannerCfg] = React.useState<BannerConfig | null>(null);
