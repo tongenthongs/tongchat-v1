@@ -1226,16 +1226,9 @@ export const CloudMonitor: React.FC = () => {
                                   </div>
                                 </div>
                               ) : (
-                                <div className="flex items-center justify-between gap-2">
-                                  <span className="text-slate-400 text-[11px] shrink-0">💰 Uang Terakhir:</span>
-                                  <div className="flex items-center gap-1.5">
-                                    {displayLastMoney ? (
-                                      <span className="font-bold text-violet-300 text-[11px] font-mono">
-                                        {displayLastMoney}
-                                      </span>
-                                    ) : (
-                                      <span className="text-slate-600 text-[11px]">-</span>
-                                    )}
+                                <div className="space-y-1.5">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <span className="text-slate-400 text-[11px] shrink-0">💰 Uang Terakhir</span>
                                     <button
                                       type="button"
                                       onClick={() => {
@@ -1248,6 +1241,17 @@ export const CloudMonitor: React.FC = () => {
                                       <Edit3 className="w-2.5 h-2.5" />
                                     </button>
                                   </div>
+                                  {displayLastMoney ? (
+                                    <div className="px-3 py-2 bg-violet-500/10 border border-violet-500/25 rounded-xl text-center">
+                                      <span className="text-lg font-black text-violet-300 font-mono tracking-tight">
+                                        {displayLastMoney}
+                                      </span>
+                                    </div>
+                                  ) : (
+                                    <div className="px-3 py-2 bg-slate-800/40 border border-slate-700/30 rounded-xl text-center">
+                                      <span className="text-xs text-slate-600">Belum diisi</span>
+                                    </div>
+                                  )}
                                 </div>
                               )}
                             </div>

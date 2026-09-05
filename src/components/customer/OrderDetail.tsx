@@ -287,11 +287,16 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({
 
             {/* Uang Awal & Uang Terakhir — khusus order joki */}
             {(() => {
-              const isJoki = (order.category || order.type || order.orderType || '').toLowerCase().includes('joko') || order.isJoko === true || order.isJokiOrder === true;
-              if (!isJoki) return null;
-              const uangAwal = order.uangAwal || order.initialMoney || order.uangSebelumJoko || order.initialCash || null;
-              const uangTerakhir = order.uangTerakhir || order.lastMoney || order.uangSetelahJoko || null;
-              const updatedAt = order.lastMoneyUpdatedAt || order.updatedAt || null;
+              // Perluas detection: cek semua kemungkinan field isJoki
+              const cat = (order.category || order.type || order.orderType || order.service_type || '').toLowerCase();
+              const isJoki = cat.includes('joko') || cat.includes('joki') || order.isJoko === true || order.isJokiOrder === true || order.isJokiService === true;
+              const uangAwal = order.uangAwal || order.initialMoney || order.uangSebelumJoko || order.initialCash || order.initial_money || null;
+              const uangTerakhir = order.uangTerakhir || order.lastMoney || order.uangSetelahJoko || order.last_money || null;
+              // Hanya pakai lastMoneyUpdatedAt untuk timestamp — BUKAN updatedAt (terlalu sering berubah)
+              const updatedAt = order.lastMoneyUpdatedAt || null;
+
+              // Tampilkan jika ada data uang, meski isJoki tidak terdeteksi
+              if (!uangAwal && !uangTerakhir) return null;
 
               const timeAgo = (ts: any): string => {
                 if (!ts) return '';
@@ -310,40 +315,33 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({
                 return 'baru saja';
               };
 
-              if (!uangAwal && !uangTerakhir) return null;
               return (
-                <div className="mt-3 pt-3 border-t border-slate-800/60 space-y-2">
-                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1">
+                <div className="mt-3 pt-3 border-t border-slate-800/60 space-y-3">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-blue-400 uppercase tracking-widest">
                     <DollarSign className="w-3 h-3" />
                     Info Keuangan Joki
                   </div>
-                  {uangAwal && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-slate-400 flex items-center gap-1">
-                        <TrendingDown className="w-3 h-3 text-amber-400" />
-                        Uang Awal
-                      </span>
-                      <span className="font-bold text-amber-300 font-mono">{uangAwal}</span>
-                    </div>
-                  )}
-                  {uangTerakhir && (
-                    <div className="space-y-0.5">
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-400 flex items-center gap-1">
-                          <TrendingUp className="w-3 h-3 text-violet-400" />
-                          Uang Terakhir
-                        </span>
-                        <span className="font-bold text-violet-300 font-mono">{uangTerakhir}</span>
+                  <div className="grid grid-cols-2 gap-2">
+                    {uangAwal && (
+                      <div className="px-3 py-2 bg-amber-500/8 border border-amber-500/20 rounded-xl">
+                        <p className="text-[10px] text-amber-400 font-semibold uppercase tracking-wide flex items-center gap-1 mb-1">
+                          <TrendingDown className="w-2.5 h-2.5" /> Uang Awal
+                        </p>
+                        <p className="text-sm font-black text-amber-300 font-mono">{uangAwal}</p>
                       </div>
-                      {updatedAt && (
-                        <div className="flex justify-end">
-                          <span className="text-[10px] text-slate-600 italic">
-                            Diupdate {timeAgo(updatedAt)}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                    )}
+                    {uangTerakhir && (
+                      <div className="px-3 py-2 bg-violet-500/10 border border-violet-500/25 rounded-xl">
+                        <p className="text-[10px] text-violet-400 font-semibold uppercase tracking-wide flex items-center gap-1 mb-1">
+                          <TrendingUp className="w-2.5 h-2.5" /> Uang Terakhir
+                        </p>
+                        <p className="text-lg font-black text-violet-300 font-mono leading-tight">{uangTerakhir}</p>
+                        {updatedAt && (
+                          <p className="text-[9px] text-slate-600 mt-0.5">Diupdate {timeAgo(updatedAt)}</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })()}

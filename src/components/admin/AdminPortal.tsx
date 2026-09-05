@@ -7390,12 +7390,26 @@ export const AdminPortal: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end pt-2 border-t border-slate-800">
-                  <button onClick={handleSaveBanner} disabled={bannerSaving}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-[#00E676] hover:bg-[#00C853] disabled:bg-slate-700 disabled:text-slate-500 text-[#111b21] font-bold rounded-xl transition-all text-sm">
-                    {bannerSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : bannerSaved ? <CheckCircle2 className="w-4 h-4" /> : null}
-                    {bannerSaved ? 'Tersimpan!' : 'Simpan Pengaturan Banner'}
-                  </button>
+                <div className="flex justify-end pt-2 border-t border-slate-800 gap-3 flex-wrap">
+                  <div className="flex-1 min-w-[200px] space-y-1.5">
+                    <label className="text-xs font-semibold text-amber-400 uppercase tracking-widest">
+                      Teks Custom Tutup Toko (Override)
+                    </label>
+                    <input
+                      value={storeClosedNoticeText || ''}
+                      onChange={e => updateStoreSettings({ storeClosedNoticeText: e.target.value })}
+                      className="w-full px-3 py-2 bg-[#202c33] border border-amber-500/30 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-amber-500/60"
+                      placeholder="Contoh: Toko tutup, buka besok jam 11 WIB..."
+                    />
+                    <p className="text-[10px] text-slate-600">Jika diisi, teks ini menggantikan teks otomatis di banner tutup</p>
+                  </div>
+                  <div className="flex items-end">
+                    <button onClick={handleSaveBanner} disabled={bannerSaving}
+                      className="flex items-center gap-2 px-6 py-2.5 bg-[#00E676] hover:bg-[#00C853] disabled:bg-slate-700 disabled:text-slate-500 text-[#111b21] font-bold rounded-xl transition-all text-sm whitespace-nowrap">
+                      {bannerSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : bannerSaved ? <CheckCircle2 className="w-4 h-4" /> : null}
+                      {bannerSaved ? 'Tersimpan!' : 'Simpan Pengaturan Banner'}
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
