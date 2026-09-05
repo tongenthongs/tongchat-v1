@@ -2271,8 +2271,11 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
         </div>
       </header>
 
-      {/* ðŸ“¢ BANNER JAM OPERASIONAL TOKO TERPUSAT (WIB & RESPONSIVE MULTI-LINE AUTO-WRAP) */}
+      {/* ── Banner Operasional Toko ── */}
       <StoreOperationalBanner />
+
+
+      {/* BAR NOTIFIKASI INFORMASI REAL-TIME DARI FIRESTORE */}
 
       {/* ðŸ“¢ BAR NOTIFIKASI INFORMASI REAL-TIME DARI FIRESTORE */}
       {announcementText && announcementText.trim().length > 0 && (
@@ -3713,3 +3716,4 @@ export const CustomerPortal: React.FC<{ standaloneCategory?: string }> = ({ stan
     </div>
   );
 };
+

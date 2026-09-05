@@ -1557,11 +1557,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     // Dokumen Pengaturan Ringan (Real-time single doc)
     
-    // Explicit WA listener as requested
-    const unsubWhatsapp = onSnapshot(doc(db, 'settings', 'whatsapp'), (docSnap) => {
-      if (docSnap.exists() && docSnap.data().giftAdminNumber) {
-        setAdminWhatsappNumber(docSnap.data().giftAdminNumber);
-      }
+    // settings/whatsapp — hanya sync ke store, JANGAN set state di sini
+    // untuk menghindari race condition dengan settings/store
+    const unsubWhatsapp = onSnapshot(doc(db, 'settings', 'whatsapp'), (_docSnap) => {
+      // intentionally empty — settings/store adalah satu-satunya source of truth untuk WA
     });
 
     const unsubPayment = onSnapshot(doc(db, 'settings', 'payment'), (docSnap) => {
@@ -1571,9 +1570,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         if (data.danaNumber) setDanaNumber(data.danaNumber);
         if (data.danaName) setDanaName(data.danaName);
         if (data.storeAvatarUrl) setStoreAvatarUrl(data.storeAvatarUrl);
-        if (data.adminWhatsappNumber || data.adminWhatsapp || data.adminPhone) {
-          setAdminWhatsappNumber(data.adminWhatsappNumber || data.adminWhatsapp || data.adminPhone);
-        }
+        // WA intentionally NOT set here — settings/store is source of truth
       }
     });
 

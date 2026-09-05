@@ -7253,7 +7253,173 @@ export const AdminPortal: React.FC = () => {
               </div>
             </div>
 
-            {/* 3. Global Auto-Update & Client Refresh Broadcast */}
+            {/* 3. Banner Pengumuman Toko */}
+            {(() => {
+              const [bannerCfg, setBannerCfg] = React.useState<import('../../services/storeScheduleService').BannerConfig | null>(null);
+              const [bannerSaving, setBannerSaving] = React.useState(false);
+              const [bannerSaved, setBannerSaved] = React.useState(false);
+
+              React.useEffect(() => {
+                const { subscribeStoreSchedule, DEFAULT_BANNER } = require('../../services/storeScheduleService');
+                const unsub = subscribeStoreSchedule((cfg: any) => {
+                  setBannerCfg({ ...DEFAULT_BANNER, ...(cfg.banner || {}) });
+                });
+                return () => unsub();
+              }, []);
+
+              const handleSaveBanner = async () => {
+                if (!bannerCfg) return;
+                setBannerSaving(true);
+                try {
+                  const { saveBannerConfig } = await import('../../services/storeScheduleService');
+                  await saveBannerConfig(bannerCfg);
+                  setBannerSaved(true);
+                  setTimeout(() => setBannerSaved(false), 2500);
+                } catch (e) { console.error(e); }
+                finally { setBannerSaving(false); }
+              };
+
+              if (!bannerCfg) return (
+                <div className="bg-[#111b21] border border-slate-800 rounded-2xl p-5 flex items-center justify-center h-24">
+                  <RefreshCw className="w-5 h-5 text-slate-600 animate-spin" />
+                </div>
+              );
+
+              return (
+                <div className="bg-[#111b21] border border-slate-800 rounded-2xl p-5 space-y-5 shadow-xl">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">📢</span>
+                      <h3 className="text-sm font-bold text-slate-200">Pengaturan Banner Toko</h3>
+                    </div>
+                    <button
+                      onClick={() => setBannerCfg({ ...bannerCfg, enabled: !bannerCfg.enabled })}
+                      className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                        bannerCfg.enabled
+                          ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
+                          : 'bg-slate-800 border-slate-700 text-slate-500'
+                      }`}
+                    >
+                      <span className={`w-2 h-2 rounded-full ${bannerCfg.enabled ? 'bg-emerald-400' : 'bg-slate-600'}`} />
+                      {bannerCfg.enabled ? 'Banner Aktif' : 'Banner Nonaktif'}
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Ikuti jam toko */}
+                    <div className="flex items-center justify-between px-4 py-3 bg-slate-800/50 border border-slate-700/40 rounded-xl">
+                      <div>
+                        <p className="text-xs font-bold text-slate-200">Ikuti Jam Toko Otomatis</p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">Banner berubah sesuai buka/tutup toko</p>
+                      </div>
+                      <button
+                        onClick={() => setBannerCfg({ ...bannerCfg, followStoreHours: !bannerCfg.followStoreHours })}
+                        className={`w-10 h-5.5 rounded-full transition-all relative flex-shrink-0 ${bannerCfg.followStoreHours ? 'bg-emerald-500' : 'bg-slate-700'}`}
+                      >
+                        <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all ${bannerCfg.followStoreHours ? 'left-5' : 'left-0.5'}`} />
+                      </button>
+                    </div>
+
+                    {/* Teks berjalan */}
+                    <div className="flex items-center justify-between px-4 py-3 bg-slate-800/50 border border-slate-700/40 rounded-xl">
+                      <div>
+                        <p className="text-xs font-bold text-slate-200">Teks Berjalan (Marquee)</p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">Teks banner bergerak seperti running text</p>
+                      </div>
+                      <button
+                        onClick={() => setBannerCfg({ ...bannerCfg, scrolling: !bannerCfg.scrolling })}
+                        className={`w-10 h-5.5 rounded-full transition-all relative flex-shrink-0 ${bannerCfg.scrolling ? 'bg-blue-500' : 'bg-slate-700'}`}
+                      >
+                        <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all ${bannerCfg.scrolling ? 'left-5' : 'left-0.5'}`} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Teks banner */}
+                  <div className="space-y-3">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Teks Saat Toko BUKA</label>
+                      <input
+                        value={bannerCfg.openText}
+                        onChange={e => setBannerCfg({ ...bannerCfg, openText: e.target.value })}
+                        className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
+                        placeholder="Toko sedang BUKA! Admin siap melayani."
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-sky-400 uppercase tracking-widest">Teks Saat TAKE ORDER</label>
+                      <input
+                        value={bannerCfg.takeOrderText}
+                        onChange={e => setBannerCfg({ ...bannerCfg, takeOrderText: e.target.value })}
+                        className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-sky-500/50"
+                        placeholder="Take Order sudah dibuka! Order via WhatsApp."
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-amber-400 uppercase tracking-widest">Teks Saat Toko TUTUP</label>
+                      <input
+                        value={bannerCfg.closedText}
+                        onChange={e => setBannerCfg({ ...bannerCfg, closedText: e.target.value })}
+                        className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-amber-500/50"
+                        placeholder="Toko sedang TUTUP. Buka kembali besok."
+                      />
+                    </div>
+                  </div>
+
+                  {/* Warna & Emoji */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Emoji Ikon</label>
+                      <input
+                        value={bannerCfg.emoji}
+                        onChange={e => setBannerCfg({ ...bannerCfg, emoji: e.target.value })}
+                        className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-sm text-slate-100 focus:outline-none focus:border-slate-600"
+                        maxLength={2}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Warna Buka</label>
+                      <select
+                        value={bannerCfg.openColor}
+                        onChange={e => setBannerCfg({ ...bannerCfg, openColor: e.target.value })}
+                        className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none"
+                      >
+                        <option value="green">Hijau</option>
+                        <option value="emerald">Emerald</option>
+                        <option value="blue">Biru</option>
+                        <option value="cyan">Cyan</option>
+                      </select>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-amber-400 uppercase tracking-widest">Warna Tutup</label>
+                      <select
+                        value={bannerCfg.closedColor}
+                        onChange={e => setBannerCfg({ ...bannerCfg, closedColor: e.target.value })}
+                        className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none"
+                      >
+                        <option value="amber">Amber</option>
+                        <option value="orange">Orange</option>
+                        <option value="red">Merah</option>
+                        <option value="rose">Rose</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end pt-2 border-t border-slate-800">
+                    <button
+                      onClick={handleSaveBanner}
+                      disabled={bannerSaving}
+                      className="flex items-center gap-2 px-6 py-2.5 bg-[#00E676] hover:bg-[#00C853] disabled:bg-slate-700 disabled:text-slate-500 text-[#111b21] font-bold rounded-xl transition-all text-sm"
+                    >
+                      {bannerSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : bannerSaved ? <CheckCircle2 className="w-4 h-4" /> : null}
+                      {bannerSaved ? 'Tersimpan!' : 'Simpan Pengaturan Banner'}
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* 4. Global Auto-Update & Client Refresh Broadcast */}
             <div className="bg-[#111b21] border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
