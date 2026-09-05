@@ -7340,28 +7340,19 @@ export const AdminPortal: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Teks Saat Toko BUKA</label>
-                    <input value={bannerCfg.openText} onChange={e => setBannerCfg({ ...bannerCfg, openText: e.target.value })}
-                      className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
-                      placeholder="Toko sedang BUKA! Admin siap melayani." />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-sky-400 uppercase tracking-widest">Teks Saat TAKE ORDER</label>
-                    <input value={bannerCfg.takeOrderText} onChange={e => setBannerCfg({ ...bannerCfg, takeOrderText: e.target.value })}
-                      className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-sky-500/50"
-                      placeholder="Take Order sudah dibuka! Order via WhatsApp." />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-amber-400 uppercase tracking-widest">Teks Saat Toko TUTUP</label>
-                    <input value={bannerCfg.closedText} onChange={e => setBannerCfg({ ...bannerCfg, closedText: e.target.value })}
-                      className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-amber-500/50"
-                      placeholder="Toko sedang TUTUP. Buka kembali besok." />
-                  </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-200 uppercase tracking-widest">Teks Banner</label>
+                  <textarea
+                    value={bannerCfg.closedText}
+                    onChange={e => setBannerCfg({ ...bannerCfg, closedText: e.target.value })}
+                    rows={3}
+                    className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-[#00E676]/50 resize-none"
+                    placeholder="Tulis teks banner sesukamu, contoh: Toko sedang libur, buka lagi besok jam 11 WIB!"
+                  />
+                  <p className="text-[10px] text-slate-600">Teks ini akan muncul di banner saat toko tutup</p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Emoji Ikon</label>
                     <input value={bannerCfg.emoji} onChange={e => setBannerCfg({ ...bannerCfg, emoji: e.target.value })}
@@ -7369,20 +7360,10 @@ export const AdminPortal: React.FC = () => {
                       maxLength={2} />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Warna Buka</label>
-                    <select value={bannerCfg.openColor} onChange={e => setBannerCfg({ ...bannerCfg, openColor: e.target.value })}
-                      className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none">
-                      <option value="green">Hijau</option>
-                      <option value="emerald">Emerald</option>
-                      <option value="blue">Biru</option>
-                      <option value="cyan">Cyan</option>
-                    </select>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-amber-400 uppercase tracking-widest">Warna Tutup</label>
+                    <label className="text-xs font-semibold text-amber-400 uppercase tracking-widest">Warna Banner</label>
                     <select value={bannerCfg.closedColor} onChange={e => setBannerCfg({ ...bannerCfg, closedColor: e.target.value })}
                       className="w-full px-3 py-2.5 bg-[#202c33] border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none">
-                      <option value="amber">Amber</option>
+                      <option value="amber">Amber (Kuning)</option>
                       <option value="orange">Orange</option>
                       <option value="red">Merah</option>
                       <option value="rose">Rose</option>
@@ -7390,26 +7371,12 @@ export const AdminPortal: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end pt-2 border-t border-slate-800 gap-3 flex-wrap">
-                  <div className="flex-1 min-w-[200px] space-y-1.5">
-                    <label className="text-xs font-semibold text-amber-400 uppercase tracking-widest">
-                      Teks Custom Tutup Toko (Override)
-                    </label>
-                    <input
-                      value={storeClosedNoticeText || ''}
-                      onChange={e => updateStoreSettings({ storeClosedNoticeText: e.target.value })}
-                      className="w-full px-3 py-2 bg-[#202c33] border border-amber-500/30 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-amber-500/60"
-                      placeholder="Contoh: Toko tutup, buka besok jam 11 WIB..."
-                    />
-                    <p className="text-[10px] text-slate-600">Jika diisi, teks ini menggantikan teks otomatis di banner tutup</p>
-                  </div>
-                  <div className="flex items-end">
-                    <button onClick={handleSaveBanner} disabled={bannerSaving}
-                      className="flex items-center gap-2 px-6 py-2.5 bg-[#00E676] hover:bg-[#00C853] disabled:bg-slate-700 disabled:text-slate-500 text-[#111b21] font-bold rounded-xl transition-all text-sm whitespace-nowrap">
-                      {bannerSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : bannerSaved ? <CheckCircle2 className="w-4 h-4" /> : null}
-                      {bannerSaved ? 'Tersimpan!' : 'Simpan Pengaturan Banner'}
-                    </button>
-                  </div>
+                <div className="flex justify-end pt-2 border-t border-slate-800">
+                  <button onClick={handleSaveBanner} disabled={bannerSaving}
+                    className="flex items-center gap-2 px-6 py-2.5 bg-[#00E676] hover:bg-[#00C853] disabled:bg-slate-700 disabled:text-slate-500 text-[#111b21] font-bold rounded-xl transition-all text-sm">
+                    {bannerSaving ? <RefreshCw className="w-4 h-4 animate-spin" /> : bannerSaved ? <CheckCircle2 className="w-4 h-4" /> : null}
+                    {bannerSaved ? 'Tersimpan!' : 'Simpan Pengaturan Banner'}
+                   </button>
                 </div>
               </div>
             )}
