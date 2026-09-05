@@ -6,6 +6,7 @@ import { runAdminAutoLinkSync } from '../../utils/phoneUtils';
 import { db, getSafeTimestamp, getInitialCreationTimestamp, getPureCreationTime, extractTimeMs, applySmartSearch } from '../../lib/firebase';
 import { SafeImage } from '../common/SafeImage';
 import { HighlightText } from '../common/HighlightText';
+import { subscribeStoreSchedule, saveBannerConfig, DEFAULT_BANNER, BannerConfig } from '../../services/storeScheduleService';
 import { 
   MessageSquare, ShoppingBag, Users, Settings, LogOut, Send, Plus, Search, Zap, 
   DollarSign, Calendar, UserCheck, FileText, Lock, ShieldCheck, CheckCircle2, 
@@ -516,13 +517,12 @@ export const AdminPortal: React.FC = () => {
   }, [qrisImageUrl, danaNumber, danaName, adminWhatsappNumber, storeAvatarUrl]);
 
   // Banner settings state — di level component untuk menghindari Rules of Hooks violation
-  const [bannerCfg, setBannerCfg] = React.useState<import('../../services/storeScheduleService').BannerConfig | null>(null);
+  const [bannerCfg, setBannerCfg] = React.useState<BannerConfig | null>(null);
   const [bannerSaving, setBannerSaving] = React.useState(false);
   const [bannerSaved, setBannerSaved] = React.useState(false);
 
   React.useEffect(() => {
-    const { subscribeStoreSchedule, DEFAULT_BANNER } = require('../../services/storeScheduleService');
-    const unsub = subscribeStoreSchedule((cfg: any) => {
+    const unsub = subscribeStoreSchedule((cfg) => {
       setBannerCfg({ ...DEFAULT_BANNER, ...(cfg.banner || {}) });
     });
     return () => unsub();
@@ -532,7 +532,6 @@ export const AdminPortal: React.FC = () => {
     if (!bannerCfg) return;
     setBannerSaving(true);
     try {
-      const { saveBannerConfig } = await import('../../services/storeScheduleService');
       await saveBannerConfig(bannerCfg);
       setBannerSaved(true);
       setTimeout(() => setBannerSaved(false), 2500);
