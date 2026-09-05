@@ -169,6 +169,20 @@ export const CloudMonitor: React.FC = () => {
     return input;
   };
 
+  // Toggle status cloud: AVAILABLE ↔ EXPIRED
+  const handleToggleCloudStatus = async (cloud: CloudInstance) => {
+    const newStatus = cloud.status === 'EXPIRED' ? 'AVAILABLE' : 'EXPIRED';
+    try {
+      await setDoc(doc(db, "cloud_instances", cloud.id), {
+        status: newStatus,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      await saveCloud({ ...cloud, status: newStatus as any, updatedAt: new Date().toISOString() });
+    } catch (err: any) {
+      console.error('Gagal toggle status cloud:', err);
+    }
+  };
+
   const handleSaveLastMoney = async (cloud: CloudInstance, targetOrder?: GameOrder) => {
     const rawVal = lastMoneyInputText.trim();
     const parsedVal = parseShortcutAmount(rawVal) || rawVal;
@@ -907,7 +921,23 @@ export const CloudMonitor: React.FC = () => {
                         <Server className="w-5 h-5" />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="text-base font-extrabold text-white leading-tight whitespace-normal break-words">{cloud.name}</h3>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="text-base font-extrabold text-white leading-tight whitespace-normal break-words">{cloud.name}</h3>
+                          {/* Toggle Ready/Expired */}
+                          <button
+                            type="button"
+                            onClick={() => handleToggleCloudStatus(cloud)}
+                            className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black border transition-all cursor-pointer active:scale-95 ${
+                              isExpired
+                                ? 'bg-red-500/20 border-red-500/40 text-red-300 hover:bg-red-500/30'
+                                : 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30'
+                            }`}
+                            title="Klik untuk toggle status Ready/Expired"
+                          >
+                            <span className={`w-1.5 h-1.5 rounded-full ${isExpired ? 'bg-red-400' : 'bg-emerald-400'}`} />
+                            {isExpired ? 'Expired' : 'Ready'}
+                          </button>
+                        </div>
                         <p className="text-[11px] text-slate-400 whitespace-normal break-words">
                           {cloud.provider || 'VPS Server'} {cloud.ipAddress ? `• ${cloud.ipAddress}` : ''}
                         </p>
@@ -931,26 +961,6 @@ export const CloudMonitor: React.FC = () => {
                           KOSONG
                         </span>
                       )}
-                    </div>
-                  </div>
-
-                  {/* Duration & Live Countdown Bar */}
-                  <div className="mt-3.5 bg-[#202c33]/70 rounded-xl p-3 border border-slate-800/80">
-                    <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1">
-                      <span className="flex items-center gap-1 font-medium">
-                        <Clock className="w-3.5 h-3.5 text-slate-500" />
-                        Hitung Mundur Sewa:
-                      </span>
-                      <span className={`font-mono font-bold ${
-                        isExpired ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-[#00E676]'
-                      }`}>
-                        {countdown.text}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-700/50">
-                      <span>Mulai: {cloud.rentStartDate || '-'}</span>
-                      <span>Selesai: {cloud.rentEndDate || '-'}</span>
                     </div>
                   </div>
 

@@ -4,11 +4,11 @@ import {
   RefreshCw, User, Phone, ChevronDown, ChevronUp, Gamepad2,
   Gift, AlertCircle, Check, Calendar, MessageSquare, Layers,
   Globe, Smartphone, Zap, Package, Lock, DollarSign, Filter,
-  ShieldCheck, FileText, Edit3, Save
+  ShieldCheck, FileText, Edit3, Save, AlertTriangle
 } from 'lucide-react';
 import {
   collection, query, onSnapshot, limit, orderBy,
-  serverTimestamp, getDocs, where, setDoc, doc, updateDoc
+  serverTimestamp, getDocs, where, setDoc, doc, updateDoc, addDoc
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { lookupRobloxProfile } from '../../lib/roblox';
@@ -120,9 +120,19 @@ const StatusPill: React.FC<{
 }> = ({ orderId, status, category, onChanged }) => {
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showHangusPopup, setShowHangusPopup] = useState(false);
+  const [hangusAlasan, setHangusAlasan] = useState('');
   const ref = useRef<HTMLDivElement>(null);
   const cfg = getCfg(status);
   const list = category === 'gift' ? GP_STATUSES : JOKI_STATUSES;
+
+  const HANGUS_PRESETS = [
+    'Tidak ada respon dari customer dalam 24 jam',
+    'Customer tidak bisa dihubungi via WhatsApp',
+    'Akun Roblox tidak bisa diakses / login gagal',
+    'Pesanan sudah melewati batas waktu proses',
+    'Customer membatalkan via chat',
+  ];
 
   useEffect(() => {
     const h = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
@@ -130,31 +140,64 @@ const StatusPill: React.FC<{
     return () => document.removeEventListener('mousedown', h);
   }, []);
 
-  const pick = async (s: string) => {
-    if (s === (status || '').toUpperCase()) { setOpen(false); return; }
+  // Handle konfirmasi hangus + kirim notif ke chat
+  const handleHangusConfirm = async () => {
+    if (!hangusAlasan.trim()) return;
     setSaving(true);
     try {
-      if (s === 'HANGUS') {
-        // Hangus = tutup permanen tanpa refund
-        await markOrderAsHangus(orderId);
-      } else if (s === 'CANCEL') {
-        // Cancel = auto-refund TongCoins ke customer
+      await markOrderAsHangus(orderId);
+      await updateDoc(doc(db, 'orders', orderId), {
+        hangusReason: hangusAlasan.trim(),
+        hangusAt: serverTimestamp(),
+      });
+      // Kirim pesan otomatis ke chat room customer
+      try {
+        const { getDoc, doc: fsDoc, collection: fsCol, query: fsQuery, where: fsWhere, getDocs: fsGetDocs } = await import('firebase/firestore');
+        const orderSnap = await getDoc(fsDoc(db, 'orders', orderId));
+        if (orderSnap.exists()) {
+          const orderData = orderSnap.data();
+          const customerId = orderData.userId || orderData.customer_id || orderData.customerId;
+          const displayOrderId = orderData.orderId || orderData.displayOrderId || `#${orderId.slice(-6).toUpperCase()}`;
+          const chatMessage = `⚠️ *Pesanan ${displayOrderId} Hangus*\n\nMohon maaf, pesanan kamu telah kami hanguskan.\n\n📋 *Alasan:* ${hangusAlasan.trim()}\n\nJika ada pertanyaan, silakan hubungi admin. Terima kasih.`;
+          if (customerId) {
+            const q = fsQuery(fsCol(db, 'chat_rooms'), fsWhere('customer_id', '==', customerId));
+            const chatSnap = await fsGetDocs(q);
+            for (const chatDoc of chatSnap.docs) {
+              await addDoc(fsCol(db, 'chat_rooms', chatDoc.id, 'messages'), {
+                text: chatMessage, sender_role: 'ADMIN', sender_id: 'system',
+                created_at: serverTimestamp(), type: 'notification', isRead: false,
+              });
+              await updateDoc(fsDoc(db, 'chat_rooms', chatDoc.id), {
+                last_message: chatMessage, last_message_at: serverTimestamp(), is_read_customer: false,
+              });
+            }
+          }
+        }
+      } catch { /* silent */ }
+      onChanged('HANGUS');
+      setShowHangusPopup(false);
+      setHangusAlasan('');
+    } catch (err: any) {
+      alert(`Gagal hanguskan: ${err?.message || 'Error'}`);
+    } finally { setSaving(false); setOpen(false); }
+  };
+
+  const pick = async (s: string) => {
+    if (s === (status || '').toUpperCase()) { setOpen(false); return; }
+    if (s === 'HANGUS') { setOpen(false); setShowHangusPopup(true); return; }
+    setSaving(true);
+    try {
+      if (s === 'CANCEL') {
         const { getDoc, doc: fsDoc } = await import('firebase/firestore');
         const snap = await getDoc(fsDoc(db, 'orders', orderId));
         if (snap.exists()) {
           const result = await executeCancelOrderWithAutoRefund({ ...snap.data(), id: orderId, firestoreId: orderId });
           if (!result.success) throw new Error(result.message || 'Gagal cancel order');
         } else {
-          await updateDoc(doc(db, 'orders', orderId), {
-            status: 'CANCEL', orderStatus: 'CANCEL',
-            updatedAt: serverTimestamp(), updated_at: new Date().toISOString()
-          });
+          await updateDoc(doc(db, 'orders', orderId), { status: 'CANCEL', orderStatus: 'CANCEL', updatedAt: serverTimestamp(), updated_at: new Date().toISOString() });
         }
       } else {
-        await updateDoc(doc(db, 'orders', orderId), {
-          status: s, orderStatus: s,
-          updatedAt: serverTimestamp(), updated_at: new Date().toISOString()
-        });
+        await updateDoc(doc(db, 'orders', orderId), { status: s, orderStatus: s, updatedAt: serverTimestamp(), updated_at: new Date().toISOString() });
       }
       onChanged(s);
     } catch (err: any) {
@@ -163,27 +206,70 @@ const StatusPill: React.FC<{
   };
 
   return (
-    <div className="relative" ref={ref}>
-      <button
-        onClick={() => setOpen(v => !v)}
-        disabled={saving}
-        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border cursor-pointer hover:opacity-80 active:scale-95 transition-all select-none ${cfg.pill}`}
-      >
-        {saving
-          ? <RefreshCw className="w-2.5 h-2.5 animate-spin" />
-          : <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot} flex-shrink-0`} />
-        }
-        {cfg.label}
-        <ChevronDown className="w-2.5 h-2.5 opacity-40" />
-      </button>
-      {open && (
-        <div className="absolute left-0 top-full mt-1.5 z-50 bg-[#182530] border border-slate-700/60 rounded-xl shadow-2xl shadow-black/40 overflow-hidden min-w-[150px] py-1">
-          {list.map(s => {
-            const sc = getCfg(s);
-            const active = s === (status || '').toUpperCase();
-            return (
-              <button key={s} onClick={() => pick(s)}
-                className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-[12px] hover:bg-slate-700/30 text-left transition-colors ${active ? 'bg-slate-700/20' : ''}`}>
+    <>
+      {/* Popup alasan hangus */}
+      {showHangusPopup && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-[#1a1520] border border-rose-500/30 rounded-2xl shadow-2xl">
+            <div className="flex items-center gap-3 px-5 py-4 border-b border-rose-500/20 bg-rose-500/5 rounded-t-2xl">
+              <AlertTriangle className="w-5 h-5 text-rose-400 flex-shrink-0" />
+              <div>
+                <p className="text-sm font-black text-white">Konfirmasi Hangus Pesanan</p>
+                <p className="text-xs text-slate-500 mt-0.5">Alasan akan otomatis dikirim ke chat customer</p>
+              </div>
+            </div>
+            <div className="p-5 space-y-4">
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Pilih Alasan Cepat</p>
+                {HANGUS_PRESETS.map(preset => (
+                  <button key={preset} type="button" onClick={() => setHangusAlasan(preset)}
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-all ${hangusAlasan === preset ? 'bg-rose-500/20 border border-rose-500/40 text-rose-300' : 'bg-slate-800/60 border border-slate-700/40 text-slate-400 hover:border-slate-600 hover:text-slate-300'}`}>
+                    {preset}
+                  </button>
+                ))}
+              </div>
+              <div className="space-y-1.5">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Atau Tulis Sendiri</p>
+                <textarea value={hangusAlasan} onChange={e => setHangusAlasan(e.target.value)} rows={3}
+                  placeholder="Tulis alasan hangus pesanan..."
+                  className="w-full px-3 py-2 bg-slate-900/80 border border-slate-700/50 rounded-xl text-xs text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-rose-500/50 resize-none" />
+              </div>
+            </div>
+            <div className="flex gap-3 px-5 pb-5">
+              <button type="button" onClick={() => { setShowHangusPopup(false); setHangusAlasan(''); }}
+                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-bold rounded-xl transition-colors">
+                Batal
+              </button>
+              <button type="button" onClick={handleHangusConfirm} disabled={!hangusAlasan.trim() || saving}
+                className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 disabled:bg-slate-800 disabled:text-slate-600 text-white text-sm font-black rounded-xl transition-colors flex items-center justify-center gap-2">
+                {saving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />}
+                Hanguskan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="relative" ref={ref}>
+        <button
+          onClick={() => setOpen(v => !v)}
+          disabled={saving}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border cursor-pointer hover:opacity-80 active:scale-95 transition-all select-none ${cfg.pill}`}
+        >
+          {saving
+            ? <RefreshCw className="w-2.5 h-2.5 animate-spin" />
+            : <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot} flex-shrink-0`} />
+          }
+          {cfg.label}
+          <ChevronDown className="w-2.5 h-2.5 opacity-40" />
+        </button>
+        {open && (
+          <div className="absolute left-0 top-full mt-1.5 z-50 bg-[#182530] border border-slate-700/60 rounded-xl shadow-2xl shadow-black/40 overflow-hidden min-w-[150px] py-1">
+            {list.map(s => {
+              const sc = getCfg(s);
+              const active = s === (status || '').toUpperCase();
+              return (
+                <button key={s} onClick={() => pick(s)}
+                  className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-[12px] hover:bg-slate-700/30 text-left transition-colors ${active ? 'bg-slate-700/20' : ''}`}>
                 <span className={`w-2 h-2 rounded-full ${sc.dot} flex-shrink-0`} />
                 <span className={`flex-1 font-medium ${active ? 'text-slate-100' : 'text-slate-300'}`}>{sc.label}</span>
                 {active && <Check className="w-3.5 h-3.5 text-[#00E676]" />}
@@ -193,6 +279,7 @@ const StatusPill: React.FC<{
         </div>
       )}
     </div>
+    </>
   );
 };
 
