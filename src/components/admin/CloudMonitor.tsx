@@ -173,10 +173,6 @@ export const CloudMonitor: React.FC = () => {
   const handleToggleCloudStatus = async (cloud: CloudInstance) => {
     const newStatus = cloud.status === 'EXPIRED' ? 'AVAILABLE' : 'EXPIRED';
     try {
-      await setDoc(doc(db, "cloud_instances", cloud.id), {
-        status: newStatus,
-        updatedAt: serverTimestamp()
-      }, { merge: true });
       await saveCloud({ ...cloud, status: newStatus as any, updatedAt: new Date().toISOString() });
     } catch (err: any) {
       console.error('Gagal toggle status cloud:', err);
