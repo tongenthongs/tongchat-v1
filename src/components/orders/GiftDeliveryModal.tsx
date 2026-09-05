@@ -31,10 +31,7 @@ export const GiftDeliveryModal: React.FC<GiftDeliveryModalProps> = ({
     const message = `Order ID: ${invoice}
 Username Roblox: @${robloxUser}
 Status Bayar: Perlu Cek
-Orderan: ${pkg}
-
-⚠️ PERLU VERIFIKASI PEMBAYARAN
-Halo Admin, pembayaran saya BELUM diverifikasi. Mohon dicek dan konfirmasi pembayaran saya ya min. Terima kasih!`;
+Orderan: ${pkg}`;
 
     const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');

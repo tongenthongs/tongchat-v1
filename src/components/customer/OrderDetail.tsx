@@ -50,6 +50,23 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({
   const [isLocallyConfirmed, setIsLocallyConfirmed] = useState<boolean>(() => {
     return order?.isChatConfirmed === true || checkIsConfirmedLocally(order);
   });
+  // State untuk menyimpan data order terbaru dari Firestore (termasuk uangAwal/uangTerakhir)
+  const [freshOrder, setFreshOrder] = useState<any>(order);
+
+  // Fetch data terbaru dari Firestore saat mount agar uangAwal/uangTerakhir selalu terkini
+  useEffect(() => {
+    const docId = order?.docUniqueId || order?.firestoreId || order?.id;
+    if (!docId) return;
+    import('firebase/firestore').then(({ doc, getDoc }) => {
+      import('../../lib/firebase').then(({ db }) => {
+        getDoc(doc(db, 'orders', docId)).then(snap => {
+          if (snap.exists()) {
+            setFreshOrder({ ...order, ...snap.data(), id: snap.id, docUniqueId: snap.id, firestoreId: snap.id });
+          }
+        }).catch(() => {});
+      });
+    });
+  }, [order?.id, order?.docUniqueId, order?.firestoreId]);
 
   useEffect(() => {
     if (order?.isChatConfirmed === true || checkIsConfirmedLocally(order)) {
@@ -59,13 +76,16 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({
 
   if (!order) return null;
 
-  const rawOrderId = order.orderId || (order.id?.startsWith('ORD-') ? order.id : `#${(order.id || 'ORDER').substring(0, 10).toUpperCase()}`);
+  // Gunakan freshOrder (data terbaru dari Firestore) untuk semua tampilan
+  const o = freshOrder || order;
+
+  const rawOrderId = o.orderId || (o.id?.startsWith('ORD-') ? o.id : `#${(o.id || 'ORDER').substring(0, 10).toUpperCase()}`);
   const cleanOrderId = rawOrderId.replace(/^#/, '');
-  const productName = order.package_name || order.packageName || order.itemGift || order.game_name || 'Paket Layanan';
-  const gameName = order.game_name || order.gameName || 'Roblox';
-  const price = Number(order.price) || 0;
-  const paymentMethod = (order.payment_method || order.paymentMethod || 'QRIS').toUpperCase();
-  const robloxUser = order.robloxUsername || order.roblox_username || order.game_username || order.targetUsername || order.username || '';
+  const productName = o.package_name || o.packageName || o.itemGift || o.game_name || 'Paket Layanan';
+  const gameName = o.game_name || o.gameName || 'Roblox';
+  const price = Number(o.price) || 0;
+  const paymentMethod = (o.payment_method || o.paymentMethod || 'QRIS').toUpperCase();
+  const robloxUser = o.robloxUsername || o.roblox_username || o.game_username || o.targetUsername || o.username || '';
   const robloxAvatar = robloxUser 
     ? `https://www.roblox.com/headshot-thumbnail/image?userName=${encodeURIComponent(robloxUser)}&width=150&height=150&format=png`
     : null;
@@ -287,15 +307,12 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({
 
             {/* Uang Awal & Uang Terakhir — khusus order joki */}
             {(() => {
-              // Perluas detection: cek semua kemungkinan field isJoki
-              const cat = (order.category || order.type || order.orderType || order.service_type || '').toLowerCase();
-              const isJoki = cat.includes('joko') || cat.includes('joki') || order.isJoko === true || order.isJokiOrder === true || order.isJokiService === true;
-              const uangAwal = order.uangAwal || order.initialMoney || order.uangSebelumJoko || order.initialCash || order.initial_money || null;
-              const uangTerakhir = order.uangTerakhir || order.lastMoney || order.uangSetelahJoko || order.last_money || null;
-              // Hanya pakai lastMoneyUpdatedAt untuk timestamp — BUKAN updatedAt (terlalu sering berubah)
-              const updatedAt = order.lastMoneyUpdatedAt || null;
+              // Gunakan o (freshOrder) untuk data terbaru dari Firestore
+              const cat = (o.category || o.type || o.orderType || o.service_type || '').toLowerCase();
+              const uangAwal = o.uangAwal || o.initialMoney || o.uangSebelumJoko || o.initialCash || o.initial_money || null;
+              const uangTerakhir = o.uangTerakhir || o.lastMoney || o.uangSetelahJoko || o.last_money || null;
+              const updatedAt = o.lastMoneyUpdatedAt || null;
 
-              // Tampilkan jika ada data uang, meski isJoki tidak terdeteksi
               if (!uangAwal && !uangTerakhir) return null;
 
               const timeAgo = (ts: any): string => {
