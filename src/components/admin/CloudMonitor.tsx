@@ -1,7 +1,9 @@
-import React, { useState, useMemo, useEffect } from 'react';
+﻿import React, { useState, useMemo, useEffect, useCallback, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { useApp } from '../../context/AppContext';
 import { CloudInstance, GameOrder, OrderStatus } from '../../types';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
 import { 
   Server, 
   Plus, 
@@ -68,8 +70,41 @@ export const getCloudExpirationMs = (cloud: any): number => {
   return 0;
 };
 
+// ─── CloudCountdown sub-component ─────────────────────────────────────────────
+// Isolated agar timer setiap detik TIDAK menyebabkan CloudMonitor re-render
+const CloudCountdown: React.FC<{ cloud: any; className?: string }> = memo(({ cloud, className }) => {
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const targetMs = getCloudExpirationMs(cloud);
+  if (!targetMs) return <span className={className}>7 Hari</span>;
+  const diffMs = targetMs - now;
+  if (diffMs <= 0) return <span className={`${className} text-red-400`}>Masa Sewa Habis</span>;
+  const totalSeconds = Math.floor(diffMs / 1000);
+  const days = Math.floor(totalSeconds / (3600 * 24));
+  const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const text = days > 0
+    ? `${days}h ${hours}j ${minutes}m ${seconds}d`
+    : `${hours}j ${minutes}m ${seconds}d`;
+  return <span className={className}>{text}</span>;
+});
+
 export const CloudMonitor: React.FC = () => {
   const { clouds, orders, saveCloud, deleteCloud, assignOrderToCloud, releaseOrderFromCloud, updateOrderStatus, updateOrder } = useApp();
+
+  // Memoize ordersMap untuk O(1) lookup — mengganti orders.find() di dalam map()
+  const ordersMap = useMemo(() => {
+    const map = new Map<string, GameOrder>();
+    orders.forEach(o => {
+      if (o.id) map.set(o.id, o);
+      if (o.orderId && o.orderId !== o.id) map.set(o.orderId, o);
+    });
+    return map;
+  }, [orders]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<'ALL' | 'AVAILABLE' | 'IN_USE' | 'EXPIRED'>('ALL');
@@ -138,25 +173,14 @@ export const CloudMonitor: React.FC = () => {
     const rawVal = lastMoneyInputText.trim();
     const parsedVal = parseShortcutAmount(rawVal) || rawVal;
     try {
-      const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
-      const { db } = await import('../../lib/firebase');
-      // Simpan ke cloud_instances
       await setDoc(doc(db, "cloud_instances", cloud.id), {
         lastMoney: parsedVal || null,
         uangTerakhir: parsedVal || null,
         updatedAt: serverTimestamp()
       }, { merge: true }).catch(() => {});
       await saveCloud({ ...cloud, lastMoney: parsedVal || null, updatedAt: new Date().toISOString() } as any);
-      // Sinkronkan ke order terkait
       if (targetOrder) {
-        const updatedOrder = {
-          ...targetOrder,
-          uangTerakhir: parsedVal,
-          lastMoney: parsedVal,
-          uangSetelahJoko: parsedVal,
-          updated: new Date().toISOString()
-        };
-        await updateOrder(updatedOrder);
+        await updateOrder({ ...targetOrder, uangTerakhir: parsedVal, lastMoney: parsedVal, uangSetelahJoko: parsedVal, updated: new Date().toISOString() } as any);
       }
       setEditingLastMoneyCloudId(null);
       showNotification('Uang Joki Terakhir berhasil disimpan!', 'success');
@@ -169,39 +193,19 @@ export const CloudMonitor: React.FC = () => {
     const rawVal = initialMoneyInputText.trim();
     const parsedVal = parseShortcutAmount(rawVal) || rawVal;
     try {
-      // 1. Update Dokumen Cloud di Firestore & State
-      const updatedCloud: CloudInstance = {
-        ...cloud,
-        initialMoney: parsedVal || null,
-        updatedAt: new Date().toISOString()
-      };
+      const updatedCloud: CloudInstance = { ...cloud, initialMoney: parsedVal || null, updatedAt: new Date().toISOString() };
       await saveCloud(updatedCloud);
-      const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
-      const { db } = await import('../../lib/firebase');
       await setDoc(doc(db, "cloud_instances", cloud.id), {
         initialMoney: parsedVal || null,
         uangAwal: parsedVal || null,
         initialCash: parsedVal || null,
         updatedAt: serverTimestamp()
       }, { merge: true }).catch(() => {});
-
-      // 2. Sinkronkan ke Dokumen Order terkait jika ada
       if (targetOrder) {
-        const updatedOrder = {
-          ...targetOrder,
-          uangSebelumJoko: parsedVal,
-          initialGameMoney: parsedVal,
-          initial_money: parsedVal,
-          initialMoney: parsedVal,
-          uangAwal: parsedVal,
-          initialCash: parsedVal,
-          updated: new Date().toISOString()
-        };
-        await updateOrder(updatedOrder);
+        await updateOrder({ ...targetOrder, uangSebelumJoko: parsedVal, initialGameMoney: parsedVal, initial_money: parsedVal, initialMoney: parsedVal, uangAwal: parsedVal, initialCash: parsedVal, updated: new Date().toISOString() } as any);
       }
-
       setEditingInitialMoneyCloudId(null);
-      showNotification('Data cloud & uang awal berhasil diperbarui', 'success');
+      showNotification('Uang Awal berhasil disimpan!', 'success');
     } catch (err: any) {
       showNotification(`Gagal menyimpan Uang Awal: ${err.message || 'Terjadi kesalahan'}`, 'error');
     }
@@ -231,29 +235,14 @@ export const CloudMonitor: React.FC = () => {
     const targetOrder = orders.find(o => o.id === orderId || o.orderId === orderId);
     try {
       if (targetOrder) {
-        const updated = {
-          ...targetOrder,
-          note: noteInputText,
-          notes: noteInputText,
-          updated: new Date().toISOString()
-        };
-        await updateOrder(updated);
+        await updateOrder({ ...targetOrder, note: noteInputText, notes: noteInputText, updated: new Date().toISOString() });
       }
       if (cloud) {
-        const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
-        const { db } = await import('../../lib/firebase');
-        await setDoc(doc(db, "cloud_instances", cloud.id), {
-          notes: noteInputText,
-          updatedAt: serverTimestamp()
-        }, { merge: true }).catch(() => {});
-        await saveCloud({
-          ...cloud,
-          notes: noteInputText,
-          updatedAt: new Date().toISOString()
-        });
+        await setDoc(doc(db, "cloud_instances", cloud.id), { notes: noteInputText, updatedAt: serverTimestamp() }, { merge: true }).catch(() => {});
+        await saveCloud({ ...cloud, notes: noteInputText, updatedAt: new Date().toISOString() });
       }
       setEditingNoteOrderId(null);
-      showNotification('Data cloud & uang awal berhasil diperbarui', 'success');
+      showNotification('Catatan berhasil disimpan', 'success');
     } catch (err: any) {
       showNotification(`Gagal menyimpan catatan: ${err.message}`, 'error');
     }
@@ -284,15 +273,9 @@ export const CloudMonitor: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
-  const [nowTimestamp, setNowTimestamp] = useState(Date.now());
 
-  // Realtime countdown clock ticker (updates every second)
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setNowTimestamp(Date.now());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  // TIDAK ada nowTimestamp di sini — countdown dipindahkan ke CloudCountdown sub-component
+  // agar timer setiap detik TIDAK menyebabkan seluruh CloudMonitor re-render
 
   const showNotification = (text: string, type: 'success' | 'error' = 'success') => {
     setFeedbackMsg({ text, type });
@@ -307,48 +290,23 @@ export const CloudMonitor: React.FC = () => {
     setTimeout(() => setCopiedOrderId(null), 2000);
   };
 
-  // Helper to calculate exact countdown string with robust fallbacks
+  // Helper to calculate exact countdown string — pakai Date.now() langsung (bukan state)
   const formatCountdown = (cloud?: CloudInstance | { rentEndDate?: string; rentStartDate?: string; durationDays?: number; expiresAt?: any } | string): { text: string; isExpired: boolean; isWarning: boolean; daysLeft: number; totalHoursLeft: number } => {
     if (!cloud) return { text: '7 Hari', isExpired: false, isWarning: false, daysLeft: 7, totalHoursLeft: 168 };
-
     const targetMs = getCloudExpirationMs(cloud);
-    if (!targetMs) {
-      return { text: '7 Hari', isExpired: false, isWarning: false, daysLeft: 7, totalHoursLeft: 168 };
-    }
-    
-    const diffMs = targetMs - nowTimestamp;
-
-    if (diffMs <= 0) {
-      return { text: 'Masa Sewa Habis', isExpired: true, isWarning: false, daysLeft: 0, totalHoursLeft: 0 };
-    }
-
+    if (!targetMs) return { text: '7 Hari', isExpired: false, isWarning: false, daysLeft: 7, totalHoursLeft: 168 };
+    const diffMs = targetMs - Date.now();
+    if (diffMs <= 0) return { text: 'Masa Sewa Habis', isExpired: true, isWarning: false, daysLeft: 0, totalHoursLeft: 0 };
     const totalSeconds = Math.floor(diffMs / 1000);
     const totalHoursLeft = Math.floor(totalSeconds / 3600);
     const days = Math.floor(totalSeconds / (3600 * 24));
     const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-
     const isWarning = days < 2;
-
-    if (days > 0) {
-      return { 
-        text: `${days}h ${hours}j ${minutes}m ${seconds}d`, 
-        isExpired: false, 
-        isWarning, 
-        daysLeft: days,
-        totalHoursLeft
-      };
-    }
-    return { 
-      text: `${hours}j ${minutes}m ${seconds}d`, 
-      isExpired: false, 
-      isWarning: true, 
-      daysLeft: 0,
-      totalHoursLeft
-    };
+    if (days > 0) return { text: `${days}h ${hours}j ${minutes}m ${seconds}d`, isExpired: false, isWarning, daysLeft: days, totalHoursLeft };
+    return { text: `${hours}j ${minutes}m ${seconds}d`, isExpired: false, isWarning: true, daysLeft: 0, totalHoursLeft };
   };
-
   // Quick Adjustment for Expiration Time (Hours and Days)
   const adjustExpirationTime = (hoursDelta: number, daysDelta: number = 0) => {
     const currentBase = formData.expiresAt ? new Date(formData.expiresAt) : new Date();
@@ -710,7 +668,7 @@ export const CloudMonitor: React.FC = () => {
 
       return true;
     });
-  }, [clouds, searchQuery, filterStatus, nowTimestamp]);
+  }, [clouds, searchQuery, filterStatus]);
 
   // Statistics Summary
   const stats = useMemo(() => {
@@ -731,7 +689,7 @@ export const CloudMonitor: React.FC = () => {
     });
 
     return { total, occupied, available, expired };
-  }, [clouds, nowTimestamp]);
+  }, [clouds]);
 
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-7xl mx-auto text-slate-100 font-sans">
