@@ -27,11 +27,13 @@ export const GiftDeliveryModal: React.FC<GiftDeliveryModalProps> = ({
     const invoice = order.orderId || order.id || '#ORD-GIFT';
     const robloxUser = order.robloxUsername || order.roblox_username || order.game_username || order.formData?.username || 'Customer';
     const pkg = order.package_name || order.packageName || order.itemGift || 'Item Gift Roblox';
+    const phone = order.customer_phone || order.whatsapp || order.phone || order.customerPhone || order.formData?.phone || '-';
 
     const message = `Order ID: ${invoice}
 Username Roblox: @${robloxUser}
 Status Bayar: Perlu Cek
-Orderan: ${pkg}`;
+Orderan: ${pkg}
+Nomor HP: ${phone}`;
 
     const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
     window.open(waUrl, '_blank', 'noopener,noreferrer');
