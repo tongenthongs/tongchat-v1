@@ -176,11 +176,12 @@ export const CloudMonitor: React.FC = () => {
       await setDoc(doc(db, "cloud_instances", cloud.id), {
         lastMoney: parsedVal || null,
         uangTerakhir: parsedVal || null,
+        lastMoneyUpdatedAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       }, { merge: true }).catch(() => {});
       await saveCloud({ ...cloud, lastMoney: parsedVal || null, updatedAt: new Date().toISOString() } as any);
       if (targetOrder) {
-        await updateOrder({ ...targetOrder, uangTerakhir: parsedVal, lastMoney: parsedVal, uangSetelahJoko: parsedVal, updated: new Date().toISOString() } as any);
+        await updateOrder({ ...targetOrder, uangTerakhir: parsedVal, lastMoney: parsedVal, uangSetelahJoko: parsedVal, lastMoneyUpdatedAt: new Date().toISOString(), updated: new Date().toISOString() } as any);
       }
       setEditingLastMoneyCloudId(null);
       showNotification('Uang Joki Terakhir berhasil disimpan!', 'success');

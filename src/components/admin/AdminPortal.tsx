@@ -498,6 +498,7 @@ export const AdminPortal: React.FC = () => {
   const [isStoreScheduleModalOpen, setIsStoreScheduleModalOpen] = useState<boolean>(false);
 
   // Local state for settings to prevent per-keystroke Firestore writes
+  const waInitialized = React.useRef(false);
   const [localSettings, setLocalSettings] = React.useState({
     qrisImageUrl: qrisImageUrl || '',
     danaNumber: danaNumber || '',
@@ -507,6 +508,7 @@ export const AdminPortal: React.FC = () => {
   });
   
   // Sync non-WA fields dari context setiap kali berubah
+  // WA HANYA di-init sekali saat mount (waInitialized ref), tidak pernah di-override lagi
   React.useEffect(() => {
     setLocalSettings(prev => ({
       ...prev,
@@ -514,10 +516,16 @@ export const AdminPortal: React.FC = () => {
       danaNumber: danaNumber || prev.danaNumber,
       danaName: danaName || prev.danaName,
       storeAvatarUrl: storeAvatarUrl || prev.storeAvatarUrl,
-      // WA hanya di-update jika field masih kosong (initial load) — tidak override saat user sedang edit
-      adminWhatsappNumber: prev.adminWhatsappNumber ? prev.adminWhatsappNumber : (adminWhatsappNumber || ''),
     }));
-  }, [qrisImageUrl, danaNumber, danaName, storeAvatarUrl, adminWhatsappNumber]);
+  }, [qrisImageUrl, danaNumber, danaName, storeAvatarUrl]);
+
+  // Init WA SEKALI SAJA saat mount dan context pertama kali punya nilai
+  React.useEffect(() => {
+    if (!waInitialized.current && adminWhatsappNumber) {
+      setLocalSettings(prev => ({ ...prev, adminWhatsappNumber }));
+      waInitialized.current = true;
+    }
+  }, [adminWhatsappNumber]);
 
   // Banner settings state — di level component untuk menghindari Rules of Hooks violation
   const [bannerCfg, setBannerCfg] = React.useState<BannerConfig | null>(null);
